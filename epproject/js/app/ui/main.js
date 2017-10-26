@@ -6,6 +6,8 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
         window.restUrl;
         //默认第一个map
         var mapId = "div0";
+        //保存所以得mapid
+        var mapIdArr = [];
         //联动保存选中项mapId
         var checkTemp = {};
         //是否选中联动按钮
@@ -93,7 +95,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
                     //    {type : "item", buttonid : "deleteAll",img:"删除所有点22px.png", text : "删除所有点"}
                     //]},
                     {id : "autoPrediction", text : "自动预测",img:"auto.png",isbig : true, type : "button"},
-                    {id : "associatedDisplay", text : "关联显示",img:"view_connect.png",isbig : true, type : "button"}
+                    {id : "associatedDisplay", text : "关联显示",img:"view_connect.png",isbig : true, type : "checkbox"}
 
                 ]},
                 {id : "kongThreeProcess", text : "空三处理", text_pos : "buttom", type : "block", mode : "cols", list : [
@@ -131,26 +133,41 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
         cell_2.fixSize(0,1);
         var grid_3 = cell_2.attachGrid();
         grid_3.setIconsPath('./codebase/imgs/');
-        grid_3.setHeader(["","序号","点ID","点类型","重叠度","有效","经度","纬度","高程"]);
-        grid_3.setColTypes("ro,ro,ro,ro,ro,edtxt,edtxt,edtxt,edtxt");
+        grid_3.setHeader(["序号","点ID","点类型","重叠度","有效","经度","纬度","高程"]);
+        grid_3.setColTypes("ro,ro,ro,ro,edtxt,edtxt,edtxt,edtxt");
 
-        grid_3.setColSorting('str,str,str,str,str,str,str,str,str');
-        grid_3.setInitWidths('0,*,*,*,*,*,*,*,*');
+        grid_3.setColSorting('str,str,str,str,str,str,str,str');
+        grid_3.setInitWidths('*,*,*,*,*,*,*,*');
         grid_3.init();
-        grid_3.load('./data/grid.xml','xml');
+        grid_3.load('./data/grid0.xml','xml');
 
       //存储每个创建的小地图，用于地图联动
        var mapLinkMove = [];
        //创建小地图
-        var creatDiv = function(){
-            $(".idMapContainer").empty();   //小地图地图容器每次创建前将前一次的小地图清空
-            $(".idMapContainer").append('<div id="mapArr" style="height: 325px;cursor:crosshair;"></div>');
-            //document.getElementById("mapArr").innerHTML = '';
-            mapLinkMove = [];
-            var mapCount = parseInt(arr[0].mapCount);
-            for(var i=0;i<mapCount;i++){
-                //var smallMap =  mapControl.createSmallMap("ol-mouse-position","tabContent"+i);  // 调用地图，第一个参数，鼠标移动控件挂载点，第二个参数：地图控件挂载点
-                //mapLinkMove.push(smallMap);
+        var creatDiv = function(rId){
+            //如果已经创建过smallMap，则显示以前的
+            grid_3.forEachRow(function(id){
+                if(id == rId){
+                    //document.getElementById("mapArr"+id).style.display = "block";
+                    $("#mapArr"+id).css("display","block");
+                }else{
+                    if(document.getElementById("mapArr"+id) != undefined){
+                        //document.getElementById("mapArr"+id).style.display = "none";
+                        $("#mapArr"+id).css("display","none");
+                    }
+                }
+            });
+            if(document.getElementById("mapArr"+rId) == undefined){
+
+                //如果没有创建过small，则创建新的
+                //$(".idMapContainer").empty();   //小地图地图容器每次创建前将前一次的小地图清空
+                $(".idMapContainer").append('<div id="mapArr'+rId+'" style="height: 325px;cursor:crosshair;"></div>');
+                //document.getElementById("mapArr").innerHTML = '';
+                mapLinkMove = [];
+                var mapCount = parseInt(arr[0].mapCount);
+                for(var i=0;i<mapCount;i++){
+                    //var smallMap =  mapControl.createSmallMap("ol-mouse-position","tabContent"+i);  // 调用地图，第一个参数，鼠标移动控件挂载点，第二个参数：地图控件挂载点
+                    //mapLinkMove.push(smallMap);
                     var url = "";//urlArr[i];
                     var oDiv = document.createElement('div');
                     var checkDiv = document.createElement('div');
@@ -158,7 +175,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
                     checkDiv.style.zIndex = "100";
                     checkDiv.style.position = "absolute";
                     checkDiv.style.marginLeft= "18%";
-                    checkDiv.innerHTML = '<input type="checkbox" style="float: right;" name="div'+i+'" type="checkbox">';
+                    checkDiv.innerHTML = '<input type="checkbox" style="float: right;" name="div'+rId+i+'" type="checkbox">';
                     checkDiv.onclick = function(event){
                         if(event.toElement.checked == true){
                             event.toElement.name;
@@ -182,9 +199,10 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
                     oDiv.style.width = "19.7%";
                     oDiv.style.float = "left";
                     oDiv.style.marginLeft = "0.3%";
-                    oDiv.id = "div"+i;
-
-                    if(oDiv.id == "div0"){
+                    oDiv.id = "div"+rId+i;
+                    mapIdArr.push("div"+rId+i);
+                    if(i == "0"){
+                        mapId = oDiv.id;
                         oDiv.style.border = "1px red solid";
                     }else{
                         oDiv.style.border = "1px #989696 solid";
@@ -193,26 +211,40 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
                         mapId = event.currentTarget.id;
                         document.getElementById(mapId).style.border = "1px red solid";
                         for(var i=0;i<mapCount;i++){
-                            if(mapId != "div"+i){
-                                document.getElementById("div"+i).style.border = "1px #989696 solid";
+                            if(mapId != "div"+rId+i){
+                                document.getElementById("div"+rId+i).style.border = "1px #989696 solid";
                             }
                         }
                     }
 
-                    document.getElementById("mapArr").appendChild(oDiv);
+                    document.getElementById("mapArr"+rId).appendChild(oDiv);
                     var wmtsUrl = "https://services.arcgisonline.com/arcgis/rest/services/Demographics/USA_Population_Density/MapServer/WMTS/";
                     var url = "http://192.168.31.12:8888/geoserver/wm/wms";
-                var mapTemp = smallMap.createMap(wmtsUrl,url,oDiv.id );
+                    var mapTemp = smallMap.createMap(wmtsUrl,url,oDiv.id );
+                }
+                i=null;
             }
-            i=null;
         };
-
+        //记录影像列表的值
+        var grid3Detail = {};
+        //记录点列表选中的ID
+        var pointId;
         var mapCount;
         var arr = [];
         // 每次单击一行，取得那一行的信息
         grid_3.attachEvent('onRowSelect', function(rId, cInd){
             var obj = {};
             obj.id = rId;   //行ID
+            pointId =  grid_3.cells(rId,3).getValue();  //取得点Id
+            if(grid3Detail[pointId] == undefined){
+                grid3Detail[pointId] = {"rows":[]};
+            }
+            //给右侧影像列表赋值
+            var data = grid3Detail[pointId];
+            grid_2.clearAll();
+            grid_2.parse(data,function(){
+                //alert(1);
+            },"json");
             obj.mapCount =  grid_3.cells(rId,3).getValue();  //取得重叠度
             if(!arr[0]){      // 第一次选择一行
                 arr.push(obj);
@@ -226,10 +258,18 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
             }
             $(".tabLi").css({"display":"block"});   //选择一行，显示其对应的选项卡
             $('.idName').html(rId);              // 将选择的那一行显示到选项卡
-            creatDiv();       //创建每副小地图容器，并且调用地图
+            _showSubView();
+            creatDiv(rId);       //创建每副小地图容器，并且调用地图
             return arr;
         });
-
+        function _showSubView(){
+            $mainViewFlag = false;
+            $subViewFlag = true;
+            $(".idMapContainer").css({"display":"block"});
+            $('.mapMainContainer').css({"display":"none"});
+            $(".tabLi").addClass('name');
+            $(".mainView").removeClass('name').addClass('number');
+        }
         var status_1 = layout_1.attachStatusBar();
         //主视图鼠标移动显示经纬度控件挂载点
         status_1.setText('<div id="post11"><div class="ol-mouse-position2"></div></div>');
@@ -298,27 +338,42 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
 
         grid_2.setHeader(["","序号","点ID","影像ID","影像名称","有效","X","Y"]);
         grid_2.setColTypes("ro,ro,ro,ro,ro,ro,ro,ro");
+        grid_2.setStyle(
+            "","overflow-x: hidden !important;","color:red;",""
 
+        );
         grid_2.setColSorting('str,str,str,str,str,str,str,str');
         grid_2.setInitWidths('0,*,*,*,*,*,*,*');
         grid_2.init();
-        grid_2.load('./data/grid.xml','xml');
+        //grid_2.load('./data/grid.xml','xml');
 
         //接收添加的点
-        var _returnAddPoint = function(point){
+        var _returnAddPoint = function(point,newData){
             pointTemp = point;
+            grid3Detail[pointId].rows.push(newData);
         }
         //接收编辑的点
-        var _returnEditPoint = function(point){
+        var _returnEditPoint = function(point,pointData){
             pointTemp = point;
+            grid3Detail[pointId] = pointData;
         }
         //接收选中的点
         var _returnSelectLint = function(points){
             points;
         }
         //接收删除的点
-        var _returnRemovePoint = function(points){
+        var _returnRemovePoint = function(points,pointData){
             points;
+            grid3Detail[pointId] = pointData;
+        }
+        //接收删除全部的点
+        var _returnRemoveAllPoint = function(pointData){
+            for(var k in grid3Detail){
+                grid3Detail[k].rows = [];
+            }
+            //grid3Detail.forEach(function(item){
+            //    item.rows = [];
+            //})
         }
         //接收编辑后的线
         var _returnLine = function(line){
@@ -350,31 +405,71 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
                     });
                     break;
                 case "zoomIn":
-                    $("#mapMainContainer").css({"cursor":"crosshair"});
-                    mapControl.zoomIn({
-                         eventName:"onClick",
-                         arg: []
-                     });
+                    if($mainViewFlag == true) {
+                        $("#mapMainContainer").css({"cursor": "crosshair"});
+                        mapControl.zoomIn({
+                            eventName: "onClick",
+                            arg: []
+                        });
+                    }else{
+                        if(isLink == true){
+                            for(var cid in checkTemp){
+                                if (checkTemp[cid] != "" && checkTemp[cid] != undefined) {
+                                    smallMap.toBig({
+                                        eventNme: "onClick",
+                                        arg: [id,cid]
+                                    });
+                                };
+                            }
+                        }else {
+                            smallMap.toBig({
+                                eventNme: "onClick",
+                                arg: [id, mapId]
+                            });
+                        }
+                    }
                     break;
                 case "zoomOut":
-                    $("#mapMainContainer").css({"cursor":"crosshair"});
-                    mapControl.zoomOut({
-                        eventName:"onClick"
-                      //  arg: [id,"mapMainContainer"]
-                    });
+                    if($mainViewFlag == true) {
+                        $("#mapMainContainer").css({"cursor": "crosshair"});
+                        mapControl.zoomOut({
+                            eventName: "onClick"
+                            //  arg: [id,"mapMainContainer"]
+                        });
+                    }else{
+                        if(isLink == true){
+                            for(var cid in checkTemp){
+                                if (checkTemp[cid] != "" && checkTemp[cid] != undefined) {
+                                    smallMap.toSmall({
+                                        eventNme: "onClick",
+                                        arg: [id,cid]
+                                    });
+                                };
+                            }
+                        }else {
+                            smallMap.toSmall({
+                                eventNme: "onClick",
+                                arg: [itemId, mapId]
+                            });
+                        }
+                    }
                     break;
                 case "fullView":
-                    mapControl.fullView({
-                        eventName:"onClick"
-                        //arg: [id,mapId]
-                    });
+                    if($mainViewFlag == true) {
+                        mapControl.fullView({
+                            eventName: "onClick"
+                            //arg: [id,mapId]
+                        });
+                    }else{
+
+                    }
                     break;
                 case "translate":
                     $(".mapMainContainer").css({"cursor":"move"});
-                    mapControl.translate({
-                        eventName:"onClick"
-                        //arg: [id,mapId]
-                    });
+                    //mapControl.translate({
+                    //    eventName:"onClick"
+                    //    //arg: [id,mapId]
+                    //});
                     break;
                 case "oneRatioOne":
                     mapControl.oneRatioOne({
@@ -404,7 +499,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
                         $("."+mapId).css({"cursor": "crosshair"});
                         smallMap.addPoint({
                             eventNme: "onClick",
-                            arg: [id,grid_2,mapId,_returnAddPoint]
+                            arg: [id,grid_2,mapId,_returnAddPoint,pointId]
                         });
                     }
                     break;
@@ -412,26 +507,52 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
                     if($mainViewFlag == true) {
                         $(".mapMainContainer").css({"cursor": "pointer"});
                         mapControl.modifyPoint({
-                            eventName: "onClick"
-                            //arg: [id,mapId]
+                            eventName: "onClick",
+                            arg: [grid_3]
                         });
                     }else{
                         smallMap.editPoint({
                             eventNme: "onClick",
-                            arg: [id,grid_2,mapId,_returnEditPoint]
+                            arg: [id,grid_2,mapId,_returnEditPoint,grid3Detail[pointId],pointId]
                         });
                     }
                     break;
                 case "deleteSingle":
-                    mapControl.deleteSinglePoint({
-                        eventName:"onClick"
-                    });
+                    if($mainViewFlag == true) {
+                        mapControl.deleteSinglePoint({
+                            eventName: "onClick",
+                            arg: [grid_3]
+                        });
+                    }else{
+                        smallMap.removeOnePoint({
+                            eventNme: "onClick",
+                            arg: [id,grid_2,mapId,_returnRemovePoint,grid3Detail[pointId],pointId]
+                        });
+                    }
                     break;
                 case "deleteAll":
-                    mapControl.deleteAllPoint({
-                        eventName:"onClick"
-                    });
-                    break;
+                    if($mainViewFlag == true) {
+                        mapControl.deleteAllPoint({
+                            eventName: "onClick",
+                            arg: [grid_3]
+                        });
+                    }else{
+                        //mapIdArr.forEach(var mapCheckId in mapIdArr){
+                        //        if (mapIdArr[mapCheckId] != "" && mapIdArr[mapCheckId] != undefined) {
+                        //            smallMap.removePoint({
+                        //                eventNme: "onClick",
+                        //                arg: [id, grid_2, mapCheckId,_returnRemovePoint,grid3Detail[pointId],pointId]
+                        //            });
+                        //        };
+                        //    }
+                        mapIdArr.forEach(function(mapId){
+                            smallMap.removePoint({
+                                eventNme: "onClick",
+                                arg: [id, grid_2, mapId,_returnRemoveAllPoint,grid3Detail[pointId],pointId]
+                            });
+                        })
+                    }
+                    break;_returnRemoveAllPoint
                 case "autoPrediction":
                     $(".autoMatch").addClass("autoMatchLoading").fadeIn(500);
                     //这里写的只是测试加载动画，真实情况要从后台处理数据进度判断动画消失的时间
@@ -440,10 +561,17 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
                     },10000);
                     break;
                 case "associatedDisplay":
-                    mapControl.mapLinkMove({
-                        eventName:"onclick",
-                        args:[mapLinkMove]
-                    });
+                    //mapControl.mapLinkMove({
+                    //    eventName:"onclick",
+                    //    args:[mapLinkMove]
+                    //});
+                    if(state == true){
+                        isLink = true;
+                        smallMap.moveMap(checkTemp);
+                    }else{
+                        isLink = false;
+                        smallMap.unMoveMap(checkTemp);
+                    }
                     break;
                 case "autoMatch":
                     $(".autoMatch").addClass("autoMatchLoading").fadeIn(500);
@@ -517,6 +645,19 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
                case "light":
                    if(state){
                        __listenValue();
+                   }
+                   break;
+               case "associatedDisplay":
+                   //mapControl.mapLinkMove({
+                   //    eventName:"onclick",
+                   //    args:[mapLinkMove]
+                   //});
+                   if(state == true){
+                       isLink = true;
+                       smallMap.moveMap(checkTemp);
+                   }else{
+                       isLink = false;
+                       smallMap.unMoveMap(checkTemp);
                    }
                    break;
            }

@@ -318,3 +318,7 @@ html, body{
     top: 90%;
     text-align: -webkit-right;
 }
+
+div.gridbox .objbox {
+    overflow-x: hidden !important;
+}

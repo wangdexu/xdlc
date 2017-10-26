@@ -101,7 +101,29 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
     }
 
     var raster = new ol.source.Raster({
-        sources: [new ol.source.OSM()],
+        sources: [
+            //new ol.source.OSM(),
+            new ol.source.ImageWMS({
+                //ratio: 1,
+                url: 'http://192.168.31.12:8888/geoserver/wm/wms',
+                params: {'FORMAT': 'image/jpeg',
+                    'VERSION': '1.1.1',
+                    STYLES: '',
+                    LAYERS: 'wm:ImageMosic',
+                }
+            })
+
+            //new ol.source.TileWMS({
+            //         url: "http://192.168.31.12:8888/geoserver/wm/wms",
+            //         params:
+            //         {'LAYERS': 'wm:ImageMosic',
+            //             'FORMAT':'image/png',
+            //             'VERSION':'1.1.1',
+            //             SRS: 'EPSG:4326',
+            //             TRANSPARENT:false,QUERYTYPE:"phasetile",OPATICY:0.7//'TILED': true,
+            //         }
+            //     })
+        ],
         operation: function(pixels, data) {
             var hcl = rgb2hcl(pixels[0]);
 
@@ -172,22 +194,39 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             }),
             layers: [
                //默认调取瓦片地图
-               // new ol.layer.Image({
-               // source: raster
-               // }),
-               // 调取geoservice的图，成功后，会覆盖默认的图层
-                new ol.layer.Tile({
-                    source: new ol.source.TileWMS({
-                        url: url,
-                        params:
-                        {'LAYERS': 'wm:ImageMosic',
-                            'FORMAT':'image/png',
-                            'VERSION':'1.1.1',
-                            SRS: 'EPSG:4326',
-                            TRANSPARENT:false,QUERYTYPE:"phasetile",OPATICY:0.7//'TILED': true,
-                        }
-                    })
+                new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    //ratio: 1,
+                    url: 'http://192.168.31.12:8888/geoserver/wm/wms',
+                    params: {'FORMAT': 'image/jpeg',
+                        'VERSION': '1.1.1',
+                        STYLES: '',
+                        LAYERS: 'wm:ImageMosic',
+                    }
                 })
+                }),
+                //new ol.source.ImageWMS({
+                //    //ratio: 1,
+                //    url: 'http://192.168.31.12:8888/geoserver/wm/wms',
+                //    params: {'FORMAT': 'image/jpeg',
+                //        'VERSION': '1.1.1',
+                //        STYLES: '',
+                //        LAYERS: 'wm:ImageMosic',
+                //    }
+                //})
+               // 调取geoservice的图，成功后，会覆盖默认的图层
+               // new ol.layer.Tile({
+               //     source: new ol.source.TileWMS({
+               //         url: url,
+               //         params:
+               //         {'LAYERS': 'wm:ImageMosic',
+               //             'FORMAT':'image/png',
+               //             'VERSION':'1.1.1',
+               //             SRS: 'EPSG:4326',
+               //             TRANSPARENT:false,QUERYTYPE:"phasetile",OPATICY:0.1//'TILED': true,
+               //         }
+               //     })
+               // })
             ],
             target:target,
             controls: ol.control.defaults({ //控件全部不能用
@@ -550,10 +589,11 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
 
     //修改点操作
     var modify;
-    var _modifyPoint = function() {
+    var _modifyPoint = function(data) {
         if(popArr.length<=0){
           alert("当前没有点可以修改！");
         }else{
+            var leftTable = data.arg[0];
             var selectedPointID ;
             var selectPoint = new ol.interaction.Select();   //实例化交互选择，操作要素
             map.addInteraction(selectPoint);
@@ -600,6 +640,18 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                         popArr[i].setPosition([x,y]);         //将当前点的显示id 跟着修改点变化
                     }
                 }
+                leftTable.forEachRow(function(id){
+                    leftTable.forEachCell(id,function(cellObj,index){
+                        if(index == 1){
+                            if(cellObj.getValue() == selectedPointID){
+                                leftTable.cells(id, 5).cell.innerHTML = x;//leftTable.cells(id, 1).cell.innerHTML;
+                                leftTable.cells(id, 6).cell.innerHTML = y;
+                            }
+                        }
+                    });
+                });
+                //var rowData = [numOrder,selectedPointID,pointType,overlap,"1",x,y,"0"];
+                //leftTable.addRow(i,rowData,false);  //行的ID 与序号号值是一样的
                 i = null;
             },this);//可以传入函数名，不使用匿名函数
         }
@@ -702,7 +754,8 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         }
     };
     //删除单点操作
-    var _deleteSinglePoint = function(){
+    var _deleteSinglePoint = function(data){
+        var leftTable = data.arg[0];
         var $pointIdPop = $("#pointIdPop");
         if(popArr.length<=0){
             alert("当前没有点可以删除！");
@@ -726,20 +779,34 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                             popArr.splice(i,1);                        //将对应存储的features 删除
                             points.splice(i,1);                        //将对应的点信息删除
                             $(this).val("null");                     //输入框置空
+
+                            leftTable.forEachRow(function(id){
+                                leftTable.forEachCell(id,function(cellObj,index){
+                                    if(index == 1){
+                                        if(cellObj.getValue() == $value){
+                                            leftTable.deleteRow(id);
+                                        }
+                                    }
+                                });
+                            });
                         }
                     }
                     i= null;
+                    $pointIdPop.css({"display":"none"}).fadeOut(500);
+                    $("#popContainer").removeClass("popContainer").fadeOut(500);
                 }
+
             });
         }
     };
 
     //删除全部点
-    var _deleteAllPoint = function(){
+    var _deleteAllPoint = function(data){
 
         if(popArr.length<=0){
             alert("当前没有点可以删除！");
         }else{
+            var leftTable = data.arg[0];
             //将界面上所有的的features删除
             pointLayer.getSource().clear();
             var i=0;
@@ -753,6 +820,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             //全删置空，没有关于点的相关信息
             popArr = [];
             points = [];
+            leftTable.clearAll()
         }
     };
     var _mapLinkMove = function(argList){
