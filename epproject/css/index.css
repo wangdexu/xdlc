@@ -322,3 +322,10 @@ html, body{
 div.gridbox .objbox {
     overflow-x: hidden !important;
 }
+
+.dhtmlxribbon_material .dhxrb_3rows_block {
+    float: left;
+    margin: 0px 0px;
+    overflow: hidden;
+    position: relative;
+}
