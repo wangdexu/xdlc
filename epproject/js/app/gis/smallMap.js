@@ -165,9 +165,9 @@ define(['./config','dhtmlx','ol'],function (config) {
 
         var map = new ol.Map({
             layers: [
-                new ol.layer.Image({
-                    source: raster
-                }),
+                //new ol.layer.Image({
+                //    source: raster
+                //}),
                 new ol.layer.Tile({
                     source: new ol.source.TileWMS({
                         url: url,
@@ -265,12 +265,13 @@ define(['./config','dhtmlx','ol'],function (config) {
     //全图操作
     var _fullView = function(data){
         var map = mapTemp[data.arg[1]];
-        var view = new ol.View({
-            center: [11975542.09549514,4225234.686415287],
-            zoom: 3,
-            maxZoom: 18
-        })
-        map.setView(view);
+        //var view = new ol.View({
+        //    center: [11975542.09549514,4225234.686415287],
+        //    zoom: 9,
+        //    maxZoom: 18
+        //})
+        //map.setView(view);
+        map.getView().setZoom(9);
     }
     //放大
     var _toBig = function(data){
@@ -288,15 +289,19 @@ define(['./config','dhtmlx','ol'],function (config) {
         var map = mapTemp[data.arg[1]];
         var point = data.arg[2];
         //point = _changeCoord("EPSG:4326","EPSG:3857",point);
-        map.getView().setCenter(point);
-        map.getView().setZoom(14);
+        //map.getView().setCenter(point);
+        map.getView().setZoom(13);
     }
     //当前点居中
     var _setPointCenter = function(data){
         var map = mapTemp[data.arg[1]];
         var point = data.arg[2];
         //point = _changeCoord("EPSG:4326","EPSG:3857",point);
-        map.getView().setCenter(point);
+        map.getView().animate({zoom: 12});
+        map.getView().animate( {center: point});
+        //map.getView().setCenter(point);
+        //map.getView().setZoom(13);
+
         //map.O.view.A.center = point;
     }
     //添加点操作

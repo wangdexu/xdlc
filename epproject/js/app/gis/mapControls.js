@@ -177,9 +177,21 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
      */
     var mapTemp = {};
     var rasterTemp = {};
-
+    var layer;
     //创建主视图的地图，禁用了双击放大、旋转
     var _creatMap = function(positionControl,target,mouseControlTarget,url){
+        layer =  new ol.layer.Image({
+            source: new ol.source.ImageWMS({
+                //ratio: 1,
+                url: 'http://192.168.31.12:8888/geoserver/wm/wms',
+                params: {'FORMAT': 'image/jpeg',
+                    'VERSION': '1.1.1',
+                    STYLES: '',
+                    LAYERS: 'wm:ImageMosic',
+                }
+            }),
+            visible:true
+        })
         map = new ol.Map({
             interactions: ol.interaction.defaults({
                 //默认不能双击、滚轮放大
@@ -194,17 +206,8 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             }),
             layers: [
                //默认调取瓦片地图
-                new ol.layer.Image({
-                source: new ol.source.ImageWMS({
-                    //ratio: 1,
-                    url: 'http://192.168.31.12:8888/geoserver/wm/wms',
-                    params: {'FORMAT': 'image/jpeg',
-                        'VERSION': '1.1.1',
-                        STYLES: '',
-                        LAYERS: 'wm:ImageMosic',
-                    }
-                })
-                }),
+                layer
+               ,
                 //new ol.source.ImageWMS({
                 //    //ratio: 1,
                 //    url: 'http://192.168.31.12:8888/geoserver/wm/wms',
@@ -256,9 +259,10 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         rasterTemp[target] = raster;
         return mapTemp;
     };
+    var drawOverlay;
     var _createBox = function(divId,data){
         var featuresArr = [];
-        var drawOverlay;
+        //var drawOverlay;
             var divId = divId;
 
 
@@ -269,12 +273,14 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             var drawStyle = new ol.style.Style({image: image, fill: fill, stroke: stroke});
             if(undefined == drawOverlay){
                 drawOverlay = new ol.layer.Vector({
-                    source: new ol.source.Vector()
+                    source: new ol.source.Vector(),
+                    visible:true
                 });
             }
             var features =  new ol.Collection();
             drawOverlay.setStyle(drawStyle);
-            drawOverlay.setMap(mapTemp[divId]);
+            //drawOverlay.setMap(mapTemp[divId]);
+            mapTemp[divId].addLayer(drawOverlay);
             //mapTemp[divId].on('click', function (evt) {
             //    evt.target.f;
             //    features;
@@ -402,17 +408,25 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
     var _zoomOut = function(data){
         map.getView().setZoom(map.getView().getZoom()-1);
     }
+    //影像范围是否显示
+    var _showImgRange = function(isShow){
+        drawOverlay.setVisible(isShow);
+    }
+    //影像是否显示
+    var _showImgLayer = function(isShow){
+        layer.setVisible(isShow);
+    }
     //全图
     var _fullView = function(){
         map.removeInteraction(dragZoom);  //移除拉框
        // __setMapCenter();
-        map.getView().setZoom(3);   //设置放大级别为3
+        map.getView().setZoom(9);   //设置放大级别为3
     }
     //1:1显示
     var _oneRatioOne = function(){
         map.removeInteraction(dragZoom);
       //  __setMapCenter();
-        map.getView().setZoom(16);     //设置放大1:1,具体要看实际需求是多少，最好设置变量，方便修改维护
+        map.getView().setZoom(13);     //设置放大1:1,具体要看实际需求是多少，最好设置变量，方便修改维护
     };
     //平移
     var _translate = function(){
@@ -491,6 +505,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
     var popArr = [];
     var _stabPoint = function(argList) {
         var  leftTable = argList.arg[0]; //获取第一个参数
+        var fun = argList.arg[1];
         if(pointLayer==null){ //只创建一次添加点图层
             __createPointLayer(); //调用绘制点图层
             map.addLayer(pointLayer); //将图层添加到目标之上
@@ -551,6 +566,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             popArr.push(pop);   // 存储点的ol.Overlay 对象
             index++;
             map.removeInteraction(draw);  //移除交互
+            fun([singlePoint.singlePointtCoordinateX,singlePoint.singlePointtCoordinateY],points)
         });
     };
 
@@ -656,7 +672,17 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             },this);//可以传入函数名，不使用匿名函数
         }
     };
-
+    //当前点居中
+    var _setPointCenter = function(data){
+        //var map = mapTemp[data.arg[1]];
+        var point = data.arg[2];
+        //point = _changeCoord("EPSG:4326","EPSG:3857",point);
+        map.getView().animate({zoom: 12});
+        map.getView().animate({center: point});
+        //map.getView().setCenter(point);
+        //map.getView().setZoom(12);
+        //map.O.view.A.center = point;
+    }
     //拖拽函数
     var drapableObj = function(obj){
         obj.on("mousedown",function(event){
@@ -861,7 +887,10 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         deleteAllPoint:_deleteAllPoint,
         mapLinkMove:_mapLinkMove,
         export:_export,
-        createBox:_createBox
+        createBox:_createBox,
+        setPointCenter:_setPointCenter,
+        showImgLayer:_showImgLayer,
+        showImgRange:_showImgRange
     }
 });
 

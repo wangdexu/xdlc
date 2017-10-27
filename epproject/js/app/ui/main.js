@@ -14,6 +14,10 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
         var isLink = false;
         //添加编辑后零时保存点
         var pointTemp;
+        //保存当前点
+        var nowPoint = [];
+        //保存主视图所有的点
+        var manPoints = [];
         window.dhx4.skin = 'material';
         var main_layout = new dhtmlXLayoutObject(document.body, '2U');
 
@@ -54,18 +58,19 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
                     {id : "close", text : "关闭",img : "close.png",isbig : true,  type : "button"},
                     {id : "open", text : "提交",img : "submit.png", isbig : true, type : "button"},
                     {id : "export", text : "导入导出",img : "import.png",isbig : true,  type : "button"},
-                    {id : "imageRange", text : "影像范围", type : "checkbox"},
-                    {id : "imageControl", text : "影像", type : "checkbox"},
-                    {id : "controlPoint", text : "控制点", type : "checkbox"},
-                    {id : "linkPoint", text : "连接点", type : "checkbox"},
-                    {id : "checkPoint", text : "检查点", type : "checkbox"},
-                    {id : "pointID", text : "点ID", type : "checkbox"}
+                    {id : "imageRange", text : "影像范围", type : "checkbox", checked : true},
+                    {id : "imageControl", text : "影像", type : "checkbox", checked : true},
+                    {id : "controlPoint", text : "控制点", type : "checkbox", checked : true},
+                    {id : "linkPoint", text : "连接点", type : "checkbox", checked : true},
+                    {id : "checkPoint", text : "检查点", type : "checkbox", checked : true},
+                    {id : "pointID", text : "点ID", type : "checkbox", checked : true}
                 ]},
                 {id : "tools", text : "工具", text_pos : "buttom", type : "block", mode : "cols", list : [
                     {id : "zoomIn", text : "放大",img:"big.png",isbig : true, type : "button"},
                     {id : "zoomOut", text : "缩小",img:"small.png",isbig : true, type : "button"},
                     {id : "translate", text : "平移",img : "move.png", isbig : true, type : "button"},
                     {id : "fullView", text : "全图",img:"allimage.png",isbig : true, type : "button"},
+                    {id : "setPointCenter", text : "当前点居中",img:"point_center.png", isbig : true, type : "button"},
                     {id : "oneRatioOne", text : "1:1显示", img : "1show.png", isbig : true, type : "button"},
                     {id : "group_1", text : "group_1", type : "group", list : [
                         {id : "contrast", text : "对比度", type : "text"},
@@ -239,6 +244,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
             if(grid3Detail[pointId] == undefined){
                 grid3Detail[pointId] = {"rows":[]};
             }
+            nowPoint = [grid_3.cells(rId,5).getValue(),grid_3.cells(rId,6).getValue()];
             //给右侧影像列表赋值
             var data = grid3Detail[pointId];
             grid_2.clearAll();
@@ -347,6 +353,11 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
         grid_2.init();
         //grid_2.load('./data/grid.xml','xml');
 
+        //接收疵的点
+        var _returnCiPoint =  function(point,points){
+            nowPoint = point;
+            manPoints = points;
+        }
         //接收添加的点
         var _returnAddPoint = function(point,newData){
             pointTemp = point;
@@ -461,7 +472,21 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
                             //arg: [id,mapId]
                         });
                     }else{
-
+                        if(isLink == true){
+                            for(var cid in checkTemp){
+                                if (checkTemp[cid] != "" && checkTemp[cid] != undefined) {
+                                    smallMap.fullView({
+                                        eventNme: "onClick",
+                                        arg: [id,cid]
+                                    });
+                                };
+                            }
+                        }else{
+                            smallMap.fullView({
+                                eventNme: "onClick",
+                                arg: [id,mapId]
+                            });
+                        }
                     }
                     break;
                 case "translate":
@@ -471,11 +496,54 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
                     //    //arg: [id,mapId]
                     //});
                     break;
+                case "setPointCenter":
+                    if($mainViewFlag == true) {
+                        mapControl.setPointCenter({
+                            eventNme: "onClick",
+                            arg: [id, mapId, nowPoint]
+                        });
+                    }else{
+                        if(isLink == true){
+                            for(var cid in checkTemp){
+                                if (checkTemp[cid] != "" && checkTemp[cid] != undefined) {
+                                    smallMap.setPointCenter({
+                                        eventNme: "onClick",
+                                        arg: [id, cid, nowPoint]
+                                    });
+                                };
+                            }
+                        }else {
+                            smallMap.setPointCenter({
+                                eventNme: "onClick",
+                                arg: [id, mapId, nowPoint]
+                            });
+                        }
+                    }
+
+                    break;
                 case "oneRatioOne":
-                    mapControl.oneRatioOne({
-                        eventName:"onClick"
-                        //arg: [id,mapId]
-                    });
+                    if($mainViewFlag == true) {
+                        mapControl.oneRatioOne({
+                            eventName: "onClick"
+                            //arg: [id,mapId]
+                        });
+                    }else{
+                        if(isLink == true){
+                            for(var cid in checkTemp){
+                                if (checkTemp[cid] != "" && checkTemp[cid] != undefined) {
+                                    smallMap.oneToOne({
+                                        eventNme: "onClick",
+                                        arg: [id, cid]
+                                    });
+                                };
+                            }
+                        }else {
+                            smallMap.oneToOne({
+                                eventNme: "onClick",
+                                arg: [id, mapId]
+                            });
+                        }
+                    }
                     break;
                 case "addPoint":
                     if($mainViewFlag == true){
@@ -493,7 +561,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
                         // $(".mapMainContainer").css({"cursor":"default"});
                         mapControl.stabPoint({
                             eventName: "onClick",
-                            arg: [grid_3]
+                            arg: [grid_3,_returnCiPoint]
                         });
                     }else{
                         $("."+mapId).css({"cursor": "crosshair"});
@@ -590,6 +658,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
         ribbon_1.attachEvent('onCheck', function(id, state){
            switch(id){
                case "imageRange":
+                   mapControl.showImgRange(state);
                    if(state){
                        console.log("你选中了" + id);
                    }else{
@@ -597,6 +666,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
                    }
                    break;
                case "imageControl":
+                   mapControl.showImgLayer(state);
                    if(state){
                        console.log("你选中了" + id);
                    }else{
