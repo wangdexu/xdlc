@@ -1,7 +1,7 @@
 /**
  * Created by domea on 17-6-2.
  */
-define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function ($,dhtmlx,ol,mapControl,smallMap) {
+define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/produce'],function ($,dhtmlx,ol,mapControl,smallMap,produce) {
     var _test=function(){
         window.restUrl;
         //默认第一个map
@@ -648,11 +648,17 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
                     //这里写的只是测试加载动画，真实情况要从后台处理数据进度判断动画消失的时间
                     setTimeout(function(){
                         $(".autoMatch").removeClass('.autoMatchLoading').fadeOut(500);
-                    },10000);
-
+                    },1000);
+                    produce.autoMatch({
+                        eventName:"onClick"
+                        //arg: [id,mapId]
+                    });
                     break;
                 case "blockAdjustment":
-                    console.log(id);
+                    produce.blockAdjustment({
+                        eventName:"onClick"
+                        //arg: [id,mapId]
+                    });
                     break;
             }
         });
