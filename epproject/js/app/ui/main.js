@@ -237,36 +237,38 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
         var mapCount;
         var arr = [];
         // 每次单击一行，取得那一行的信息
-        grid_3.attachEvent('onRowSelect', function(rId, cInd){
-            var obj = {};
-            obj.id = rId;   //行ID
-            pointId =  grid_3.cells(rId,3).getValue();  //取得点Id
-            if(grid3Detail[pointId] == undefined){
-                grid3Detail[pointId] = {"rows":[]};
-            }
-            nowPoint = [grid_3.cells(rId,5).getValue(),grid_3.cells(rId,6).getValue()];
-            //给右侧影像列表赋值
-            var data = grid3Detail[pointId];
-            grid_2.clearAll();
-            grid_2.parse(data,function(){
-                //alert(1);
-            },"json");
-            obj.mapCount =  grid_3.cells(rId,3).getValue();  //取得重叠度
-            if(!arr[0]){      // 第一次选择一行
-                arr.push(obj);
-            }else{     //判断选择的这一行是否已经存在了
-                if(parseInt(arr[0].id) === parseInt(obj.id)){
-                   return arr;
-                }else{
-                    arr.pop(arr[0]);
-                    arr.push(obj);
+        grid_3.attachEvent('onRowSelect', function(rId, cInd) {
+            if(cInd == 3){
+                var obj = {};
+                obj.id = rId;   //行ID
+                pointId = grid_3.cells(rId, 3).getValue();  //取得点Id
+                if (grid3Detail[pointId] == undefined) {
+                    grid3Detail[pointId] = {"rows": []};
                 }
+                nowPoint = [grid_3.cells(rId, 5).getValue(), grid_3.cells(rId, 6).getValue()];
+                //给右侧影像列表赋值
+                var data = grid3Detail[pointId];
+                grid_2.clearAll();
+                grid_2.parse(data, function () {
+                    //alert(1);
+                }, "json");
+                obj.mapCount = grid_3.cells(rId, 3).getValue();  //取得重叠度
+                if (!arr[0]) {      // 第一次选择一行
+                    arr.push(obj);
+                } else {     //判断选择的这一行是否已经存在了
+                    if (parseInt(arr[0].id) === parseInt(obj.id)) {
+                        return arr;
+                    } else {
+                        arr.pop(arr[0]);
+                        arr.push(obj);
+                    }
+                }
+                $(".tabLi").css({"display": "block"});   //选择一行，显示其对应的选项卡
+                $('.idName').html(rId);              // 将选择的那一行显示到选项卡
+                _showSubView();
+                creatDiv(rId);       //创建每副小地图容器，并且调用地图
+                return arr;
             }
-            $(".tabLi").css({"display":"block"});   //选择一行，显示其对应的选项卡
-            $('.idName').html(rId);              // 将选择的那一行显示到选项卡
-            _showSubView();
-            creatDiv(rId);       //创建每副小地图容器，并且调用地图
-            return arr;
         });
         function _showSubView(){
             $mainViewFlag = false;
@@ -674,6 +676,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
                    }
                    break;
                case "controlPoint":
+                   mapControl.showControlPoint(state,grid_3);
                    if(state){
                        console.log("你选中了" + id);
                    }else{
@@ -681,6 +684,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
                    }
                    break;
                case "linkPoint":
+                   mapControl.showTiepointPoint(state,grid_3);
                    if(state){
                        console.log("你选中了" + id);
                    }else{
@@ -688,6 +692,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
                    }
                    break;
                case "checkPoint":
+                   mapControl.showCheckPoint(state,grid_3);
                    if(state){
                        console.log("你选中了" + id);
                    }else{
@@ -695,6 +700,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap'],function 
                    }
                    break;
                case "pointID":
+                   mapControl.showPoint(state);
                    if(state){
                        console.log("你选中了" + id);
                    }else{

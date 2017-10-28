@@ -416,6 +416,73 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
     var _showImgLayer = function(isShow){
         layer.setVisible(isShow);
     }
+    //控制点是否显示
+    var _showControlPoint = function(isShow,grid_3){
+        var pointArr = [];
+        grid_3.forEachRow(function(id){  //循环每一行
+            grid_3.forEachCell(id,function(cellObj,index){  //循环每一行的每一个cell,每个cell的id为index，对象为cellObj
+                if(index === 2 && "Controlpoint" == cellObj.getValue()){
+                    pointArr.push(grid_3.cells(id, 1).cell.innerHTML)
+                }
+
+            });
+        });
+        pointLayerArr.forEach(function(layer){
+            pointArr.forEach(function(pId){
+                if(pId == layer.id){
+                    layer.setVisible(isShow);
+                    popArr[pId-1].setVisible(isShow);
+                    $("#pop"+(pId-1)).toggle();
+                }
+            })
+        })
+    }
+    //链接点是否显示
+    var _showTiepointPoint = function(isShow,grid_3){
+        var pointArr = [];
+        grid_3.forEachRow(function(id){  //循环每一行
+            grid_3.forEachCell(id,function(cellObj,index){  //循环每一行的每一个cell,每个cell的id为index，对象为cellObj
+                if(index === 2 && "Tiepoint" == cellObj.getValue()){
+                    pointArr.push(grid_3.cells(id, 1).cell.innerHTML)
+                }
+            });
+        });
+        pointLayerArr.forEach(function(layer){
+            pointArr.forEach(function(pId){
+                if(pId == layer.id){
+                    layer.setVisible(isShow);
+                    //popArr[pId-1].setVisible(isShow);
+                    $("#pop"+(pId-1)).toggle();
+                }
+            })
+        })
+    }
+    //检查点是否显示
+    var _showCheckPoint = function(isShow,grid_3){
+        var pointArr = [];
+        grid_3.forEachRow(function(id){  //循环每一行
+            grid_3.forEachCell(id,function(cellObj,index){  //循环每一行的每一个cell,每个cell的id为index，对象为cellObj
+                if(index === 2 && "Checkpoint" == cellObj.getValue()){
+                    pointArr.push(grid_3.cells(id, 1).cell.innerHTML)
+                }
+            });
+        });
+        pointLayerArr.forEach(function(layer){
+            pointArr.forEach(function(pId){
+                if(pId == layer.id){
+                    layer.setVisible(isShow);
+                    popArr[pId-1].setVisible(isShow);
+                    $("#pop"+(pId-1)).toggle();
+                }
+            })
+        })
+    }
+    //点id是否显示
+    var _showPoint = function(isShow){
+        popArr.forEach(function(pop){
+            pop.setVisible(isShow);
+        })
+    }
     //全图
     var _fullView = function(){
         map.removeInteraction(dragZoom);  //移除拉框
@@ -441,12 +508,13 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
     });
 
 
-    var pointLayer = null;
-    var draw = null;
 
+    var draw = null;
+    var pointLayerArr = [];
      //创建绘制图层
     var __createPointLayer = function(){
-        pointLayer = new ol.layer.Vector({
+
+        var pointLayer = new ol.layer.Vector({
             source:source,
             style:function(feature) {
                 return [
@@ -470,7 +538,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
     };
 
     //绘制一个点
-    var __drawPoint = function(){
+    var __drawPoint = function(pointLayer){
         draw = new ol.interaction.Draw({
             type: 'Point',
             source: pointLayer.getSource(),
@@ -506,23 +574,25 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
     var _stabPoint = function(argList) {
         var  leftTable = argList.arg[0]; //获取第一个参数
         var fun = argList.arg[1];
-        if(pointLayer==null){ //只创建一次添加点图层
-            __createPointLayer(); //调用绘制点图层
+        //if(pointLayer==null){ //只创建一次添加点图层
+           var pointLayer = __createPointLayer(); //调用绘制点图层
             map.addLayer(pointLayer); //将图层添加到目标之上
-            __drawPoint();           //绘制一个点
-        }
+            __drawPoint(pointLayer);           //绘制一个点
+        //}
         map.addInteraction(draw);   //添加交互
 
         //没点时，获取最大的行号、点ID号
         if(orderList.length<=0 && pointIdList.length <= 0){
             leftTable.forEachRow(function(id){  //循环每一行
                 leftTable.forEachCell(id,function(cellObj,index){  //循环每一行的每一个cell,每个cell的id为index，对象为cellObj
-                    if(index === 0){
-                        orderList.push(cellObj.getValue());
-                    }
-                    if(index === 1){
-                        pointIdList.push(cellObj.getValue());
-                    }
+                    //if(index === 0){
+                    //    orderList.push(cellObj.getValue());
+                    //}
+                    //if(index === 1){
+                    //    pointIdList.push(cellObj.getValue());
+                    //}
+                    orderList.push(0);
+                    pointIdList.push(0);
                 });
             });
         }
@@ -547,7 +617,8 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             //添加一行信息  序号，点ID，点类型。。。。。。。
             var rowData = [numOrder,pointID,pointType[0],3,"1",__mapCoordinateFixed4(coordinates[0]),__mapCoordinateFixed4(coordinates[1]),"0"];
             leftTable.addRow(numOrder,rowData,false);  //行的ID 与序号号值是一样的
-
+            pointLayer.id = pointID;
+            pointLayerArr.push(pointLayer);
             event.feature.setId(pointID);  //给每个点（要素）添加一个唯一的ID值
             singlePoint.id = pointID;
             singlePoint.singlePointtCoordinateX = __mapCoordinateFixed4(coordinates[0]);
@@ -890,7 +961,11 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         createBox:_createBox,
         setPointCenter:_setPointCenter,
         showImgLayer:_showImgLayer,
-        showImgRange:_showImgRange
+        showImgRange:_showImgRange,
+        showControlPoint:_showControlPoint,
+        showCheckPoint:_showCheckPoint,
+        showTiepointPoint:_showTiepointPoint,
+        showPoint:_showPoint
     }
 });
 
