@@ -582,19 +582,22 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         map.addInteraction(draw);   //添加交互
 
         //没点时，获取最大的行号、点ID号
-        if(orderList.length<=0 && pointIdList.length <= 0){
-            leftTable.forEachRow(function(id){  //循环每一行
-                leftTable.forEachCell(id,function(cellObj,index){  //循环每一行的每一个cell,每个cell的id为index，对象为cellObj
-                    //if(index === 0){
-                    //    orderList.push(cellObj.getValue());
-                    //}
-                    //if(index === 1){
-                    //    pointIdList.push(cellObj.getValue());
-                    //}
-                    orderList.push(0);
-                    pointIdList.push(0);
+        if(orderList.length<=0 && pointIdList.length <= 0) {
+            if (leftTable.getRowsNum() > 0) {
+                leftTable.forEachRow(function (id) {  //循环每一行
+                    leftTable.forEachCell(id, function (cellObj, index) {  //循环每一行的每一个cell,每个cell的id为index，对象为cellObj
+                        if (index === 0) {
+                            orderList.push(cellObj.getValue() == undefined ? 0 : cellObj.getValue());
+                        }
+                        if (index === 1) {
+                            pointIdList.push(cellObj.getValue() == undefined ? 0 : cellObj.getValue());
+                        }
+                    });
                 });
-            });
+            } else {
+                orderList.push(0);
+                pointIdList.push(0);
+            }
         }
 
         //监听一个点绘制完成，获取坐标
@@ -651,17 +654,22 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
     //添加一个点,就是添加一条空数据，手动填入数据
     var _addPoint = function(argList){
      var  leftTable = argList.arg[0]; //获取第一个参数
-        if(orderList.length<=0 && pointIdList.length <= 0){
-            leftTable.forEachRow(function(id){
-                leftTable.forEachCell(id,function(cellObj,index){
-                    if(index === 0){
-                        orderList.push(cellObj.getValue());
-                    }
-                    if(index === 1){
-                        pointIdList.push(cellObj.getValue());
-                    }
+        if(orderList.length<=0 && pointIdList.length <= 0) {
+            if (leftTable.getRowsNum() > 0) {
+                leftTable.forEachRow(function (id) {  //循环每一行
+                    leftTable.forEachCell(id, function (cellObj, index) {  //循环每一行的每一个cell,每个cell的id为index，对象为cellObj
+                        if (index === 0) {
+                            orderList.push(cellObj.getValue() == undefined ? 0 : cellObj.getValue());
+                        }
+                        if (index === 1) {
+                            pointIdList.push(cellObj.getValue() == undefined ? 0 : cellObj.getValue());
+                        }
+                    });
                 });
-            });
+            } else {
+                orderList.push(0);
+                pointIdList.push(0);
+            }
         }
 
        var numOrder = Math.max.apply(null,orderList) + 1;
@@ -673,7 +681,59 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         var rowData = [numOrder,pointID,pointType[0],"",FLAGTRUE,"","",""];
         leftTable.addRow(numOrder,rowData,false);
     };
+    //自动预测
+    var _auto = function(argList) {
+        var leftTable = argList.arg[0]; //获取第一个参数
+        //var fun = argList.arg[1];
+        var pointLayer = new ol.layer.Vector({
+            source: new ol.source.Vector(),
+            style:new ol.style.Style({
+                image:new ol.style.Icon({
+                    anchor: [10,10],
+                    anchorXUnits: 'pixels',
+                    anchorYUnits: 'pixels',
+                    imgSize:[21,21],
+                    src:"img/21px.png"
+                })
+            }),
+            wrapX: false
+        });
+        var point = [115.4855,40.269];
+        var pointFeature = new ol.Feature({
+            geometry:new ol.geom.Point(point),
+            style:new ol.style.Style({
+                image:new ol.style.Icon({
+                    anchor: [10,10],
+                    anchorXUnits: 'pixels',
+                    anchorYUnits: 'pixels',
+                    imgSize:[21,21],
+                    src:"img/21px.png"
+                })
+            })
+        });
+        pointLayer.getSource().addFeature(pointFeature);
+        map.addLayer(pointLayer); //将图层添加到目标之上
+        var id = leftTable.getSelectedId();
+        var pointID = leftTable.cells(id, 1).cell.innerHTML;
+        pointFeature.setId(pointID);
+        pointLayer.id = pointID;
+        pointLayerArr.push(pointLayer);
+        //给每个刺点显示其点ID的容器
+        $('#pop').append('<div id="pop'+pointID+'" style="color: red">&nbsp;'+pointID+'</div>');
 
+        var pop = new ol.Overlay({
+            element:document.getElementById('pop'+pointID), //挂载点
+            position: point,    //设置其位置
+            positioning: 'top-left'   //显示位置的方向
+        });
+        var singlePoint={};
+        singlePoint.id = pointID;
+        singlePoint.singlePointtCoordinateX = __mapCoordinateFixed4(pointID[0]);
+        singlePoint.singlePointtCoordinateY =__mapCoordinateFixed4(pointID[1]);
+        points.push(singlePoint);
+        map.addOverlay(pop);  // 地图添加
+        popArr.push(pop);   // 存储点的ol.Overlay 对象
+    }
     //修改点操作
     var modify;
     var _modifyPoint = function(data) {
@@ -965,7 +1025,8 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         showControlPoint:_showControlPoint,
         showCheckPoint:_showCheckPoint,
         showTiepointPoint:_showTiepointPoint,
-        showPoint:_showPoint
+        showPoint:_showPoint,
+        auto:_auto
     }
 });
 

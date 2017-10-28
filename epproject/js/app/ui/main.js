@@ -10,6 +10,8 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         var mapIdArr = [];
         //联动保存选中项mapId
         var checkTemp = {};
+        //全选保存选中项mapId
+        var checkAllTemp = {};
         //是否选中联动按钮
         var isLink = false;
         //添加编辑后零时保存点
@@ -101,6 +103,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     //]},
                     {id : "autoPrediction", text : "自动预测",img:"auto.png",isbig : true, type : "button"},
                     {id : "associatedDisplay", text : "关联显示",img:"view_connect.png",isbig : true, type : "checkbox"}
+                    //,{id : "checkAll", text : "全选",img:"view_connect.png", type : "checkbox"}
 
                 ]},
                 {id : "kongThreeProcess", text : "空三处理", text_pos : "buttom", type : "block", mode : "cols", list : [
@@ -181,21 +184,23 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     checkDiv.style.position = "absolute";
                     checkDiv.style.marginLeft= "18%";
                     checkDiv.innerHTML = '<input type="checkbox" style="float: right;" name="div'+rId+i+'" type="checkbox">';
+                    checkAllTemp["div"+rId+i] = "div"+rId+i;
                     checkDiv.onclick = function(event){
                         if(event.toElement.checked == true){
                             event.toElement.name;
                             checkTemp[event.toElement.name] = event.toElement.name;
                             //如果联动为选中状态，新选择地图增加联动监听
-                            if(isLink == true){
+                            //if(isLink == true){
                                 smallMap.moveMap(checkTemp);
-                            }
+                            //}
                         }else{
-                            checkTemp[event.toElement.name] = "";
+
                             //如果联动为选中状态，取消地图选择移除取消的地图监听并重新增加监听
-                            if(isLink == true) {
+                            //if(isLink == true) {
                                 smallMap.unMoveMap(checkTemp);
+                                checkTemp[event.toElement.name] = "";
                                 smallMap.moveMap(checkTemp);
-                            }
+                            //}
                         }
                     }
 
@@ -407,9 +412,31 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         ribbon_1.attachEvent("onClick", function(id) {
             switch(id){
                 case "open":
+                    //$.ajax({
+                    //    url:window.restUrl+"api/fs/listioput/"+taskId,
+                    //    type:"get",
+                    //    data:"",
+                    //    async: false,
+                    //    success:function(data){
+                    //
+                    //        alert("提交成功！");
+                    //    },
+                    //    error: function (e) {
+                    //        if(e.status == "401"){
+                    //            //getSession();
+                    //        }
+                    //    }
+                    //})
                    console.log(id);
                     break;
                 case "close":
+                    if
+                    (confirm("您确定要关闭本系统吗？")){
+                        window.opener=null;
+                        window.open('','_self');
+                        window.close();
+                    }
+                    else{}
                     console.log(id);
                     break;
                 case "export":
@@ -624,11 +651,15 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     }
                     break;_returnRemoveAllPoint
                 case "autoPrediction":
-                    $(".autoMatch").addClass("autoMatchLoading").fadeIn(500);
+                    //$(".autoMatch").addClass("autoMatchLoading").fadeIn(500);
                     //这里写的只是测试加载动画，真实情况要从后台处理数据进度判断动画消失的时间
-                    setTimeout(function(){
-                        $(".autoMatch").removeClass('.autoMatchLoading').fadeOut(500);
-                    },10000);
+                    //setTimeout(function(){
+                    //    $(".autoMatch").removeClass('.autoMatchLoading').fadeOut(500);
+                    //},10000);
+                    mapControl.auto({
+                        eventName: "onClick",
+                        arg: [grid_3]
+                    })
                     break;
                 case "associatedDisplay":
                     //mapControl.mapLinkMove({
@@ -643,6 +674,8 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                         smallMap.unMoveMap(checkTemp);
                     }
                     break;
+
+
                 case "autoMatch":
                     $(".autoMatch").addClass("autoMatchLoading").fadeIn(500);
                     //这里写的只是测试加载动画，真实情况要从后台处理数据进度判断动画消失的时间
@@ -736,10 +769,29 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                    //});
                    if(state == true){
                        isLink = true;
-                       smallMap.moveMap(checkTemp);
+                       //smallMap.moveMap(checkTemp);
+                       smallMap.moveMap(checkAllTemp);
+                       smallMap.checkAll(checkAllTemp);
                    }else{
                        isLink = false;
-                       smallMap.unMoveMap(checkTemp);
+                       //smallMap.unMoveMap(checkTemp);
+                       smallMap.unMoveMap(checkAllTemp);
+                       smallMap.unCheckAll(checkAllTemp);
+                   }
+                   break;
+               case "checkAll":
+                   //mapControl.mapLinkMove({
+                   //    eventName:"onclick",
+                   //    args:[mapLinkMove]
+                   //});
+                   if(state == true){
+                       isLink = true;
+                       smallMap.moveMap(checkAllTemp);
+                       smallMap.checkAll(checkAllTemp);
+                   }else{
+                       isLink = false;
+                       smallMap.unMoveMap(checkAllTemp);
+                       smallMap.unCheckAll(checkAllTemp);
                    }
                    break;
            }

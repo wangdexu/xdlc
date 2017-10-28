@@ -262,6 +262,18 @@ define(['./config','dhtmlx','ol'],function (config) {
             }
         }
     }
+    //添加全选
+    var _checkAll = function(checkAllTemp){
+        for (k in checkAllTemp) {
+            document.getElementsByName(k)[0].checked = true;
+        }
+    }
+    //清除全选
+    var _unCheckAll = function(checkAllTemp){
+        for (k in checkAllTemp) {
+            document.getElementsByName(k)[0].checked = false;
+        }
+    }
     //全图操作
     var _fullView = function(data){
         var map = mapTemp[data.arg[1]];
@@ -445,19 +457,22 @@ define(['./config','dhtmlx','ol'],function (config) {
             //point[1] = point[1].toFixed(6);
 
             //没点时，获取最大的行号、点ID号
-            if(orderList.length<=0 && pointIdList.length <= 0){
-                //grid_7.forEachRow(function(id){  //循环每一行
-                //    grid_7.forEachCell(id,function(cellObj,index){  //循环每一行的每一个cell,每个cell的id为index，对象为cellObj
-                //        if(index === 0){
-                //            orderList.push(cellObj.getValue());
-                //        }
-                //        if(index === 1){
-                //            pointIdList.push(cellObj.getValue());
-                //        }
-                //    });
-                //});
-                orderList.push(0);
-                pointIdList.push(0);
+            if(orderList.length<=0 && pointIdList.length <= 0) {
+                if (grid_7.getRowsNum() > 0) {
+                    grid_7.forEachRow(function (id) {  //循环每一行
+                        grid_7.forEachCell(id, function (cellObj, index) {  //循环每一行的每一个cell,每个cell的id为index，对象为cellObj
+                            if (index === 0) {
+                                orderList.push(cellObj.getValue() == undefined ? 0 : cellObj.getValue());
+                            }
+                            if (index === 1) {
+                                pointIdList.push(cellObj.getValue() == undefined ? 0 : cellObj.getValue());
+                            }
+                        });
+                    });
+                } else {
+                    orderList.push(0);
+                    pointIdList.push(0);
+                }
             }
 
             var numOrder = Math.max.apply(null,orderList) + 1;  // 获取最大的加1
@@ -963,6 +978,8 @@ define(['./config','dhtmlx','ol'],function (config) {
         toBig:_toBig,
         toSmall:_toSmall,
         moveMap:_moveMap,
-        unMoveMap:_unMoveMap
+        unMoveMap:_unMoveMap,
+        checkAll:_checkAll,
+        unCheckAll:_unCheckAll
     };
 });
