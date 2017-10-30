@@ -582,7 +582,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         map.addInteraction(draw);   //添加交互
 
         //没点时，获取最大的行号、点ID号
-        if(orderList.length<=0 && pointIdList.length <= 0) {
+        //if(orderList.length<=0 && pointIdList.length <= 0) {
             if (leftTable.getRowsNum() > 0) {
                 leftTable.forEachRow(function (id) {  //循环每一行
                     leftTable.forEachCell(id, function (cellObj, index) {  //循环每一行的每一个cell,每个cell的id为index，对象为cellObj
@@ -598,7 +598,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                 orderList.push(0);
                 pointIdList.push(0);
             }
-        }
+        //}
 
         //监听一个点绘制完成，获取坐标
         var singlePoint = {};
