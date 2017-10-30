@@ -648,14 +648,14 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                         $(".autoMatch").removeClass('.autoMatchLoading').fadeOut(500);
                     },1000);
                     produce.autoMatch({
-                        eventName:"onClick"
-                        //arg: [id,mapId]
+                        eventName:"onClick",
+                        arg: [grid_3,grid_2]
                     });
                     break;
                 case "blockAdjustment":
                     produce.blockAdjustment({
-                        eventName:"onClick"
-                        //arg: [id,mapId]
+                        eventName:"onClick",
+                        arg: [cell_1]
                     });
                     break;
             }
@@ -738,6 +738,42 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                    break;
            }
         });
+        //统一弹出框wrap
+        //拖拽函数
+        var drapableObj = function(obj){
+            obj.on("mousedown","#popBox_title",function(event){
+                event.stopPropagation();
+                /* 获取需要拖动节点的坐标 */
+                var offset_x = $(this).parent()[0].offsetLeft;//x坐标
+                var offset_y = $(this).parent()[0].offsetTop;//y坐标
+                /* 获取当前鼠标的坐标 */
+                var mouse_x = event.pageX;
+                var mouse_y = event.pageY;
+                /* 绑定拖动事件 */
+                /* 由于拖动时，可能鼠标会移出元素，所以应该使用全局（document）元素 */
+                $(document).on("mousemove",function(ev){
+                    ev.stopPropagation();
+                    /* 计算鼠标移动了的位置 */
+                    var _x = ev.pageX - mouse_x;
+                    var _y = ev.pageY - mouse_y;
+                    /* 设置移动后的元素坐标 */
+                    var now_x = (offset_x + _x ) ;
+                    var now_y = (offset_y + _y );
+                    obj.css({
+                        top:now_y + "px",
+                        left:now_x + "px"
+                    });
+                });
+            });
+            /* 当鼠标左键松开，接触事件绑定 */
+            $(document).on("mouseup",function(event){
+                event.stopPropagation();
+                $(this).off("mousemove");
+            });
+        };
+        var $popBox = $("#popBox");
+        drapableObj($popBox);                               //弹出层可以拖拽
+
     };
     return {
         test:_test

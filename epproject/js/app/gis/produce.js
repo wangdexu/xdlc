@@ -1,281 +1,312 @@
 define(['jquery','dhtmlx','ol'],function($,dhl,ol){
     var _autoMatch = function(argList){
+        //"ÁÇπÂàóË°®""ÂΩ±ÂÉèÂàóË°®",ËôöÊãüÊï∞ÊçÆ
         var dataMain={
-            "Systemproperty" :
+            "TiePoint" :
             {
-                "Freeze" :
-                [
-                    {
-                        "name" : "FreezeExecute",
-                        "title" : "∂≥Ω·÷¥––",
-                        "type" : "string",
-                        "value" : ""
-                    }
-                ],
-                    "SystemConfiguration" :
-                [
-                    {
-                        "name" : "ThreadNum",
-                        "title" : "œﬂ≥Ã∏ˆ ˝",
-                        "type" : "int",
-                        "value" : 0
-                    },
-                    {
-                        "name" : "BlockSize",
-                        "title" : "∑÷øÈ¥Û–°",
-                        "type" : "int",
-                        "value" : null
-                    }
-                ]
-            },
-            "Userproperty" :
-            {
-                "InputParameter" :
-                {
-                    "Configuration" : [],
-                    "InputFilePath" :
+                "Property" :
                     [
                         {
-                            "auto" : [ "" ],
-                            "name" : "GeoCoordinate",
-                            "title" : "ŒÔ∑Ω◊¯±Í",
-                            "type" : "double",
-                            "value" : [ 117.196185, 39.475796000000003, -0.94199999999999995 ]
+                            "imagename" : "E:\\testdata\\inputData\\TH\\TH01-01_R201202210000003_1A_SXZ_1_10_883_123.tif",
+                            "imageid":	"F_1",
+                            "pointid" : 1,
+                            "x" : 44.1632,
+                            "y" : 319.1258
                         },
                         {
-                            "auto" : [ "ZY3", "TH" ],
-                            "index" : 0,
-                            "multi" : true,
-                            "name" : "InputImgFileName",
-                            "title" : " ‰»Î”∞œÒ",
-                            "type" : "string",
-                            "value" : "/mnt/hgfs/Data/tianjin-2/JB12-1_CCD_000252393_STE01_001_001_L1-01.tiff"
+                            "imagename" : "E:\\testdata\\inputData\\TH\\TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                            "imageid":	"F_1",
+                            "pointid" : 6,
+                            "x" : 44.1632,
+                            "y" : 319.1258
                         },
                         {
-                            "auto" : [ "ZY3", "TH" ],
-                            "index" : 1,
-                            "multi" : true,
-                            "name" : "InputImgFileName",
-                            "title" : " ‰»Î”∞œÒ",
-                            "type" : "string",
-                            "value" : "/mnt/hgfs/Data/tianjin-2/JB12-1_CCD_000252393_STE01_001_001_L1-02.tiff"
+                            "imagename" : "E:\\testdata\\inputData\\TH\\TH01-01_R201202210000003_1A_SXZ_2_10_883_125.tif",
+                            "imageid":	"N_1",
+                            "pointid" : 1,
+                            "x" : 44.1632,
+                            "y" : 319.1258
                         },
                         {
-                            "auto" : [ "ZY3", "TH" ],
-                            "index" : 2,
-                            "multi" : true,
-                            "name" : "InputImgFileName",
-                            "title" : " ‰»Î”∞œÒ",
-                            "type" : "string",
-                            "value" : "/mnt/hgfs/Data/tianjin-2/JB12-1_CCD_000252393_STE01_001_001_L1-03.tiff"
+                            "imagename" : "E:\\testdata\\inputData\\TH\\TH01-01_R201202210000003_1A_SXZ_1_10_883_126.tif",
+                            "imageid":	"F_1",
+                            "pointid" : 2,
+                            "x" : 44.1632,
+                            "y" : 319.1258
                         },
                         {
-                            "auto" : [ "dir_pan", "pan2", "PAN" ],
-                            "index" : 0,
-                            "multi" : true,
-                            "name" : "InputRPCFileName",
-                            "title" : " ‰»ÎRPC",
-                            "type" : "url",
-                            "value" : "/mnt/hgfs/Data/tianjin-2/JB12-1_CCD_000252393_STE01_001_001_L1-01.rpb"
+                            "imagename" : "E:\\testdata\\inputData\\TH\\TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                            "imageid":	"F_1",
+                            "pointid" : 2,
+                            "x" : 44.1632,
+                            "y" : 319.1258
                         },
                         {
-                            "auto" : [ "dir_pan", "pan2", "PAN" ],
-                            "index" : 1,
-                            "multi" : true,
-                            "name" : "InputRPCFileName",
-                            "title" : " ‰»ÎRPC",
-                            "type" : "url",
-                            "value" : "/mnt/hgfs/Data/tianjin-2/JB12-1_CCD_000252393_STE01_001_001_L1-02.rpb"
+                            "imagename" : "E:\\testdata\\inputData\\TH\\TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                            "imageid":	"F_1",
+                            "pointid" : 2,
+                            "x" : 44.1632,
+                            "y" : 319.1258
                         },
                         {
-                            "auto" : [ "dir_pan", "pan2", "PAN" ],
-                            "index" : 2,
-                            "multi" : true,
-                            "name" : "InputRPCFileName",
-                            "title" : " ‰»ÎRPC",
-                            "type" : "url",
-                            "value" : "/mnt/hgfs/Data/tianjin-2/JB12-1_CCD_000252393_STE01_001_001_L1-03.rpb"
+                            "imagename" : "E:\\testdata\\inputData\\TH\\TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                            "imageid":	"F_1",
+                            "pointid" : 4,
+                            "x" : 44.1632,
+                            "y" : 319.1258
                         },
                         {
-                            "auto" : [ "dir_pan", "pan2", "PAN" ],
-                            "index" : 0,
-                            "multi" : true,
-                            "name" : "InputImgGeo",
-                            "title" : "”∞œÒµÿ¿Ì∑∂Œß",
-                            "type" : "double",
-                            "value" :
-                                [
-                                    117.1707172,
-                                    39.714812219999999,
-                                    117.3680691,
-                                    39.689810369999996,
-                                    116.99190590000001,
-                                    39.08999103,
-                                    117.18758750000001,
-                                    39.065114889999997
-                                ]
+                            "imagename" : "E:\\testdata\\inputData\\TH\\TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                            "imageid":	"F_1",
+                            "pointid" : 2,
+                            "x" : 44.1632,
+                            "y" : 319.1258
                         },
                         {
-                            "auto" : [ "dir_pan", "pan2", "PAN" ],
-                            "index" : 1,
-                            "multi" : true,
-                            "name" : "InputImgGeo",
-                            "title" : "”∞œÒµÿ¿Ì∑∂Œß",
-                            "type" : "double",
-                            "value" :
-                                [
-                                    117.1786493,
-                                    39.70355137,
-                                    117.35349069999999,
-                                    39.672814119999998,
-                                    117.0039977,
-                                    39.100940710000003,
-                                    117.1774279,
-                                    39.070319910000002
-                                ]
+                            "imagename" : "E:\\testdata\\inputData\\TH\\TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                            "imageid":	"F_1",
+                            "pointid" : 2,
+                            "x" : 44.1632,
+                            "y" : 319.1258
                         },
                         {
-                            "auto" : [ "dir_pan", "pan2", "PAN" ],
-                            "index" : 2,
-                            "multi" : true,
-                            "name" : "InputImgGeo",
-                            "title" : "”∞œÒµÿ¿Ì∑∂Œß",
-                            "type" : "double",
-                            "value" :
-                                [
-                                    117.16906040000001,
-                                    39.702466600000001,
-                                    117.35907280000001,
-                                    39.659470040000002,
-                                    117.000249,
-                                    39.124786929999999,
-                                    117.1887974,
-                                    39.08190072
-                                ]
+                            "imagename" : "E:\\testdata\\inputData\\TH\\TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                            "imageid":	"F_1",
+                            "pointid" : 4,
+                            "x" : 44.1632,
+                            "y" : 319.1258
                         }
                     ]
-                },
-                "OutputParameter" :
-                {
-                    "OutPutFilePath" :
-                    [
-                        {
-                            "att" :
-                                [
-                                    {
-                                        "name" : "DataFormat",
-                                        "title" : "”∞œÒ∏Ò Ω",
-                                        "type" : "string",
-                                        "value" : ""
-                                    },
-                                    {
-                                        "name" : "ImageTime",
-                                        "title" : "…˙≤˙ ±º‰",
-                                        "type" : "number",
-                                        "value" : 1508726704784
-                                    },
-                                    {
-                                        "name" : "MapProjection",
-                                        "title" : "Õ∂”∞¿‡–Õ",
-                                        "type" : "string",
-                                        "value" : ""
-                                    },
-                                    {
-                                        "name" : "EarthModel",
-                                        "title" : "≤ŒøºÕ÷«Ú",
-                                        "type" : "string",
-                                        "value" : ""
-                                    },
-                                    {
-                                        "name" : "PixelSpacing",
-                                        "title" : "∑÷±Ê¬ ",
-                                        "type" : "number",
-                                        "value" : ""
-                                    },
-                                    {
-                                        "name" : "SatelliteID",
-                                        "title" : "Œ¿–«±Í ∂",
-                                        "type" : "string",
-                                        "value" : ""
-                                    },
-                                    {
-                                        "name" : "Location",
-                                        "title" : "µÿ¿ÌŒª÷√",
-                                        "type" : "number",
-                                        "value" : ""
-                                    },
-                                    {
-                                        "name" : "DataType",
-                                        "title" : "Data¿‡–Õ",
-                                        "type" : "string",
-                                        "value" : ""
-                                    }
-                                ],
-                            "xy" :
-                                [
-                                    {
-                                        "index" : 0,
-                                        "multi" : "true",
-                                        "name" : "ImgCoordinate",
-                                        "suffix" : "",
-                                        "title" : "œÒ∑Ω◊¯±Í",
-                                        "type" : "double",
-                                        "value" : [ 10774.369829352097, 31598.402745536827 ]
-                                    },
-                                    {
-                                        "index" : 1,
-                                        "multi" : "true",
-                                        "name" : "ImgCoordinate",
-                                        "suffix" : "",
-                                        "title" : "œÒ∑Ω◊¯±Í",
-                                        "type" : "double",
-                                        "value" : [ 10677.25186769914, 37162.398384846216 ]
-                                    },
-                                    {
-                                        "index" : 2,
-                                        "multi" : "true",
-                                        "name" : "ImgCoordinate",
-                                        "suffix" : "",
-                                        "title" : "œÒ∑Ω◊¯±Í",
-                                        "type" : "double",
-                                        "value" : [ 10825.370724215207, 29241.449871842775 ]
-                                    }
-                                ]
-                        }
-                    ],
-                        "ProgramStatus" :
-                    [
-                        {
-                            "name" : "ReturnCode",
-                            "title" : "‘À––◊¥Ã¨",
-                            "type" : "int",
-                            "value" : 0
-                        },
-                        {
-                            "name" : "ReturnAnalyse",
-                            "title" : "¥ÌŒÛ√Ë ˆ",
-                            "type" : "string",
-                            "value" : "Image coordinates predict succeed!"
-                        }
-                    ],
-                        "tempfile" : []
+            }
+        };
+        var newdata=[];
+        var judgedata=[];
+        var dataArr = dataMain.TiePoint.Property;
+        var shu=dataArr.length;
+        for(var i=0;i<shu;i++){
+            var degree=0;
+            var id;
+            var judge=judgedata.indexOf(dataArr[i].pointid);
+            //console.log(judge);
+            //console.log(judgedata);
+            if(judge!=-1) {
+                ++i;
+                //console.log(i-1);
+            }else{
+            //console.log(i);
+            for(var j=i;j<shu;j++) {
+
+                if (dataArr[i].pointid == dataArr[j].pointid){
+                    //console.log(i,j);
+                    ++degree;
+                    id=dataArr[i].pointid;
+                    //console.log(degree);
                 }
-            },
-            "dirs" : [ "‘≠ ºRPC" ],
-            "name" : "œÒµ„‘§≤‚",
-            "op" : "ImgPoiPredict",
-            "outputDir" : "",
-            "tmp" : "tmp",
-            "version" : "0.0.1",
-            "workDir" : ""
+                    }
+                judgedata.push(id);
+                //console.log(id,degree);
+                newdata.push({"id":id,"degree":degree});
+            }
         }
-
-
-
-        console.log("1");
+        pointNumber(dataMain,newdata);
+        function pointNumber(dataMain,newdata){
+            //ÁîüÊàêÁÇπ‰ø°ÊÅØÊï∞ÊçÆ
+            var data= {
+                rows: []
+            };
+            var shu=newdata.length;
+            for(var i=1;i<=shu;i++){
+                data.rows.push({ id:newdata[i-1].id, data: [i,newdata[i-1].id,"TiePoint",newdata[i-1].degree,"1","","",""]});
+            }
+            console.log(data);
+            argList.arg[0].clearAll();
+            //console.log(data);
+            argList.arg[0].parse(data,function(){
+                //alert(1);
+            },"json");
+        }
     };
-    var _blockAdjustment = function(argList){
-        console.log("2");
+    var _blockAdjustment = function(){
+        //"ÊÄªÁªì"ÂºπÂá∫Ê°Ü
+        $("#popBox_wrap").css({width:"auto",height:"auto"});
+        $("#popBox_bottom").empty();
+        $("#popBox_wrap").empty();
+        $("#popBox_wrap").load('./data/totall.html',function(){
+            totallInformation(dataMain);
+        });
+        var $popBox = $("#popBox");
+        $popBox.fadeIn(500);    //ÈÄèÊòéËíôÂ±Ç
+        $("#popBox").on('click',"#popBox_close,#totall_close",function(){     //Âà†Èô§ÂºπÂá∫Â±Ç
+            $popBox.fadeOut(500);
+        });
+        //"ÁÇπÊï∞"ÂºπÂá∫Ê°Ü,ËôöÊãüÊï∞ÊçÆ
+        var pointData={
+            "Review":
+            [
+                {
+                    "ImgID" : "F_1",
+                    "PointID": 2,
+                    "Imgx" : 3810.500,
+                    "Imgy" : 4943.500,
+                    "detImgx" : -1.249,
+                    "detImgy" : 1.176,
+                    "Rmse" : 1.716
+                },
+                {
+                    "ImgID" : "F_1",
+                    "PointID": 3,
+                    "Imgx" : 3810.500,
+                    "Imgy" : 4943.500,
+                    "detImgx" : -1.249,
+                    "detImgy" : 1.176,
+                    "Rmse" : 1.716
+                },
+                {
+                    "ImgID" : "F_1",
+                    "PointID": 4,
+                    "Imgx" : 3810.500,
+                    "Imgy" : 4943.500,
+                    "detImgx" : -1.249,
+                    "detImgy" : 1.176,
+                    "Rmse" : 1.716
+                },
+                {
+                    "ImgID" : "F_1",
+                    "PointID": 5,
+                    "Imgx" : 3810.500,
+                    "Imgy" : 4943.500,
+                    "detImgx" : -1.249,
+                    "detImgy" : 1.176,
+                    "Rmse" : 1.716
+                },
+                {
+                    "ImgID" : "F_1",
+                    "PointID": 6,
+                    "Imgx" : 3810.500,
+                    "Imgy" : 4943.500,
+                    "detImgx" : -1.249,
+                    "detImgy" : 1.176,
+                    "Rmse" : 1.716
+                },
+                {
+                    "ImgID" : "F_1",
+                    "PointID": 7,
+                    "Imgx" : 3810.500,
+                    "Imgy" : 4943.500,
+                    "detImgx" : -1.249,
+                    "detImgy" : 1.176,
+                    "Rmse" : 1.716
+                }
+            ]
+        };
+        $("#popBox").on('click',"#totall_check",function(){     //Âà†Èô§ÂºπÂá∫Â±Ç
+            $("#popBox_wrap").empty();
+            pointNumber(pointData);
+        });
+        //"ÊÄªÁªì"ÂºπÂá∫Ê°Ü,ËôöÊãüÊï∞ÊçÆ
+        var dataMain={
+            "RefineSum":
+            [
+                {
+                    "name" : "TotalImageRMSE",
+                    "Unit": "pixels",
+                    "value" : 1.839
+                },
+            {
+                "name" : "CheckPointRMSE",
+                "GroundX" : 3.042,
+                "GroundXSize" : 7,
+                "GroundY" : 3.453,
+                "GroundYSize" : 7,
+                "GroundZ" : 8.026,
+                "GroundZSize" : 7,
+                "ImageX" : 1.234,
+                "ImageXSize" : 20,
+                "ImageY" : 1.436,
+                "ImageYSize" : 20,
+                "CE90" : 6.153,
+                "LE90" : 9.131
+            },
+            {
+                "name" : "ControlPointRMSE",
+                "GroundX" : 0.000,
+                "GroundXSize" : 0,
+                "GroundY" : 0.000,
+                "GroundYSize" : 0,
+                "GroundZ" : 0.000,
+                "GroundZSize" : 0,
+                "ImageX" : 0.000,
+                "ImageXSize" : 20,
+                "ImageY" : 0.000,
+                "ImageYSize" : 0,
+                "CE90" : 0.000,
+                "LE90" : 0.000
+            }
+        ]
+        };
+        totallInformation(dataMain);
+
+            function totallInformation() {
+                var dataTitle = dataMain.RefineSum;
+                $("#totall_name").html(""+dataTitle[0].name);
+                $("#totall_Unit").empty().html(dataTitle[0].Unit);
+                $("#totall_value").empty().html(dataTitle[0].value);
+                $("#control_name").empty().html(dataTitle[1].name);
+                $("#control_GroundX").empty().html(dataTitle[1].GroundX+"("+dataTitle[1].GroundXSize+")");
+                $("#control_GroundY").empty().html(dataTitle[1].GroundY+"("+dataTitle[1].GroundYSize+")");
+                $("#control_GroundZ").empty().html(dataTitle[1].GroundZ+"("+dataTitle[1].GroundZSize+")");
+                $("#control_ImageX").empty().html(dataTitle[1].ImageX+"("+dataTitle[1].ImageXSize+")");
+                $("#control_ImageY").empty().html(dataTitle[1].ImageY+"("+dataTitle[1].ImageYSize+")");
+                $("#control_CE90").empty().html(dataTitle[1].CE90);
+                $("#control_LE90").empty().html(dataTitle[1].LE90);
+                $("#check_name").empty().html(dataTitle[2].name);
+                $("#check_GroundX").empty().html(dataTitle[2].GroundX+"("+dataTitle[2].GroundXSize+")");
+                $("#check_GroundY").empty().html(dataTitle[2].GroundY+"("+dataTitle[2].GroundYSize+")");
+                $("#check_GroundZ").empty().html(dataTitle[2].GroundZ+"("+dataTitle[2].GroundZSize+")");
+                $("#check_ImageX").empty().html(dataTitle[2].ImageX+"("+dataTitle[2].ImageXSize+")");
+                $("#check_ImageY").empty().html(dataTitle[2].ImageY+"("+dataTitle[2].ImageYSize+")");
+                $("#check_CE90").empty().html(dataTitle[2].CE90);
+                $("#check_LE90").empty().html(dataTitle[2].LE90);
+            }
+        //ÁÇπÂè∑
+        function pointNumber(pointData){
+            $("#popBox_bottom").empty();
+            $("#popBox_wrap").css({width:"900px",height:"400px"});
+            window.dhx4.skin = 'material';
+            var main_layout = new dhtmlXLayoutObject($("#popBox_wrap")[0], '1C');
+            var a = main_layout.cells('a');
+            a.setHeight('300');
+            a.setWidth('600');
+            a.hideHeader();
+            var grid_4 = a.attachGrid();
+            grid_4.setIconsPath('./codebase/imgs/');
+            grid_4.setHeader(["Ë°åÂè∑","ÂΩ±ÂÉèID","ÁÇπID","ÊúâÊïà","X","Y","RX","RY","ÊÆãÂ∑Æ"]);
+            grid_4.setColTypes("ro,ro,ro,ro,edtxt,edtxt,edtxt,edtxt,edtxt");
+
+            grid_4.setColSorting('str,str,str,str,str,str,str,str,str');
+            grid_4.setInitWidths('*,*,*,*,*,*,*,*,*');
+            grid_4.init();
+
+            var dataArr = pointData.Review;
+            //ÁîüÊàêÁÇπ‰ø°ÊÅØÊï∞ÊçÆ
+            var data= {
+                rows: []
+            };
+            var shu=dataArr.length;
+            for(var i=1;i<=shu;i++){
+                data.rows.push({ id:dataArr[i-1].PointID, data: [i,dataArr[i-1].ImgID,dataArr[i-1].PointID,"ÊúâÊïà",dataArr[i-1].Imgx,dataArr[i-1].Imgy,dataArr[i-1].detImgx,dataArr[i-1].detImgy,dataArr[i-1].Rmse]});
+            }
+            grid_4.clearAll();
+            console.log(data);
+            grid_4.parse(data,function(){
+                //alert(1);
+            },"json");
+
+            $("#popBox_bottom").append('<div id="point_bottom"><button id="point_confirm">Á°ÆÂÆö</button><button id="again_average">ÈáçÊñ∞Âπ≥Â∑Æ</button><div><span>ÊÆãÂ∑ÆÈòÄÂÄº:</span><input id="average_switch" type="text"/></div><button id="point_delete">Âà†Èô§</button></div>');
+            $("#point_bottom").css({width:"100%",height:"60px",padding:"10px 0"});
+            $("#point_bottom>button").css({marginLeft:"100px",textAlign:"center",height:"40px",lineHeight:"40px"});
+            $("#point_bottom>div").css({marginLeft:"100px",display:"inline-block",height:"40px",lineHeight:"40px"});
+        }
     };
 
     return {
