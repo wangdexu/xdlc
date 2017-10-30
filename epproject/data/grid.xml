@@ -7,9 +7,8 @@
 		<cell>Tiepoint</cell>
 		<cell>2</cell>
 		<cell>1</cell>
-		<cell>24</cell>
-		<cell>0</cell>
-		<cell>05/01/1998</cell>
+		<cell>13907.669428881965</cell>
+		<cell>13147.054622607193</cell>
 	</row>
 	<row id="2">
 		<cell>aaa</cell>
@@ -18,52 +17,7 @@
 		<cell>Tiepoint</cell>
 		<cell>3</cell>
 		<cell>1</cell>
-		<cell>24</cell>
-		<cell>0</cell>
-		<cell>01/01/2000</cell>
-	</row>
-	<row id="3" selected="1">
-		<cell>aaa</cell>
-		<cell>3</cell>
-		<cell>3</cell>
-		<cell>Controlpoint</cell>
-		<cell>8</cell>
-		<cell>0</cell>
-		<cell>48</cell>
-		<cell>0</cell>
-		<cell>12/01/2001</cell>
-	</row>
-	<row id="4" selected="1">
-		<cell>aaa</cell>
-		<cell>4</cell>
-		<cell>7</cell>
-		<cell>Controlpoint</cell>
-		<cell>6</cell>
-		<cell>0</cell>
-		<cell>48</cell>
-		<cell>0</cell>
-		<cell>12/01/2001</cell>
-	</row>
-	<row id="5" selected="1">
-		<cell>aaa</cell>
-		<cell>5</cell>
-		<cell>6</cell>
-		<cell>Checkpoint</cell>
-		<cell>7</cell>
-		<cell>0</cell>
-		<cell>48</cell>
-		<cell>0</cell>
-		<cell>12/01/2001</cell>
-	</row>
-	<row id="6" selected="1">
-		<cell>aaa</cell>
-		<cell>6</cell>
-		<cell>8</cell>
-		<cell>Checkpoint</cell>
-		<cell>2</cell>
-		<cell>0</cell>
-		<cell>48</cell>
-		<cell>0</cell>
-		<cell>12/01/2001</cell>
+		<cell>20549.190592890045</cell>
+		<cell>17841.913952814564</cell>
 	</row>
 </rows>

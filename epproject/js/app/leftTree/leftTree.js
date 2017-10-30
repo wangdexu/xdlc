@@ -184,22 +184,22 @@ define(['jquery','dhtmlx','ol','../gis/mapControls'],function ($,dhtmlx,ol,mapCo
                 0.0
             ]
         ],"url":"http://192.168.31.12:8888/geoserver/wm/wms"}
-            $.ajax({
-                url:window.restUrl+"api/fs/listioput/"+taskId,
-                type:"get",
-                data:"",
-                async: false,
-                success:function(data){
-                    //参数1：主视图地图 鼠标移动控件内容(经纬度)挂载点，参数2：地图id挂载点，参数三：将控件放到目标位置挂载点
-                    //mapControl.createMap("ol-mouse-position2","mapMainContainer","post11",mapData.url);
-                    //mapControl.createBox("mapMainContainer",mapData.value);
-                },
-                error: function (e) {
-                    if(e.status == "401"){
-                        //getSession();
-                    }
-                }
-            })
+            //$.ajax({
+            //    url:window.restUrl+"api/fs/listioput/"+taskId,
+            //    type:"get",
+            //    data:"",
+            //    async: false,
+            //    success:function(data){
+            //        //参数1：主视图地图 鼠标移动控件内容(经纬度)挂载点，参数2：地图id挂载点，参数三：将控件放到目标位置挂载点
+            //        //mapControl.createMap("ol-mouse-position2","mapMainContainer","post11",mapData.url);
+            //        //mapControl.createBox("mapMainContainer",mapData.value);
+            //    },
+            //    error: function (e) {
+            //        if(e.status == "401"){
+            //            //getSession();
+            //        }
+            //    }
+            //})
         //参数1：主视图地图 鼠标移动控件内容(经纬度)挂载点，参数2：地图id挂载点，参数三：将控件放到目标位置挂载点
         mapControl.createMap("ol-mouse-position2","mapMainContainer","post11",mapData.url);
         mapControl.createBox("mapMainContainer",mapData.value);

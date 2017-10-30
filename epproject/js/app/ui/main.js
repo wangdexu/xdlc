@@ -10,6 +10,8 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         var mapIdArr = [];
         //联动保存选中项mapId
         var checkTemp = {};
+        //全选保存选中项mapId
+        var checkAllTemp = {};
         //是否选中联动按钮
         var isLink = false;
         //添加编辑后零时保存点
@@ -72,20 +74,20 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     {id : "fullView", text : "全图",img:"allimage.png",isbig : true, type : "button"},
                     {id : "setPointCenter", text : "当前点居中",img:"point_center.png", isbig : true, type : "button"},
                     {id : "oneRatioOne", text : "1:1显示", img : "1show.png", isbig : true, type : "button"},
-                    {id : "group_1", text : "group_1", type : "group", list : [
-                        {id : "contrast", text : "对比度", type : "text"},
-                        {id : "hue", text : "", type : "slider",  size : 100, min : -180, max : 180,value:0, step : 1, margin : 10}
-                    ]},
-                    {id : "group_2", text : "group_2", type : "group", list : [
-
-                        {id : "sharpening", text : "锐&nbsp&nbsp&nbsp化", type : "text"},
-                        {id : "chroma", text : "", type : "slider", size : 100, min : 0, max : 100,value:100, step : 1, margin : 10}
-                    ]},
-                    {id : "group_3", text : "group_2", type : "group", list : [
-
-                        {id : "light", text : "亮&nbsp&nbsp&nbsp度", type : "text"},
-                        {id : "lightness", text : "", type : "slider", size : 100, min : 0, max : 100,value:100, step : 1, margin : 10}
-                    ]}
+                    //{id : "group_1", text : "group_1", type : "group", list : [
+                    //    {id : "contrast", text : "对比度", type : "text"},
+                    //    {id : "hue", text : "", type : "slider",  size : 100, min : -180, max : 180,value:0, step : 1, margin : 10}
+                    //]},
+                    //{id : "group_2", text : "group_2", type : "group", list : [
+                    //
+                    //    {id : "sharpening", text : "锐&nbsp&nbsp&nbsp化", type : "text"},
+                    //    {id : "chroma", text : "", type : "slider", size : 100, min : 0, max : 100,value:100, step : 1, margin : 10}
+                    //]},
+                    //{id : "group_3", text : "group_2", type : "group", list : [
+                    //
+                    //    {id : "light", text : "亮&nbsp&nbsp&nbsp度", type : "text"},
+                    //    {id : "lightness", text : "", type : "slider", size : 100, min : 0, max : 100,value:100, step : 1, margin : 10}
+                    //]}
 
                 ]},
                 {id : "edit", text : "编辑", text_pos : "buttom", type : "block", mode : "cols", list : [
@@ -101,6 +103,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     //]},
                     {id : "autoPrediction", text : "自动预测",img:"auto.png",isbig : true, type : "button"},
                     {id : "associatedDisplay", text : "关联显示",img:"view_connect.png",isbig : true, type : "checkbox"}
+                    //,{id : "checkAll", text : "全选",img:"view_connect.png", type : "checkbox"}
 
                 ]},
                 {id : "kongThreeProcess", text : "空三处理", text_pos : "buttom", type : "block", mode : "cols", list : [
@@ -149,7 +152,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
       //存储每个创建的小地图，用于地图联动
        var mapLinkMove = [];
        //创建小地图
-        var creatDiv = function(rId){
+        var creatDiv = function(rId,data,pointId){
             //如果已经创建过smallMap，则显示以前的
             grid_3.forEachRow(function(id){
                 if(id == rId){
@@ -170,42 +173,47 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                 //document.getElementById("mapArr").innerHTML = '';
                 mapLinkMove = [];
                 var mapCount = parseInt(arr[0].mapCount);
-                for(var i=0;i<mapCount;i++){
+                for(var i=0;i<data.rows.length;i++){
                     //var smallMap =  mapControl.createSmallMap("ol-mouse-position","tabContent"+i);  // 调用地图，第一个参数，鼠标移动控件挂载点，第二个参数：地图控件挂载点
                     //mapLinkMove.push(smallMap);
-                    var url = "";//urlArr[i];
+                    //var url = "";//urlArr[i];
+                    var tempId = data.rows[i].data[3];
                     var oDiv = document.createElement('div');
                     var checkDiv = document.createElement('div');
                     //checkDiv.style.height = "6%";
                     checkDiv.style.zIndex = "100";
                     checkDiv.style.position = "absolute";
                     checkDiv.style.marginLeft= "18%";
-                    checkDiv.innerHTML = '<input type="checkbox" style="float: right;" name="div'+rId+i+'" type="checkbox">';
+                    checkDiv.innerHTML = '<input type="checkbox" style="float: right;" name="'+tempId+'" type="checkbox">';
+                    //checkAllTemp["div"+rId+i] = "div"+rId+i;
+                    checkAllTemp[tempId] = tempId;
                     checkDiv.onclick = function(event){
                         if(event.toElement.checked == true){
                             event.toElement.name;
                             checkTemp[event.toElement.name] = event.toElement.name;
                             //如果联动为选中状态，新选择地图增加联动监听
-                            if(isLink == true){
+                            //if(isLink == true){
                                 smallMap.moveMap(checkTemp);
-                            }
+                            //}
                         }else{
-                            checkTemp[event.toElement.name] = "";
+
                             //如果联动为选中状态，取消地图选择移除取消的地图监听并重新增加监听
-                            if(isLink == true) {
+                            //if(isLink == true) {
                                 smallMap.unMoveMap(checkTemp);
+                                checkTemp[event.toElement.name] = "";
                                 smallMap.moveMap(checkTemp);
-                            }
+                            //}
                         }
                     }
 
                     oDiv.appendChild(checkDiv);
                     oDiv.style.height = "299px";
-                    oDiv.style.width = "19.7%";
+                    oDiv.style.width = "19.8%";
                     oDiv.style.float = "left";
-                    oDiv.style.marginLeft = "0.3%";
-                    oDiv.id = "div"+rId+i;
-                    mapIdArr.push("div"+rId+i);
+                    oDiv.style.marginLeft = "0.2%";
+                    //oDiv.id = "div"+rId+i;
+                    oDiv.id = tempId;
+                    mapIdArr.push(oDiv.id);
                     if(i == "0"){
                         mapId = oDiv.id;
                         oDiv.style.border = "1px red solid";
@@ -215,58 +223,66 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     oDiv.onclick = function(event){
                         mapId = event.currentTarget.id;
                         document.getElementById(mapId).style.border = "1px red solid";
-                        for(var i=0;i<mapCount;i++){
-                            if(mapId != "div"+rId+i){
-                                document.getElementById("div"+rId+i).style.border = "1px #989696 solid";
+                        for(var i=0;i<data.rows.length;i++){
+                            if(mapId != data.rows[i].data[3]){
+                                document.getElementById(data.rows[i].data[3]).style.border = "1px #989696 solid";
                             }
                         }
                     }
 
                     document.getElementById("mapArr"+rId).appendChild(oDiv);
-                    var wmtsUrl = "https://services.arcgisonline.com/arcgis/rest/services/Demographics/USA_Population_Density/MapServer/WMTS/";
-                    var url = "http://192.168.31.12:8888/geoserver/wm/wms";
-                    var mapTemp = smallMap.createMap(wmtsUrl,url,oDiv.id );
+                    //var wmtsUrl = "https://services.arcgisonline.com/arcgis/rest/services/Demographics/USA_Population_Density/MapServer/WMTS/";
+                    var url = data.rows[i].data[8];
+                    var rows = data.rows[i].data[6];
+                    var cols = data.rows[i].data[6];
+                    var uuid = data.rows[i].data[0];
+                    var pointId = data.rows[i].data[1];
+                    var mapTemp = smallMap.createMap(uuid,url,oDiv.id,rows,cols,pointId);
                 }
                 i=null;
             }
         };
         //记录影像列表的值
-        var grid3Detail = {};
+        var grid3Detail = {"3":{"rows": [{"id":1,"data":["aaa","1","3","img0","2","1","13907.669428881965","13147.054622607193","http://192.168.4.2:18080/geowebcache/service/wms?VERSION:1.1.1&layers=GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020"]},
+            {"id":2,"data":["bbb","2","3","img1","2","1","20549.190592890045","17841.913952814564","http://192.168.4.2:18080/geowebcache/service/wms?VERSION:1.1.1&layers=GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020"]},
+            {"id":3,"data":["ccc","3","3","img2","2","1","5898.776260519281","21325.1966816781","http://192.168.4.2:18080/geowebcache/service/wms?VERSION:1.1.1&layers=GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020"]}]}}
         //记录点列表选中的ID
         var pointId;
         var mapCount;
         var arr = [];
         // 每次单击一行，取得那一行的信息
-        grid_3.attachEvent('onRowSelect', function(rId, cInd){
-            var obj = {};
-            obj.id = rId;   //行ID
-            pointId =  grid_3.cells(rId,3).getValue();  //取得点Id
-            if(grid3Detail[pointId] == undefined){
-                grid3Detail[pointId] = {"rows":[]};
-            }
-            nowPoint = [grid_3.cells(rId,5).getValue(),grid_3.cells(rId,6).getValue()];
-            //给右侧影像列表赋值
-            var data = grid3Detail[pointId];
-            grid_2.clearAll();
-            grid_2.parse(data,function(){
-                //alert(1);
-            },"json");
-            obj.mapCount =  grid_3.cells(rId,3).getValue();  //取得重叠度
-            if(!arr[0]){      // 第一次选择一行
-                arr.push(obj);
-            }else{     //判断选择的这一行是否已经存在了
-                if(parseInt(arr[0].id) === parseInt(obj.id)){
-                   return arr;
-                }else{
-                    arr.pop(arr[0]);
-                    arr.push(obj);
+        grid_3.attachEvent('onRowSelect', function(rId, cInd) {
+            if(cInd == 3){
+                var obj = {};
+                obj.id = rId;   //行ID
+                pointId = grid_3.cells(rId, 3).getValue();  //取得点Id
+                if (grid3Detail[pointId] == undefined) {
+                    grid3Detail[pointId] = {"rows": []};
                 }
+                nowPoint = [grid_3.cells(rId, 5).getValue(), grid_3.cells(rId, 6).getValue()];
+                //给右侧影像列表赋值
+                var data = grid3Detail[pointId];
+                grid_2.clearAll();
+                grid_2.parse(data, function () {
+                    //alert(1);
+                }, "json");
+                obj.mapCount = grid_3.cells(rId, 3).getValue();  //取得重叠度
+                if (!arr[0]) {      // 第一次选择一行
+                    arr.push(obj);
+                } else {     //判断选择的这一行是否已经存在了
+                    if (parseInt(arr[0].id) === parseInt(obj.id)) {
+                        return arr;
+                    } else {
+                        arr.pop(arr[0]);
+                        arr.push(obj);
+                    }
+                }
+                $(".tabLi").css({"display": "block"});   //选择一行，显示其对应的选项卡
+                $('.idName').html(rId);              // 将选择的那一行显示到选项卡
+                _showSubView();
+                creatDiv(rId,data,pointId);       //创建每副小地图容器，并且调用地图
+                return arr;
             }
-            $(".tabLi").css({"display":"block"});   //选择一行，显示其对应的选项卡
-            $('.idName').html(rId);              // 将选择的那一行显示到选项卡
-            _showSubView();
-            creatDiv(rId);       //创建每副小地图容器，并且调用地图
-            return arr;
         });
         function _showSubView(){
             $mainViewFlag = false;
@@ -405,9 +421,31 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         ribbon_1.attachEvent("onClick", function(id) {
             switch(id){
                 case "open":
+                    //$.ajax({
+                    //    url:window.restUrl+"api/fs/listioput/"+taskId,
+                    //    type:"get",
+                    //    data:"",
+                    //    async: false,
+                    //    success:function(data){
+                    //
+                    //        alert("提交成功！");
+                    //    },
+                    //    error: function (e) {
+                    //        if(e.status == "401"){
+                    //            //getSession();
+                    //        }
+                    //    }
+                    //})
                    console.log(id);
                     break;
                 case "close":
+                    if
+                    (confirm("您确定要关闭本系统吗？")){
+                        window.opener=null;
+                        window.open('','_self');
+                        window.close();
+                    }
+                    else{}
                     console.log(id);
                     break;
                 case "export":
@@ -622,11 +660,15 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     }
                     break;_returnRemoveAllPoint
                 case "autoPrediction":
-                    $(".autoMatch").addClass("autoMatchLoading").fadeIn(500);
+                    //$(".autoMatch").addClass("autoMatchLoading").fadeIn(500);
                     //这里写的只是测试加载动画，真实情况要从后台处理数据进度判断动画消失的时间
-                    setTimeout(function(){
-                        $(".autoMatch").removeClass('.autoMatchLoading').fadeOut(500);
-                    },10000);
+                    //setTimeout(function(){
+                    //    $(".autoMatch").removeClass('.autoMatchLoading').fadeOut(500);
+                    //},10000);
+                    mapControl.auto({
+                        eventName: "onClick",
+                        arg: [grid_3]
+                    })
                     break;
                 case "associatedDisplay":
                     //mapControl.mapLinkMove({
@@ -641,6 +683,8 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                         smallMap.unMoveMap(checkTemp);
                     }
                     break;
+
+
                 case "autoMatch":
                     $(".autoMatch").addClass("autoMatchLoading").fadeIn(500);
                     //这里写的只是测试加载动画，真实情况要从后台处理数据进度判断动画消失的时间
@@ -680,6 +724,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                    }
                    break;
                case "controlPoint":
+                   mapControl.showControlPoint(state,grid_3);
                    if(state){
                        console.log("你选中了" + id);
                    }else{
@@ -687,6 +732,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                    }
                    break;
                case "linkPoint":
+                   mapControl.showTiepointPoint(state,grid_3);
                    if(state){
                        console.log("你选中了" + id);
                    }else{
@@ -694,6 +740,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                    }
                    break;
                case "checkPoint":
+                   mapControl.showCheckPoint(state,grid_3);
                    if(state){
                        console.log("你选中了" + id);
                    }else{
@@ -701,6 +748,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                    }
                    break;
                case "pointID":
+                   mapControl.showPoint(state);
                    if(state){
                        console.log("你选中了" + id);
                    }else{
@@ -730,10 +778,29 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                    //});
                    if(state == true){
                        isLink = true;
-                       smallMap.moveMap(checkTemp);
+                       //smallMap.moveMap(checkTemp);
+                       smallMap.moveMap(checkAllTemp);
+                       smallMap.checkAll(checkAllTemp);
                    }else{
                        isLink = false;
-                       smallMap.unMoveMap(checkTemp);
+                       //smallMap.unMoveMap(checkTemp);
+                       smallMap.unMoveMap(checkAllTemp);
+                       smallMap.unCheckAll(checkAllTemp);
+                   }
+                   break;
+               case "checkAll":
+                   //mapControl.mapLinkMove({
+                   //    eventName:"onclick",
+                   //    args:[mapLinkMove]
+                   //});
+                   if(state == true){
+                       isLink = true;
+                       smallMap.moveMap(checkAllTemp);
+                       smallMap.checkAll(checkAllTemp);
+                   }else{
+                       isLink = false;
+                       smallMap.unMoveMap(checkAllTemp);
+                       smallMap.unCheckAll(checkAllTemp);
                    }
                    break;
            }

@@ -5,6 +5,8 @@ define(['./config','dhtmlx','ol'],function (config) {
 
     //创建地图
     var mapTemp = {};
+    var countTemp = {};
+    var extentTemp = {};
     var rasterTemp = {};
     var controlIds;
     var controlId;
@@ -18,7 +20,7 @@ define(['./config','dhtmlx','ol'],function (config) {
         resolutions[z] = size / Math.pow(2, z);
         matrixIds[z] = z;
     }
-    var _createMap = function(wmtsUrl,url,divId){
+    var _createMap = function(uuid,path,divId,rows,cols,pointID){
         /**
          * Color manipulation functions below are adapted from
          * https://github.com/d3/d3-color.
@@ -162,51 +164,136 @@ define(['./config','dhtmlx','ol'],function (config) {
                 data[id] = Number(controlId[id].value);
             }
         });
-
-        var map = new ol.Map({
-            layers: [
-                //new ol.layer.Image({
-                //    source: raster
-                //}),
-                new ol.layer.Tile({
-                    source: new ol.source.TileWMS({
-                        url: url,
-                        params:
-                        {'LAYERS': 'wm:ImageMosic',
-                            'FORMAT':'image/png',
-                            'VERSION':'1.1.1',
-                            SRS: 'EPSG:4326',
-                            TRANSPARENT:false,QUERYTYPE:"phasetile",OPATICY:0.7//'TILED': true,
-                        }
-                    })
-                })
-            ],
-            target: divId,
-            view: new ol.View({
-                projection:'EPSG:4326',
-                //center: [11975542.09549514,4225234.686415287],
-                center: [115.77942,40.00397],
-                zoom: 9,
-                maxZoom: 18
-            }),
-            controls: ol.control.defaults({
-                attribution: false,
-                rotate: false,
-                zoom: false
-            }).extend([
-                //new ol.control.FullScreen(),
-                new ol.control.MousePosition({
-                    coordinateFormat: ol.coordinate.createStringXY(4),
-                    projection: 'EPSG:4326',
-                    //className: 'custom-mouse-position',
-                    //target: document.getElementById('mouse-position')
-                })
-            ]),
-            events: {
-                map: ['singleclick','pointermove']
+        var map;
+        var layer="GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020";
+        var url =  path.split("?")[0];
+        var theRequest = new Object();
+        if (path.indexOf("?") != -1) {
+            var str = path.substr(1);
+            var strs = str.split("&");
+            for(var i = 0; i < strs.length; i ++) {
+                theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
             }
-        });
-        mapTemp[divId] = map;
+        }
+        //var layer = theRequest.layers;
+        paramsExtend(layer,wmsParamsCallback);
+
+        function paramsExtend(layerName,callback){
+            fetch(window.getLayerUrl+layerName).then(function(response) {
+                return response.json();
+            }).then(function(result) {
+                    console.log(result);
+                    callback(layerName,result);
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+        }
+
+        //wms服务
+        function wmsParamsCallback(layerName,result){
+            var projection = new ol.proj.Projection({
+                code: result.content.srs,
+                units: 'degrees',
+                axisOrientation: 'neu'
+            });
+            var extent=JSON.parse(result.content.imagebox);
+            extentTemp[divId] = extent;
+            var imageLayer=new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    //ratio: 1,
+                    url: url,
+                    params: {'FORMAT': 'image/jpeg',
+                        'VERSION': '1.1.1',
+                        STYLES: '',
+                        LAYERS: layerName,
+                    }
+                })
+            });
+            map = new ol.Map({
+                controls: ol.control.defaults({
+                    attribution: false,
+                    rotate: false,
+                    zoom: false
+                }).extend([
+                    new ol.control.MousePosition()
+                ]),
+                target: divId,
+                layers: [imageLayer],
+                view: new ol.View({
+                    projection: projection
+                }),
+                events: {
+                    map: ['singleclick','pointermove']
+                }
+            });
+            map.getView().fit(extent, map.getSize());
+            var colCount=result.content.extend.rasterX;
+            var rowCount= result.content.extend.rasterY;
+            var count = {
+                "colCount":colCount,
+                "rowCount":rowCount
+            }
+            countTemp[divId] = count;
+                map.on('singleclick', function(evt) {
+                var cols=colCount/(extent[2]-extent[0])*(evt.coordinate[0]-extent[0]);
+                var rows=rowCount/(extent[3]-extent[1])*(extent[3]-evt.coordinate[1]);
+                console.log("经度:",evt.coordinate[0],"纬度:",evt.coordinate[1]);
+                console.log("行:",rows,"列:",cols);
+            });
+            $("button[name='center']").click(function(){
+                console.log(extent);
+                map.getView().setZoom(12);
+                map.getView().setCenter([(extent[0]+extent[2])/2,(extent[1]+extent[3])/2]);
+            });
+            mapTemp[divId] = map;
+            _initPoint(uuid,cols,rows,divId,pointID);
+
+        }
+        //var map = new ol.Map({
+        //    layers: [
+        //        //new ol.layer.Image({
+        //        //    source: raster
+        //        //}),
+        //        new ol.layer.Tile({
+        //            source: new ol.source.TileWMS({
+        //                url: url,
+        //                params:
+        //                {'LAYERS': 'wm:ImageMosic',
+        //                    'FORMAT':'image/png',
+        //                    'VERSION':'1.1.1',
+        //                    SRS: 'EPSG:4326',
+        //                    TRANSPARENT:false,QUERYTYPE:"phasetile",OPATICY:0.7//'TILED': true,
+        //                }
+        //            })
+        //        })
+        //    ],
+        //    target: divId,
+        //    view: new ol.View({
+        //        projection:'EPSG:4326',
+        //        //center: [11975542.09549514,4225234.686415287],
+        //        center: [115.77942,40.00397],
+        //        zoom: 9,
+        //        maxZoom: 18
+        //    }),
+        //    controls: ol.control.defaults({
+        //        attribution: false,
+        //        rotate: false,
+        //        zoom: false
+        //    }).extend([
+        //        //new ol.control.FullScreen(),
+        //        new ol.control.MousePosition({
+        //            coordinateFormat: ol.coordinate.createStringXY(4),
+        //            projection: 'EPSG:4326',
+        //            //className: 'custom-mouse-position',
+        //            //target: document.getElementById('mouse-position')
+        //        })
+        //    ]),
+        //    events: {
+        //        map: ['singleclick','pointermove']
+        //    }
+        //});
+
         rasterTemp[divId] = raster;
         controlId = {
             'hue':{'value':0},
@@ -214,20 +301,59 @@ define(['./config','dhtmlx','ol'],function (config) {
             'lightness':{'value':100}
         }
         controlIds = ['hue', 'chroma', 'lightness'];
-        //controlIds.forEach(function(id) {
-        //    var control = document.getElementById(id);
-        //    var output = document.getElementById(id + 'Out');
-        //    control.addEventListener('input', function() {
-        //        output.innerText = control.value;
-        //        raster.changed();
-        //    });
-        //    output.innerText = control.value;
-        //    controls[id] = control;
-        //});
 
         return mapTemp;
     }
 
+    //初始化显示行列号的经纬度
+    var _initPoint = function(uuid,cols,rows,mapId,pointID){
+        var extent = extentTemp[mapId];
+        var colCount = countTemp[mapId].colCount;
+        var rowCount = countTemp[mapId].rowCount;
+        var lon = cols/(colCount/(extent[2]-extent[0]))+extent[0];
+        var lat = extent[3]-rows/(rowCount/(extent[3]-extent[1]));
+
+        var pointLayer = new ol.layer.Vector({
+            source: new ol.source.Vector(),
+            style:new ol.style.Style({
+                image:new ol.style.Icon({
+                    anchor: [10,10],
+                    anchorXUnits: 'pixels',
+                    anchorYUnits: 'pixels',
+                    imgSize:[21,21],
+                    src:"img/21px.png"
+                })
+            }),
+            wrapX: false
+        });
+        var point = [lon,lat];
+        var pointFeature = new ol.Feature({
+            geometry:new ol.geom.Point(point),
+            style:new ol.style.Style({
+                image:new ol.style.Icon({
+                    anchor: [10,10],
+                    anchorXUnits: 'pixels',
+                    anchorYUnits: 'pixels',
+                    imgSize:[21,21],
+                    src:"img/21px.png"
+                })
+            })
+        });
+        pointLayer.getSource().addFeature(pointFeature);
+        mapTemp[mapId].addLayer(pointLayer); //将图层添加到目标之上
+        pointFeature.id = uuid;
+
+        //给每个刺点显示其点ID的容器
+        $('#smallPop').append('<div id="pop'+index+pointID+'" style="color: red;font-size: 14px;">&nbsp;'+pointID+'</div>');
+        var pop = new ol.Overlay({
+            element:document.getElementById('pop'+index+pointID), //挂载点
+            position: [lon,lat],    //设置其位置
+            positioning: 'top-left'   //显示位置的方向
+        });
+        mapTemp[mapId].addOverlay(pop);  // 地图添加
+        popArr.push(pop);
+        popArrObj[uuid] = pop;
+    }
     var olLingKey;
     //监听移动地图
     var _moveMap = function(data){
@@ -260,6 +386,18 @@ define(['./config','dhtmlx','ol'],function (config) {
                 }) ;
                 mapTemp[id].setView(view);
             }
+        }
+    }
+    //添加全选
+    var _checkAll = function(checkAllTemp){
+        for (k in checkAllTemp) {
+            document.getElementsByName(k)[0].checked = true;
+        }
+    }
+    //清除全选
+    var _unCheckAll = function(checkAllTemp){
+        for (k in checkAllTemp) {
+            document.getElementsByName(k)[0].checked = false;
         }
     }
     //全图操作
@@ -358,22 +496,7 @@ define(['./config','dhtmlx','ol'],function (config) {
         });
         featureOverlay.setMap(map);
 
-        //var modify = new ol.interaction.Modify({
-        //    features: features,
-        //    // the SHIFT key must be pressed to delete vertices, so
-        //    // that new vertices can be drawn at the same position
-        //    // of existing vertices
-        //    deleteCondition: function (event) {
-        //        return ol.events.condition.shiftKeyOnly(event) &&
-        //            ol.events.condition.singleClick(event);
-        //    }
-        //});
-        //map.addInteraction(modify);
-        //modify.on("modifyend", onModifyEnd, this);
-        //modify.on("modifystart", onModifyStart, this);
-        //modify.changed(onDrawEnd);
         var draw; // global so we can remove it later
-        //var typeSelect = document.getElementById('type');
         function addInteraction() {
             draw = new ol.interaction.Draw({
                 features: features,
@@ -404,34 +527,13 @@ define(['./config','dhtmlx','ol'],function (config) {
             draw.on("drawend", onDrawEnd, this);
         }
 
-        //function onModifyStart(event) {
-        //    var lon = event.target.a.b.data.ba;
-        //    var lat = event.target.a.b.data.ga;
-        //    //var newData = ["image4", "imageA", "true", lon, lat];
-        //    //grid_7.forEachRowInGroup("John", function (id) {
-        //    //    id;
-        //    //});
-        //    //grid_7.addRow(3, newData);
-        //}
 
-        //function onModifyEnd(event) {
-        //    mapTemp[mapId].removeInteraction(draw);
-        //    var lon = event.target.a.b.data.ba;
-        //    var lat = event.target.a.b.data.ga;
-        //    point[lon] = lon;
-        //    point[lat] = lat;
-        //    var img = "img"+mapId;
-        //    var newData = [img, "imageA", "true", lon, lat];
-        //    grid_7.addRow(3, newData);
-        //    return point;
-        //}
-
-        function onDrawEnd(event) {
+        function onDrawEnd(evt) {
             features;
             var uuid =  _uuid();
-            event.feature.id = uuid;
+            evt.feature.id = uuid;
             mapTemp[mapId].removeInteraction(draw);
-            var coordinates = event.feature.getGeometry().getCoordinates();   //获取坐标
+            var coordinates = evt.feature.getGeometry().getCoordinates();   //获取坐标
             var lon = coordinates[0];// target.a[0];
             var lat = coordinates[1];//event.target.a[1];
             point[0] = lon;
@@ -445,20 +547,23 @@ define(['./config','dhtmlx','ol'],function (config) {
             //point[1] = point[1].toFixed(6);
 
             //没点时，获取最大的行号、点ID号
-            if(orderList.length<=0 && pointIdList.length <= 0){
-                //grid_7.forEachRow(function(id){  //循环每一行
-                //    grid_7.forEachCell(id,function(cellObj,index){  //循环每一行的每一个cell,每个cell的id为index，对象为cellObj
-                //        if(index === 0){
-                //            orderList.push(cellObj.getValue());
-                //        }
-                //        if(index === 1){
-                //            pointIdList.push(cellObj.getValue());
-                //        }
-                //    });
-                //});
-                orderList.push(0);
-                pointIdList.push(0);
-            }
+            //if(orderList.length<=0 && pointIdList.length <= 0) {
+                if (grid_7.getRowsNum() > 0) {
+                    grid_7.forEachRow(function (id) {  //循环每一行
+                        grid_7.forEachCell(id, function (cellObj, index) {  //循环每一行的每一个cell,每个cell的id为index，对象为cellObj
+                            if (index === 1) {
+                                orderList.push(cellObj.getValue() == undefined ? 0 : cellObj.getValue());
+                            }
+                            if (index === 2) {
+                                pointIdList.push(cellObj.getValue() == undefined ? 0 : cellObj.getValue());
+                            }
+                        });
+                    });
+                } else {
+                    orderList.push(0);
+                    pointIdList.push(0);
+                }
+            //}
 
             var numOrder = Math.max.apply(null,orderList) + 1;  // 获取最大的加1
             var pointID= Math.max.apply(null,pointIdList) + 1;
@@ -478,10 +583,17 @@ define(['./config','dhtmlx','ol'],function (config) {
             map.addOverlay(pop);  // 地图添加
             popArr.push(pop);
             popArrObj[uuid] = pop;
-
-            var img = "img"+mapId;
+            var extent = extentTemp[mapId];
+            //map.getView().fit(extent, map.getSize());
+            var colCount = countTemp[mapId].colCount;
+            var rowCount = countTemp[mapId].rowCount;
+            var cols=colCount/(extent[2]-extent[0])*(lon-extent[0]);
+            var rows=rowCount/(extent[3]-extent[1])*(extent[3]-lat);
+            var x = cols/(colCount/(extent[2]-extent[0]))+extent[0];
+            var y = extent[3]-rows/(rowCount/(extent[3]-extent[1]));
+            var img = mapId;
             //添加一行信息  序号，点ID，点类型。。。。。。。
-            var rowData = [uuid,numOrder,pointId,img,3,"1",__mapCoordinateFixed4(coordinates[0]),__mapCoordinateFixed4(coordinates[1]),"0"];
+            var rowData = [uuid,numOrder,pointId,img,3,"1",rows,cols,"0"];
             grid_7.addRow(numOrder,rowData,false);  //行的ID 与序号号值是一样的
             var newData = { id:numOrder, data: rowData};
             //var newData = [img, "imageA", "true", point[0].toFixed(6), point[1].toFixed(6)];
@@ -521,78 +633,7 @@ define(['./config','dhtmlx','ol'],function (config) {
         var gridData = data.arg[4];
         var map = mapTemp[mapId];
         var features = featuresTemp[mapId];
-        //var modify = new ol.interaction.Modify({
-        //    features: features,
-        //    // the SHIFT key must be pressed to delete vertices, so
-        //    // that new vertices can be drawn at the same position
-        //    // of existing vertices
-        //    deleteCondition: function (event) {
-        //        return ol.events.condition.shiftKeyOnly(event) &&
-        //            ol.events.condition.singleClick(event);
-        //    }
-        //});
-        //map.addInteraction(modify);
-        //modify.on("modifyend", onModifyEnd, this);
-        //modify.on("modifystart", onModifyStart, this);
         var uuid;
-        //function onModifyStart(event) {
-        //    //var lon = event.target.a.b.data.ba;
-        //    //var lat = event.target.a.b.data.ga;
-        //    var coordinates = event.features.getGeometry().getCoordinates();   //获取坐标
-        //    var lon = coordinates[0];// target.a[0];
-        //    var lat = coordinates[1];
-        //    var uuids = event.features.a;
-        //    uuids.forEach(function(data){
-        //        if(data.O.geometry.B[0] == lon && data.O.geometry.B[1] ==lat){
-        //            uuid = data.id;
-        //        }
-        //    })
-        //}
-
-        //function onModifyEnd(event) {
-        //    mapTemp[mapId].removeInteraction(modify);
-        //    //var lon = event.target.a.b.data.ba;
-        //    //var lat = event.target.a.b.data.ga;
-        //    var pointID = event.id;
-        //    var coordinates = event.features.getGeometry().getCoordinates();   //获取坐标
-        //    var lon = coordinates[0];// target.a[0];
-        //    var lat = coordinates[1];
-        //    point[0] = lon;
-        //    point[1] = lat;
-        //    var tempPoint = {
-        //        id:uuid,
-        //        point:[lon,lat]
-        //    }
-        //    point = _changeCoord("EPSG:3857","EPSG:4326",point)
-        //    //point[0] = point[0].toFixed(6);
-        //    //point[1] = point[1].toFixed(6);
-        //    //没点时，获取最大的行号、点ID号
-        //    var numOrder = 0;
-        //    if(orderList.length<=0 && pointIdList.length <= 0){
-        //        grid_7.forEachRow(function(id){  //循环每一行
-        //            grid_7.forEachCell(id,function(cellObj,index){  //循环每一行的每一个cell,每个cell的id为index，对象为cellObj
-        //                if(index === 1){
-        //                    if(pointID == cellObj.getValue()){
-        //                        numOrder = id;
-        //                    }
-        //                }
-        //            });
-        //        });
-        //    }
-        //
-        //
-        //    popArrObj.forEach(function(data){
-        //        if(data.id == uuid){
-        //            popArrObj[uuid].setPosition([lon,lat]);
-        //        }
-        //    })
-        //    var img = "img"+mapId;
-        //    var rowData = [numOrder,pointID,img,3,"1",__mapCoordinateFixed4(coordinates[0]),__mapCoordinateFixed4(coordinates[1]),"0"];
-        //    grid_7.addRow(numOrder,rowData,false);
-        //    fun(tempPoint);
-        //}
-
-
         var selectedPointID ;
         var selectPoint = new ol.interaction.Select();   //实例化交互选择，操作要素
         map.addInteraction(selectPoint);
@@ -630,10 +671,10 @@ define(['./config','dhtmlx','ol'],function (config) {
             event.stopPropagation();
             map.removeInteraction(modify);
 
-            var x=event.mapBrowserEvent.coordinate[0];   //当鼠标松开时，获取当前点坐标
-            x =__mapCoordinateFixed4(x);
-            var y=event.mapBrowserEvent.coordinate[1];
-            y = __mapCoordinateFixed4(y);
+            var lon=event.mapBrowserEvent.coordinate[0];   //当鼠标松开时，获取当前点坐标
+            var x =__mapCoordinateFixed4(lon);
+            var lat=event.mapBrowserEvent.coordinate[1];
+            var y = __mapCoordinateFixed4(lat);
             var tempPoint = {
                         id:uuid,
                         point:[x,y]
@@ -647,32 +688,39 @@ define(['./config','dhtmlx','ol'],function (config) {
             //}
             i = null;
                 //没点时，获取最大的行号、点ID号
-                var numOrder = 0;
-                var pointIdList = [];
-                if(orderList.length<=0 && pointIdList.length <= 0){
-                    grid_7.forEachRow(function(id){  //循环每一行
-                        grid_7.forEachCell(id,function(cellObj,index){  //循环每一行的每一个cell,每个cell的id为index，对象为cellObj
-                            if(index === 1){
-                                if(uuid == cellObj.getValue()){
-                                    numOrder = id;
-                                    pointIdList.push(cellObj.getValue());
-                                }
-                            }
-                        });
-                    });
-                }
-                var pointID= Math.max.apply(null,pointIdList);
+                //var numOrder = 0;
+                //var pointIdList = [];
+                //if(orderList.length<=0 && pointIdList.length <= 0){
+                //    grid_7.forEachRow(function(id){  //循环每一行
+                //        grid_7.forEachCell(id,function(cellObj,index){  //循环每一行的每一个cell,每个cell的id为index，对象为cellObj
+                //            if(index === 1){
+                //                if(uuid == cellObj.getValue()){
+                //                    numOrder = id;
+                //                    pointIdList.push(cellObj.getValue());
+                //                }
+                //            }
+                //        });
+                //    });
+                //}
+                //var pointID= Math.max.apply(null,pointIdList);
                 var img = "img"+mapId;
                 //var rowData = [numOrder,pointID,img,3,"1",__mapCoordinateFixed4(x),__mapCoordinateFixed4(y),"0"];
                 //grid_7.addRow(numOrder,rowData,false);
+
+            var extent = extentTemp[mapId];
+            //map.getView().fit(extent, map.getSize());
+            var colCount = countTemp[mapId].colCount;
+            var rowCount = countTemp[mapId].rowCount;
+            var cols=colCount/(extent[2]-extent[0])*(lon-extent[0]);
+            var rows=rowCount/(extent[3]-extent[1])*(extent[3]-lat);
                 grid_7.forEachRow(function(id){
                     grid_7.forEachCell(id,function(cellObj,index){
                         if(index == 0){
                             if(cellObj.getValue() == uuid){
-                                grid_7.cells(id, 6).cell.innerHTML = x;
-                                grid_7.cells(id, 7).cell.innerHTML = y;
-                                gridData.rows[id-1].data[6] = x;
-                                gridData.rows[id-1].data[7] = y;
+                                grid_7.cells(id, 6).cell.innerHTML = cols;
+                                grid_7.cells(id, 7).cell.innerHTML = rows;
+                                gridData.rows[id-1].data[6] = cols;
+                                gridData.rows[id-1].data[7] = rows;
                             }
                         }
                     });
@@ -963,6 +1011,8 @@ define(['./config','dhtmlx','ol'],function (config) {
         toBig:_toBig,
         toSmall:_toSmall,
         moveMap:_moveMap,
-        unMoveMap:_unMoveMap
+        unMoveMap:_unMoveMap,
+        checkAll:_checkAll,
+        unCheckAll:_unCheckAll
     };
 });
