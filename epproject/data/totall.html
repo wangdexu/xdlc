@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        *{box-sizing: border-box;
+            text-decoration: none;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .totall_clear:after{
+            content: "";
+            display: block;
+            clear: both;
+        }
+        #totall{
+            width: 450px;
+        }
+        .totall_title{
+            border: 1px solid #ABABAB;
+            text-align: center;
+        }
+        .totall_title>div{
+            display: inline-block;
+            height: 40px;
+            line-height: 40px;
+        }
+        .totall_body_error{
+            height: 35px;
+            width: 450px;
+        }
+        .totall_body_error>div{
+            float: left;
+            font-size: 17px;
+            font-weight: bold;
+            width: 50%;
+            text-align: center;
+            margin-top: 25px;
+        }
+        .totall_body_error>div>span{
+            background: #fff;
+        }
+        .body_error{
+            border: 1px solid #ABABAB;
+            width: 450px;
+        }
+        .body_error>div{
+            float: left;
+            width: 50%;
+        }
+        .body_error>div>ul{
+            float: left;
+            margin-left: 5px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+        .body_error>div>ul>li{
+            height: 35px;
+            line-height: 35px;
+        }
+        .body_check{
+            border-left: 1px solid #ABABAB;
+        }
+        .totall_bottom{
+            height:40px;
+            width: 450px;
+            line-height: 40px;
+            padding-top: 13px;
+        }
+        .totall_bottom button{
+            padding: 5px;
+            float: right;
+            margin-right: 20px;
+            height: 100%;
+            line-height: 100%;
+        }
+    </style>
+</head>
+<body>
+<div id="totall">
+    <div class="totall_title">
+        <div id="totall_name"></div>
+        <div id="totall_Unit"></div>
+        <div id="totall_value"></div>
+    </div>
+    <div class="totall_body">
+        <div class="totall_body_error">
+            <div><span id="control_name"></span></div>
+            <div><span id="check_name"></span></div>
+        </div>
+        <div class="body_error totall_clear">
+            <div class="body_control">
+                <ul>
+                    <li>地面x方向精度：</li>
+                    <li>地面y方向精度：</li>
+                    <li>地面z方向精度：</li>
+                    <li>像方x方向中误差：</li>
+                    <li>像方y方向中误差：</li>
+                    <li>CE90：</li>
+                    <li>le90：</li>
+                </ul>
+                <ul>
+                    <li id="control_GroundX"></li>
+                    <li id="control_GroundY"></li>
+                    <li id="control_GroundZ"></li>
+                    <li id="control_ImageX"></li>
+                    <li id="control_ImageY"></li>
+                    <li id="control_CE90"></li>
+                    <li id="control_LE90"></li>
+                </ul>
+            </div>
+            <div class="body_check">
+                <ul>
+                    <li>地面x方向精度：</li>
+                    <li>地面y方向精度：</li>
+                    <li>地面z方向精度：</li>
+                    <li>像方x方向中误差：</li>
+                    <li>像方y方向中误差：</li>
+                    <li>CE90：</li>
+                    <li>le90：</li>
+                </ul>
+                <ul>
+                    <li id="check_GroundX"></li>
+                    <li id="check_GroundY"></li>
+                    <li id="check_GroundZ"></li>
+                    <li id="check_ImageX"></li>
+                    <li id="check_ImageY"></li>
+                    <li id="check_CE90"></li>
+                    <li id="check_LE90"></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="totall_bottom">
+        <button id="totall_help">帮助</button>
+        <button id="totall_check">检查</button>
+        <button id="totall_report">报告</button>
+        <button id="totall_close">关闭</button>
+    </div>
+</div>
+<script>
+
+
+</script>
+</body>
+</html>

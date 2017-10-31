@@ -267,8 +267,48 @@ html, body{
     border: 1px solid #999999;
     z-index: 99;
 }
-
-
+/*统一弹出框*/
+#popBox{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate3d(-50%,-50%,0);
+    transform: translate3d(-50%,-50%,0);
+    background-color: #fff;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.7);
+    border: 1px solid #999999;
+    z-index: 100;
+}
+#popBox_title{
+    background: #EBEBEB;
+    height: 40px;
+    width: 100%;
+    cursor:move;
+}
+#popBox_title>div{
+    float: left;
+    height: 40px;
+    line-height: 40px;
+    margin-left: 20px;
+}
+#popBox_title>div:first-child{
+    height: 30px;
+    width: 5px;
+    background: #04979E;
+    margin-top: 5px;
+}
+#popBox_title>#popBox_name{
+    margin-left: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+#popBox_title>#popBox_close{
+    float: right;
+    margin-left: 0;
+    width: 40px;
+    text-align: center;
+    cursor:pointer;
+}
 .exportPop {
     position: relative;
     right: -260px;
@@ -276,6 +316,9 @@ html, body{
     font-size: 30px;
     padding-right: 0px;
     overflow: auto;
+}
+#popBox_wrap{
+    padding: 20px;
 }
 
 .fileList{
