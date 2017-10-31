@@ -25,8 +25,8 @@
       <file leaf-file-name="main.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/app/ui/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.60280377">
-              <caret line="210" column="47" selection-start-line="210" selection-start-column="47" selection-end-line="210" selection-end-column="47" />
+            <state vertical-scroll-proportion="-0.7079439">
+              <caret line="422" column="26" selection-start-line="422" selection-start-column="22" selection-end-line="422" selection-end-column="26" />
               <folding>
                 <marker date="1509356572932" expanded="true" signature="9022:9053" placeholder="..." />
                 <marker date="1509356572932" expanded="true" signature="9986:9999" placeholder="..." />
@@ -48,8 +48,8 @@
       <file leaf-file-name="leftTree.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/app/leftTree/leftTree.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="207" column="28" selection-start-line="207" selection-start-column="28" selection-end-line="207" selection-end-column="28" />
+            <state vertical-scroll-proportion="-23.71875">
+              <caret line="201" column="16" selection-start-line="186" selection-start-column="12" selection-end-line="201" selection-end-column="16" />
               <folding>
                 <element signature="e#261#5228#0" expanded="false" />
                 <element signature="e#15987#16252#0" expanded="false" />
@@ -84,8 +84,8 @@
       <file leaf-file-name="mapControls.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/app/gis/mapControls.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-499.78125">
-              <caret line="635" column="37" selection-start-line="635" selection-start-column="26" selection-end-line="635" selection-end-column="37" />
+            <state vertical-scroll-proportion="-10.25">
+              <caret line="911" column="20" selection-start-line="911" selection-start-column="20" selection-end-line="911" selection-end-column="20" />
               <folding>
                 <element signature="e#2341#2406#0" expanded="false" />
                 <element signature="e#2432#2490#0" expanded="false" />
@@ -94,9 +94,9 @@
                 <element signature="e#10458#11397#0" expanded="false" />
                 <element signature="e#28667#29736#0" expanded="false" />
                 <element signature="e#30494#31685#0" expanded="false" />
-                <element signature="e#32313#32357#0" expanded="false" />
-                <marker date="1509350774754" expanded="true" signature="20998:21008" placeholder="..." />
-                <marker date="1509350774754" expanded="true" signature="24456:24466" placeholder="..." />
+                <element signature="e#32975#33019#0" expanded="false" />
+                <marker date="1509363967439" expanded="true" signature="20998:21008" placeholder="..." />
+                <marker date="1509363967439" expanded="true" signature="24456:24466" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -182,15 +182,15 @@
         <option value="$PROJECT_DIR$/css/leftSourceManage.css" />
         <option value="$PROJECT_DIR$/css/SourceManage.css" />
         <option value="$PROJECT_DIR$/index.html" />
-        <option value="$PROJECT_DIR$/js/app/leftTree/leftTree.js" />
         <option value="$PROJECT_DIR$/css/index.css" />
         <option value="$PROJECT_DIR$/js/app/gis/test.js" />
         <option value="$PROJECT_DIR$/data/grid.xml" />
-        <option value="$PROJECT_DIR$/js/app/gis/mapControls.js" />
         <option value="$PROJECT_DIR$/js/app.js" />
         <option value="$PROJECT_DIR$/data/grid0.xml" />
         <option value="$PROJECT_DIR$/js/app/gis/smallMap.js" />
         <option value="$PROJECT_DIR$/js/app/ui/main.js" />
+        <option value="$PROJECT_DIR$/js/app/leftTree/leftTree.js" />
+        <option value="$PROJECT_DIR$/js/app/gis/mapControls.js" />
       </list>
     </option>
   </component>
@@ -880,20 +880,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/app/leftTree/leftTree.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="207" column="28" selection-start-line="207" selection-start-column="28" selection-end-line="207" selection-end-column="28" />
-          <folding>
-            <element signature="e#261#5228#0" expanded="false" />
-            <element signature="e#15987#16252#0" expanded="false" />
-            <marker date="1509100175752" expanded="true" signature="6915:6933" placeholder="..." />
-            <marker date="1509100175752" expanded="true" signature="7454:7472" placeholder="..." />
-            <marker date="1509100175752" expanded="true" signature="10499:10517" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/libs/openlayers/v4.1.1-dist/ol-debug.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334">
@@ -907,25 +893,6 @@
         <state vertical-scroll-proportion="-15.714286">
           <caret line="20" column="32" selection-start-line="20" selection-start-column="14" selection-end-line="20" selection-end-column="32" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/app/gis/mapControls.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-499.78125">
-          <caret line="635" column="37" selection-start-line="635" selection-start-column="26" selection-end-line="635" selection-end-column="37" />
-          <folding>
-            <element signature="e#2341#2406#0" expanded="false" />
-            <element signature="e#2432#2490#0" expanded="false" />
-            <element signature="e#2516#2610#0" expanded="false" />
-            <element signature="e#2636#2745#0" expanded="false" />
-            <element signature="e#10458#11397#0" expanded="false" />
-            <element signature="e#28667#29736#0" expanded="false" />
-            <element signature="e#30494#31685#0" expanded="false" />
-            <element signature="e#32313#32357#0" expanded="false" />
-            <marker date="1509350774754" expanded="true" signature="20998:21008" placeholder="..." />
-            <marker date="1509350774754" expanded="true" signature="24456:24466" placeholder="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -975,10 +942,43 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/js/app/leftTree/leftTree.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-23.71875">
+          <caret line="201" column="16" selection-start-line="186" selection-start-column="12" selection-end-line="201" selection-end-column="16" />
+          <folding>
+            <element signature="e#261#5228#0" expanded="false" />
+            <element signature="e#15987#16252#0" expanded="false" />
+            <marker date="1509100175752" expanded="true" signature="6915:6933" placeholder="..." />
+            <marker date="1509100175752" expanded="true" signature="7454:7472" placeholder="..." />
+            <marker date="1509100175752" expanded="true" signature="10499:10517" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/app/gis/mapControls.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-10.25">
+          <caret line="911" column="20" selection-start-line="911" selection-start-column="20" selection-end-line="911" selection-end-column="20" />
+          <folding>
+            <element signature="e#2341#2406#0" expanded="false" />
+            <element signature="e#2432#2490#0" expanded="false" />
+            <element signature="e#2516#2610#0" expanded="false" />
+            <element signature="e#2636#2745#0" expanded="false" />
+            <element signature="e#10458#11397#0" expanded="false" />
+            <element signature="e#28667#29736#0" expanded="false" />
+            <element signature="e#30494#31685#0" expanded="false" />
+            <element signature="e#32975#33019#0" expanded="false" />
+            <marker date="1509363967439" expanded="true" signature="20998:21008" placeholder="..." />
+            <marker date="1509363967439" expanded="true" signature="24456:24466" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/js/app/ui/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.60280377">
-          <caret line="210" column="47" selection-start-line="210" selection-start-column="47" selection-end-line="210" selection-end-column="47" />
+        <state vertical-scroll-proportion="-0.7079439">
+          <caret line="422" column="26" selection-start-line="422" selection-start-column="22" selection-end-line="422" selection-end-column="26" />
           <folding>
             <marker date="1509356572932" expanded="true" signature="9022:9053" placeholder="..." />
             <marker date="1509356572932" expanded="true" signature="9986:9999" placeholder="..." />
