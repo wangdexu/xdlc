@@ -907,7 +907,23 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
 
         function loaded(evt) {
             var fileString = evt.target.result;
-            alert(fileString);
+            var data = {"gcp":fileString,
+                        "id":["1f5243ad-ae32-44df-9956-58504a2b92a2","693ad1db-0c86-408e-b307-6124bc8eafad","239caa14-4aac-4685-823b-841ef178b46a"]}
+            $.ajax({
+                url:"http://192.168.31.229:5000/testmain2",
+                type:"post",
+                //contentType: "application/json",
+                data:JSON.stringify(data),
+                async: false,
+                success:function(data){
+                    alert(data);
+                },
+                error: function (e) {
+                    if(e.status == "401"){
+                        //getSession();
+                    }
+                }
+            })
         }
     };
     //删除单点操作
