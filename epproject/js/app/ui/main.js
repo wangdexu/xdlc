@@ -824,12 +824,51 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     var _x = ev.pageX - mouse_x;
                     var _y = ev.pageY - mouse_y;
                     /* 设置移动后的元素坐标 */
-                    var now_x = (offset_x + _x ) ;
-                    var now_y = (offset_y + _y );
-                    obj.css({
-                        top:now_y + "px",
-                        left:now_x + "px"
-                    });
+                    var now_x = parseFloat(offset_x + _x ) ;
+                    var now_y = parseFloat(offset_y + _y );
+                    //if(now_x<0&&now_y>=0){
+                    //    obj.css({
+                    //        top:0 + "px",
+                    //        left:now_x + "px"
+                    //    })
+                    //}else{
+                    //    obj.css({
+                    //        top:now_y + "px",
+                    //        left:now_x + "px"
+                    //    })
+                    //}
+                    var popBox_minheight=parseFloat($("#popBox").height())/2;
+                    var popBox_minwidth=parseFloat($("#popBox").width())/2;
+                    var popBox_maxheight=parseFloat($("body").height())-popBox_minheight;
+
+                    var popBox_maxwidth=parseFloat($("body").width())-popBox_minwidth;
+                    console.log($(document).width());
+                    if(now_x>popBox_maxwidth){
+                        obj.css({
+                            left:popBox_maxwidth + "px"
+                        })
+                    }else if(now_x<popBox_minwidth){
+                        obj.css({
+                            left:popBox_minwidth + "px"
+                        })
+                    }else{
+                        obj.css({
+                            left:now_x + "px"
+                        })
+                    }
+                    if(now_y>popBox_maxheight){
+                        obj.css({
+                            top:popBox_maxheight + "px"
+                        })
+                    }else if(now_y<popBox_minheight){
+                        obj.css({
+                            top:popBox_minheight + "px"
+                        })
+                    }else{
+                        obj.css({
+                            top:now_y + "px"
+                        })
+                    }
                 });
             });
             /* 当鼠标左键松开，接触事件绑定 */
