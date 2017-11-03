@@ -252,6 +252,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         var arr = [];
         // 每次单击一行，取得那一行的信息
         grid_3.attachEvent('onRowSelect', function(rId, cInd) {
+            //console.log(grid3Detail);
             if(cInd == 3){
                 var obj = {};
                 obj.id = rId;   //行ID
@@ -369,6 +370,10 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         grid_2.init();
         //grid_2.load('./data/grid.xml','xml');
 
+        //接收影像列表信息
+        var _returnDetail =  function(Detail){
+            grid3Detail = Detail;
+        }
         //接收疵的点
         var _returnCiPoint =  function(point,points){
             nowPoint = point;
@@ -693,18 +698,17 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     },1000);
                     produce.autoMatch({
                         eventName:"onClick",
-                        arg: [grid_3,grid_2]
+                        arg: [grid_3,grid_2,grid3Detail,_returnDetail]
                     });
                     break;
                 case "blockAdjustment":
                     produce.blockAdjustment({
                         eventName:"onClick",
-                        arg: [cell_1]
+                        arg: [grid_3,grid_2]
                     });
                     break;
             }
         });
-
         ribbon_1.attachEvent('onCheck', function(id, state){
            switch(id){
                case "imageRange":

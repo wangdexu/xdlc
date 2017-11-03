@@ -1,5 +1,5 @@
 define(['jquery','dhtmlx','ol'],function($,dhl,ol){
-    var _autoMatch = function(argList){
+    var _autoMatch = function(argList){                 //自动匹配函数
         //"点列表""影像列表",虚拟数据
         var dataMain={
             "TiePoint" :
@@ -7,70 +7,70 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                 "Property" :
                     [
                         {
-                            "imagename" : "E:\\testdata\\inputData\\TH\\TH01-01_R201202210000003_1A_SXZ_1_10_883_123.tif",
+                            "imagename" : "TH01-01_R201202210000003_1A_SXZ_1_10_883_123.tif",
                             "imageid":	"F_1",
                             "pointid" : 1,
                             "x" : 44.1632,
                             "y" : 319.1258
                         },
                         {
-                            "imagename" : "E:\\testdata\\inputData\\TH\\TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                            "imagename" : "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                             "imageid":	"F_1",
                             "pointid" : 6,
                             "x" : 44.1632,
                             "y" : 319.1258
                         },
                         {
-                            "imagename" : "E:\\testdata\\inputData\\TH\\TH01-01_R201202210000003_1A_SXZ_2_10_883_125.tif",
+                            "imagename" : "TH01-01_R201202210000003_1A_SXZ_2_10_883_125.tif",
                             "imageid":	"N_1",
                             "pointid" : 1,
                             "x" : 44.1632,
                             "y" : 319.1258
                         },
                         {
-                            "imagename" : "E:\\testdata\\inputData\\TH\\TH01-01_R201202210000003_1A_SXZ_1_10_883_126.tif",
+                            "imagename" : "TH01-01_R201202210000003_1A_SXZ_1_10_883_126.tif",
                             "imageid":	"F_1",
                             "pointid" : 2,
                             "x" : 44.1632,
                             "y" : 319.1258
                         },
                         {
-                            "imagename" : "E:\\testdata\\inputData\\TH\\TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                            "imagename" : "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                             "imageid":	"F_1",
                             "pointid" : 2,
                             "x" : 44.1632,
                             "y" : 319.1258
                         },
                         {
-                            "imagename" : "E:\\testdata\\inputData\\TH\\TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                            "imagename" : "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                             "imageid":	"F_1",
                             "pointid" : 2,
                             "x" : 44.1632,
                             "y" : 319.1258
                         },
                         {
-                            "imagename" : "E:\\testdata\\inputData\\TH\\TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                            "imagename" : "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                             "imageid":	"F_1",
                             "pointid" : 4,
                             "x" : 44.1632,
                             "y" : 319.1258
                         },
                         {
-                            "imagename" : "E:\\testdata\\inputData\\TH\\TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                            "imagename" : "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                             "imageid":	"F_1",
                             "pointid" : 2,
                             "x" : 44.1632,
                             "y" : 319.1258
                         },
                         {
-                            "imagename" : "E:\\testdata\\inputData\\TH\\TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                            "imagename" : "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                             "imageid":	"F_1",
                             "pointid" : 2,
                             "x" : 44.1632,
                             "y" : 319.1258
                         },
                         {
-                            "imagename" : "E:\\testdata\\inputData\\TH\\TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                            "imagename" : "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                             "imageid":	"F_1",
                             "pointid" : 4,
                             "x" : 44.1632,
@@ -79,7 +79,28 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                     ]
             }
         };
-        var imageData={};                           //影像列表显示的data数据
+        $.ajax({
+            url: "http://192.168.31.229:5000/ImageFptRefine",
+            type: "post",
+            //data:JSON.stringify(dataMain),
+            data:{},
+            dataType: 'JSPON',
+            success: function (data) {
+                datamain=data;
+            },
+            error: function (e) {
+                if(e.status == "401"){
+                    console.log("请求失败");
+                }
+            }
+        });
+
+        var imageData={};
+        var grid3Detail = argList.arg[2];                 //影像列表显示的data数据
+        var new_imageData = $.extend(imageData, grid3Detail);
+        //console.log(new_imageData);
+        var fun = argList.arg[3];
+        fun(new_imageData);
         var newdata=[];                             //点列表显示的data数据
         var judgedata=[];                           //存一个遍历过的id集合,用于后面的判断
         var dataArr = dataMain.TiePoint.Property;
@@ -103,7 +124,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                     id=dataArr[i].pointid;
                     //console.log(degree);
                     k++;
-                    keydata.rows.push({"id":k,"data":["aaa",k,dataArr[i].pointid,dataArr[i].imageid,dataArr[i].imagename,"1",dataArr[i].x,dataArr[i].y]});
+                    keydata.rows.push({"id":k,"data":[_uuid(),k,dataArr[i].pointid,dataArr[i].imageid,dataArr[i].imagename,"1",dataArr[i].x,dataArr[i].y]});
                 }
                     }
                 //imageData.push({"key":id,"data":keydata});
@@ -121,7 +142,21 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                 newdata.push({"id":id,"degree":degree});
             }
         }
-        //console.log(imageData);
+        //console.log(argList.arg[2]);
+        //随机生成唯一字符串函数
+        function _uuid() {
+            var s = [];
+            var hexDigits = "0123456789abcdef";
+            for (var i = 0; i < 36; i++) {
+                s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+            }
+            s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
+            s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+            s[8] = s[13] = s[18] = s[23] = "-";
+
+            var uuid = s.join("");
+            return uuid;
+        }
         //点列表
         pointList(dataMain,newdata);                //调用点列表显示函数
         function pointList(dataMain,newdata){       //点列表显示函数
@@ -147,7 +182,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         });
         function imageList(rId,imageData) {            //影像列表显示函数
             var data=imageData[rId];
-            console.log(data);
+            //console.log(data);
             argList.arg[1].clearAll();
             //console.log(data);
             argList.arg[1].parse(data,function(){
@@ -155,9 +190,12 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             },"json");
         }
     };
-    var _blockAdjustment = function(){
+    var _blockAdjustment = function(argList){
+        var grid_3=argList.arg[0];
+        var grid_2=argList.arg[1];
         //"总结"弹出框
         $("#popBox_wrap").css({width:"auto",height:"auto"});
+        $("#popBox_name").html("总结");
         $("#popBox_bottom").empty();
         $("#popBox_wrap").empty();
         $("#popBox_wrap").load('./data/totall.html',function(){
@@ -173,68 +211,77 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         //"点数"弹出框,虚拟数据
         var pointData={
             "Review":
-            [
-                {
-                    "ImgID" : "F_1",
-                    "PointID": 2,
-                    "Imgx" : 3810.500,
-                    "Imgy" : 4943.500,
-                    "detImgx" : -1.249,
-                    "detImgy" : 1.176,
-                    "Rmse" : 1.716
-                },
-                {
-                    "ImgID" : "F_1",
-                    "PointID": 3,
-                    "Imgx" : 3810.500,
-                    "Imgy" : 4943.500,
-                    "detImgx" : -1.249,
-                    "detImgy" : 1.176,
-                    "Rmse" : 1.716
-                },
-                {
-                    "ImgID" : "F_1",
-                    "PointID": 4,
-                    "Imgx" : 3810.500,
-                    "Imgy" : 4943.500,
-                    "detImgx" : -1.249,
-                    "detImgy" : 1.176,
-                    "Rmse" : 1.716
-                },
-                {
-                    "ImgID" : "F_1",
-                    "PointID": 5,
-                    "Imgx" : 3810.500,
-                    "Imgy" : 4943.500,
-                    "detImgx" : -1.249,
-                    "detImgy" : 1.176,
-                    "Rmse" : 1.716
-                },
-                {
-                    "ImgID" : "F_1",
-                    "PointID": 6,
-                    "Imgx" : 3810.500,
-                    "Imgy" : 4943.500,
-                    "detImgx" : -1.249,
-                    "detImgy" : 1.176,
-                    "Rmse" : 1.716
-                },
-                {
-                    "ImgID" : "F_1",
-                    "PointID": 7,
-                    "Imgx" : 3810.500,
-                    "Imgy" : 4943.500,
-                    "detImgx" : -1.249,
-                    "detImgy" : 1.176,
-                    "Rmse" : 1.716
-                }
-            ]
+                [
+                    {
+                        "ImgID" : "F_1",
+                        "PointStyle":"Tiepoint",
+                        "PointID": 3,
+                        "Imgx" : 3810.500,
+                        "Imgy" : 4943.500,
+                        "detImgx" : -1.249,
+                        "detImgy" : 1.176,
+                        "Rmse" : 1.716
+                    },
+                    {
+                        "ImgID" : "F_1",
+                        "PointStyle":"Tiepoint",
+                        "PointID": 5,
+                        "Imgx" : 3810.500,
+                        "Imgy" : 4943.500,
+                        "detImgx" : -1.249,
+                        "detImgy" : 1.176,
+                        "Rmse" : 1.816
+                    },
+                    {
+                        "ImgID" : "F_1",
+                        "PointStyle":"Tiepoint",
+                        "PointID": 7,
+                        "Imgx" : 3810.500,
+                        "Imgy" : 4943.500,
+                        "detImgx" : -1.249,
+                        "detImgy" : 1.176,
+                        "Rmse" : 1.916
+                    },
+                    {
+                        "ImgID" : "F_1",
+                        "PointStyle":"Tiepoint",
+                        "PointID": 9,
+                        "Imgx" : 3810.500,
+                        "Imgy" : 4943.500,
+                        "detImgx" : -1.249,
+                        "detImgy" : 1.176,
+                        "Rmse" : 1.516
+                    },
+                    {
+                        "ImgID" : "F_1",
+                        "PointStyle":"Tiepoint",
+                        "PointID": 2,
+                        "Imgx" : 3810.500,
+                        "Imgy" : 4943.500,
+                        "detImgx" : -1.249,
+                        "detImgy" : 1.176,
+                        "Rmse" : 1.616
+                    },
+                    {
+                        "ImgID" : "F_1",
+                        "PointStyle":"Tiepoint",
+                        "PointID": 4,
+                        "Imgx" : 3810.500,
+                        "Imgy" : 4943.500,
+                        "detImgx" : -1.249,
+                        "detImgy" : 1.176,
+                        "Rmse" : 1.916
+                    }
+                ]
+
+
         };
-        $("#popBox").on('click',"#totall_check",function(){     //删除弹出层
+        $("#popBox").on('click',"#totall_check",function(){     //弹出点数框
+            $("#popBox_name").html("点数");
             $("#popBox_wrap").empty();
             pointNumber(pointData);
         });
-        //"总结"弹出框,虚拟数据
+        //"总结"弹出框虚拟数据
         var dataMain={
             "RefineSum":
             [
@@ -300,6 +347,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                 $("#check_LE90").empty().html(dataTitle[2].LE90);
             }
         //点号
+        var grid_4;
         function pointNumber(pointData){
             $("#popBox_bottom").empty();
             $("#popBox_wrap").css({width:"900px",height:"400px"});
@@ -309,13 +357,13 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             a.setHeight('300');
             a.setWidth('600');
             a.hideHeader();
-            var grid_4 = a.attachGrid();
+            grid_4 = a.attachGrid();
             grid_4.setIconsPath('./codebase/imgs/');
-            grid_4.setHeader(["行号","影像ID","点ID","有效","X","Y","RX","RY","残差"]);
-            grid_4.setColTypes("ro,ro,ro,ro,edtxt,edtxt,edtxt,edtxt,edtxt");
+            grid_4.setHeader(["行号","点ID","影像ID","点类型","有效","X","Y","RX","RY","残差"]);
+            grid_4.setColTypes("ro,ro,edtxt,edtxt,edtxt,edtxt,edtxt,edtxt,edtxt,edtxt");
 
-            grid_4.setColSorting('str,str,str,str,str,str,str,str,str');
-            grid_4.setInitWidths('*,*,*,*,*,*,*,*,*');
+            grid_4.setColSorting('str,str,str,str,str,str,str,str,str,str');
+            grid_4.setInitWidths('*,*,*,*,*,*,*,*,*,*');
             grid_4.init();
 
             var dataArr = pointData.Review;
@@ -325,20 +373,87 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             };
             var shu=dataArr.length;
             for(var i=1;i<=shu;i++){
-                data.rows.push({ id:dataArr[i-1].PointID, data: [i,dataArr[i-1].ImgID,dataArr[i-1].PointID,"有效",dataArr[i-1].Imgx,dataArr[i-1].Imgy,dataArr[i-1].detImgx,dataArr[i-1].detImgy,dataArr[i-1].Rmse]});
+                data.rows.push({ id:dataArr[i-1].PointID, data: [i,dataArr[i-1].PointID,dataArr[i-1].ImgID,dataArr[i-1].PointStyle,"1",dataArr[i-1].Imgx,dataArr[i-1].Imgy,dataArr[i-1].detImgx,dataArr[i-1].detImgy,dataArr[i-1].Rmse]});
             }
             grid_4.clearAll();
-            console.log(data);
             grid_4.parse(data,function(){
                 //alert(1);
             },"json");
 
-            $("#popBox_bottom").append('<div id="point_bottom"><button id="point_confirm">确定</button><button id="again_average">重新平差</button><div><span>残差阀值:</span><input id="average_switch" type="text"/></div><button id="point_delete">删除</button></div>');
+            $("#popBox_bottom").append('<div id="point_bottom"><button id="point_confirm">确定</button><button id="again_average">重新平差</button><div><span>残差阈值:</span><input id="average_switch" type="text"/></div><button id="point_delete">删除</button></div>');
             $("#point_bottom").css({width:"100%",height:"60px",padding:"10px 0"});
             $("#point_bottom>button").css({marginLeft:"100px",textAlign:"center",height:"40px",lineHeight:"40px"});
             $("#point_bottom>div").css({marginLeft:"100px",display:"inline-block",height:"40px",lineHeight:"40px"});
         }
-    };
+        $("#popBox").on('click',"#again_average",function(){     //重新平差
+            _blockAdjustment();
+        });
+
+
+
+        var input_data;
+        var id_data=[];
+        //console.log(11);
+        $("#popBox").on('keyup',"#average_switch",function(){    //"点数"键盘弹起选中的变色
+            //console.log(12);
+            input_data=$(this).val();
+
+            for(var i=1;i<=grid_4.getRowsNum();i++){
+                var id=grid_4.getRowId(i-1);
+                var data=grid_4.cells(id,9).getValue();
+                if(input_data<=data){
+                    grid_4.setRowColor(id,"#04979E");
+                    //console.log(13);
+                }else{
+                    grid_4.setRowColor(id,"#ffffff");
+                }
+            }
+            grid_4.setRowColor(grid_4.getSelectedId(),"#ffffff");
+        });
+        $("#popBox").on('click',"#point_delete",function() {         //"点数"点击删除按钮后将"有效"变为"0"
+
+            for (var i = 1; i <= grid_4.getRowsNum(); i++) {
+                var id = grid_4.getRowId(i - 1);
+                var data = grid_4.cells(id, 9).getValue();
+                if (input_data <= data) {
+                    id_data.push(id);
+                }
+            }
+            //console.log(id_data);
+            //$.each(id_data,function(index,item){
+            //    grid_4.deleteRow(item);
+            //})
+            $.each(id_data, function (index, item) {
+                grid_4.setRowColor(item, "#ffffff");
+                //grid_4.deleteRow(item);
+                grid_4.cells(item, 4).setValue("0");
+                //grid_3.cells(item, 4).setValue("0");
+            });
+
+            if ($("#average_switch").val()=="") {
+                //console.log("jiaoke");
+            grid_4.cells(grid_4.getSelectedId(), 4).setValue("0")
+            }
+            $("#average_switch").val("");
+                //console.log($("#average_switch").html());
+        });
+
+        $("#popBox").on('click',"#point_confirm",function() {         //"点数"点击确定按钮后将"点列表""影像列表",是否"有效"同步
+            //$("#popBox_close").trigger();
+            var ids=argList.arg[0].getAllRowIds();
+            $.each(id_data, function (index, item) {
+                var ids=argList.arg[0].getAllRowIds().split(",");
+                //console.log(ids);
+                if(ids.indexOf(""+item)!=-1){
+                    //console.log(item);
+                argList.arg[0].cells(item, 4).setValue("0");
+                //argList.arg[0].cellById(item, 4).setValue("0");
+                }
+                //console.log(id_data);
+            });
+        })
+
+        };
 
     return {
         autoMatch:_autoMatch,
