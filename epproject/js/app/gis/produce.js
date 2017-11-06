@@ -1,4 +1,5 @@
 define(['jquery','dhtmlx','ol'],function($,dhl,ol){
+    var grid_4;
     var _autoMatch = function(argList){                 //自动匹配函数
         //"点列表""影像列表",虚拟数据
         var dataMain={
@@ -191,8 +192,6 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         }
     };
     var _blockAdjustment = function(argList){
-        var grid_3=argList.arg[0];
-        var grid_2=argList.arg[1];
         //"总结"弹出框
         $("#popBox_wrap").css({width:"auto",height:"auto"});
         $("#popBox_name").html("总结");
@@ -200,10 +199,11 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         $("#popBox_wrap").empty();
         $("#popBox_wrap").load('./data/totall.html',function(){
             totallInformation(dataMain);
+            $("#popCase").addClass("popContainer").fadeIn(500); //显示透明蒙层
         });
         //var $popBox = $("#popBox");
         //$popBox.fadeIn(500);    //显示弹出层
-        $("#popCase").addClass("popContainer").fadeIn(500); //显示透明蒙层
+
         $("#popBox").on('click',"#popBox_close,#totall_close",function(){     //删除弹出层
             //$popBox.fadeOut(500);
             $("#popCase").addClass("popContainer").fadeOut(500); //删除透明蒙层
@@ -347,7 +347,6 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                 $("#check_LE90").empty().html(dataTitle[2].LE90);
             }
         //点号
-        var grid_4;
         function pointNumber(pointData){
             $("#popBox_bottom").empty();
             $("#popBox_wrap").css({width:"900px",height:"400px"});
@@ -386,7 +385,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             $("#point_bottom>div").css({marginLeft:"100px",display:"inline-block",height:"40px",lineHeight:"40px"});
         }
         $("#popBox").on('click',"#again_average",function(){     //重新平差
-            _blockAdjustment();
+            _blockAdjustment(argList);
         });
 
 
