@@ -1,12 +1,7 @@
 /**
- * Created by domea on 17-6-2.
+ * Created by user on 2017/11/4.
  */
 define({
-    tools:"tools",
-    left:"left",
-    map:"map",
-    leftGrid:"leftGrid",
-    rightGrid:"rightGrid",
     argsKer : {
         "panimg":"InputImgFileName",
         "panrpb":"InputRPCFileName",

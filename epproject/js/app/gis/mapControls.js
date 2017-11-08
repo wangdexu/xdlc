@@ -1,4 +1,5 @@
 define(['jquery','dhtmlx','ol'],function($,dhl,ol){
+    var startId = getUrlParam("uuid");
     //定义地图接口变量，全局使用
     var map,smallMap;
     var center = [108.93, 34.27]; //设置地图默认的中心点(西安)
@@ -572,6 +573,10 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
     var index = 0;
     var popArr = [];
     var _stabPoint = function(argList) {
+        if(draw != undefined && draw != null){
+            map.removeInteraction(draw);
+        }
+        map.removeInteraction(modify);
         var  leftTable = argList.arg[0]; //获取第一个参数
         var fun = argList.arg[1];
         //if(pointLayer==null){ //只创建一次添加点图层
@@ -639,7 +644,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             map.addOverlay(pop);  // 地图添加
             popArr.push(pop);   // 存储点的ol.Overlay 对象
             index++;
-            map.removeInteraction(draw);  //移除交互
+            //map.removeInteraction(draw);  //移除交互
             fun([singlePoint.singlePointtCoordinateX,singlePoint.singlePointtCoordinateY],points)
         });
     };
@@ -653,6 +658,8 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
 
     //添加一个点,就是添加一条空数据，手动填入数据
     var _addPoint = function(argList){
+        map.removeInteraction(modify);
+        map.removeInteraction(draw);  //移除交互
      var  leftTable = argList.arg[0]; //获取第一个参数
         if(orderList.length<=0 && pointIdList.length <= 0) {
             if (leftTable.getRowsNum() > 0) {
@@ -683,56 +690,104 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
     };
     //自动预测
     var _auto = function(argList) {
+        map.removeInteraction(draw);  //移除交互
         var leftTable = argList.arg[0]; //获取第一个参数
+        var rightTable = argList.arg[1];
+        var treeData = argList.arg[2];
+        var fun = argList.arg[3];
+        var gridData = argList.arg[4];
         //var fun = argList.arg[1];
-        var pointLayer = new ol.layer.Vector({
-            source: new ol.source.Vector(),
-            style:new ol.style.Style({
-                image:new ol.style.Icon({
-                    anchor: [10,10],
-                    anchorXUnits: 'pixels',
-                    anchorYUnits: 'pixels',
-                    imgSize:[21,21],
-                    src:"img/21px.png"
-                })
-            }),
-            wrapX: false
-        });
-        var point = [115.4855,40.269];
-        var pointFeature = new ol.Feature({
-            geometry:new ol.geom.Point(point),
-            style:new ol.style.Style({
-                image:new ol.style.Icon({
-                    anchor: [10,10],
-                    anchorXUnits: 'pixels',
-                    anchorYUnits: 'pixels',
-                    imgSize:[21,21],
-                    src:"img/21px.png"
-                })
-            })
-        });
-        pointLayer.getSource().addFeature(pointFeature);
-        map.addLayer(pointLayer); //将图层添加到目标之上
+        var returnData;
         var id = leftTable.getSelectedId();
-        var pointID = leftTable.cells(id, 1).cell.innerHTML;
-        pointFeature.setId(pointID);
-        pointLayer.id = pointID;
-        pointLayerArr.push(pointLayer);
-        //给每个刺点显示其点ID的容器
-        $('#pop').append('<div id="pop'+pointID+'" style="color: red">&nbsp;'+pointID+'</div>');
+        var mainX = leftTable.cells(id, 5).cell.innerHTML;
+        var mainY = leftTable.cells(id, 6).cell.innerHTML;
+        var jsonData = {"id":startId,"args":treeData.args,"x":mainX,"y":mainY,"z":"0"};
+        //自动预测
+        $.ajax({
+            url:window.toolsUrl+"api/imagepointalgorithm/startpointpredict",
+            type:"post",
+            contentType: "application/json",
+            data:JSON.stringify(jsonData),
+            async: false,
+            success:function(data){
+                returnData = data;
 
-        var pop = new ol.Overlay({
-            element:document.getElementById('pop'+pointID), //挂载点
-            position: point,    //设置其位置
-            positioning: 'top-left'   //显示位置的方向
-        });
-        var singlePoint={};
-        singlePoint.id = pointID;
-        singlePoint.singlePointtCoordinateX = __mapCoordinateFixed4(pointID[0]);
-        singlePoint.singlePointtCoordinateY =__mapCoordinateFixed4(pointID[1]);
-        points.push(singlePoint);
-        map.addOverlay(pop);  // 地图添加
-        popArr.push(pop);   // 存储点的ol.Overlay 对象
+                leftTable.cells(id, 3).cell.innerHTML = returnData.overlap;
+                //设置右侧面板参数
+                var index = 1;
+                returnData.xy.forEach(function(item){
+                    var uuid =  _uuid();
+                    var pointId = leftTable.cells(id, 1).cell.innerHTML;
+                    var img = item.imagename;
+                    var cols = item.value[0];
+                    var rows = item.value[1];
+                    var rowData = [uuid,index,pointId,img,3,"1",cols,rows,"0"];
+                    rightTable.addRow(index,rowData,false);
+                    index++;
+                    var newData = { id:index, data: rowData};
+
+                    gridData.rows.push(newData);
+                })
+                fun(gridData,id);
+
+
+                var pointLayer = new ol.layer.Vector({
+                    source: new ol.source.Vector(),
+                    style:new ol.style.Style({
+                        image:new ol.style.Icon({
+                            anchor: [10,10],
+                            anchorXUnits: 'pixels',
+                            anchorYUnits: 'pixels',
+                            imgSize:[21,21],
+                            src:"img/21px.png"
+                        })
+                    }),
+                    wrapX: false
+                });
+
+                var point = [mainX,mainY];
+                var pointFeature = new ol.Feature({
+                    geometry:new ol.geom.Point(point),
+                    style:new ol.style.Style({
+                        image:new ol.style.Icon({
+                            anchor: [10,10],
+                            anchorXUnits: 'pixels',
+                            anchorYUnits: 'pixels',
+                            imgSize:[21,21],
+                            src:"img/21px.png"
+                        })
+                    })
+                });
+                pointLayer.getSource().addFeature(pointFeature);
+                map.addLayer(pointLayer); //将图层添加到目标之上
+
+                var pointID = leftTable.cells(id, 1).cell.innerHTML;
+                pointFeature.setId(pointID);
+                pointLayer.id = pointID;
+                pointLayerArr.push(pointLayer);
+                //给每个刺点显示其点ID的容器
+                $('#pop').append('<div id="pop'+pointID+'" style="color: red">&nbsp;'+pointID+'</div>');
+
+                var pop = new ol.Overlay({
+                    element:document.getElementById('pop'+pointID), //挂载点
+                    position: point,    //设置其位置
+                    positioning: 'top-left'   //显示位置的方向
+                });
+                var singlePoint={};
+                singlePoint.id = pointID;
+                singlePoint.singlePointtCoordinateX = __mapCoordinateFixed4(pointID[0]);
+                singlePoint.singlePointtCoordinateY =__mapCoordinateFixed4(pointID[1]);
+                points.push(singlePoint);
+                map.addOverlay(pop);  // 地图添加
+                popArr.push(pop);   // 存储点的ol.Overlay 对象
+            },
+            error: function (e) {
+                if(e.status == "401"){
+                    //getSession();
+                }
+            }
+        })
+
     }
     //修改点操作
     var modify;
@@ -740,6 +795,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         if(popArr.length<=0){
           alert("当前没有点可以修改！");
         }else{
+            map.removeInteraction(draw);  //移除交互
             var leftTable = data.arg[0];
             var selectedPointID ;
             var selectPoint = new ol.interaction.Select();   //实例化交互选择，操作要素
@@ -775,7 +831,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             modify.on('modifyend',function(event){     //修改完成后，将修改的要素坐标更新到 points中
                 event.preventDefault();
                 event.stopPropagation();
-                map.removeInteraction(modify);
+                //map.removeInteraction(modify);
                 var x=event.mapBrowserEvent.coordinate[0];   //当鼠标松开时，获取当前点坐标
                 x =__mapCoordinateFixed4(x);
                 var y=event.mapBrowserEvent.coordinate[1];
@@ -857,11 +913,16 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             $("#popExport").removeClass("popContainer").fadeOut(500);
         });
         $("#export").on('click',function(){
-            var a=new Array();
-            for(var i=0;i<10;i++){
-                a.push(i);
-            }
-            doSave(a, "text/latex", "hello.txt");
+            var gcpJsonData = JSON.parse(gpcData);
+            gcpJsonData.forEach(function (item){
+                var str = "";
+                var name = "";
+                 item.FeaturePoint.Property.forEach(function (data){
+                     name =  data.IMAGEID;
+                     str = str+data.POINTID+"  "+data.LONRANGE+"  "+data.LATRANGE+"  "+data.HEIGHT+"\r\n"
+                 })
+                doSave(str, "text/latex", name+".gcp");
+                })
         })
 
         function doSave(value, type, name) {
@@ -904,19 +965,28 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         })
         var a=new Array();
 
-
+        var gpcData ;
+        var fileString;
         function loaded(evt) {
-            var fileString = evt.target.result;
-            var data = {"gcp":fileString,
-                        "id":["1f5243ad-ae32-44df-9956-58504a2b92a2","693ad1db-0c86-408e-b307-6124bc8eafad","239caa14-4aac-4685-823b-841ef178b46a"]}
+            fileString = evt.target.result;
+            fileString=fileString.replace(/\r\n/g,"&");
+            fileString=fileString.replace(/\r/g,"&");
+            fileString=fileString.replace(/\n/g,"&");
+            //alert(fileString);
+
+        }
+        $("#import").on('click',function(){
+            var data = {"gcp":fileString,"xmlid":["48ea4804-9bf8-4d55-9f68-33ca16e8d2b4","1455e544-135a-42db-9c0a-127c45eee025"]}
             $.ajax({
-                url:"http://192.168.31.229:5000/testmain2",
+                url:"http://192.168.31.230:5000/ControlPointImport",
                 type:"post",
-                //contentType: "application/json",
+                contentType: "application/json",
+                //dataType:'jsonp',
                 data:JSON.stringify(data),
                 async: false,
                 success:function(data){
-                    alert(data);
+                    console.log(data);
+                    gpcData = data
                 },
                 error: function (e) {
                     if(e.status == "401"){
@@ -924,7 +994,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                     }
                 }
             })
-        }
+        })
     };
     //删除单点操作
     var _deleteSinglePoint = function(data){
@@ -1017,6 +1087,15 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
 
         var uuid = s.join("");
         return uuid;
+    }
+    function getUrlParam(name){
+        var reg = new RegExp("(^|&)"+name+"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null){
+            return unescape(r[2])
+        }else{
+            return null;
+        }
     }
     return {
         createMap:_creatMap,

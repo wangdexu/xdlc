@@ -1,9 +1,10 @@
 /**
  * Created by dexu on 2017/10/18.
  */
-define(['jquery','dhtmlx','ol','../gis/mapControls'],function ($,dhtmlx,ol,mapControl) {
+define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config,$,dhtmlx,ol,mapControl) {
     var _initTree = function(){
         var taskId = getUrlParam("taskId");
+        var startId = getUrlParam("uuid");
             //执行加坐标操作
         var mapData = {"value" :[
             [
@@ -183,23 +184,49 @@ define(['jquery','dhtmlx','ol','../gis/mapControls'],function ($,dhtmlx,ol,mapCo
                 0.0,
                 0.0
             ]
-        ],"url":"http://192.168.31.12:8888/geoserver/wm/wms"}
-            //$.ajax({
-            //    url:window.restUrl+"api/fs/listioput/"+taskId,
-            //    type:"get",
-            //    data:"",
-            //    async: false,
-            //    success:function(data){
-            //        //参数1：主视图地图 鼠标移动控件内容(经纬度)挂载点，参数2：地图id挂载点，参数三：将控件放到目标位置挂载点
-            //        //mapControl.createMap("ol-mouse-position2","mapMainContainer","post11",mapData.url);
-            //        //mapControl.createBox("mapMainContainer",mapData.value);
-            //    },
-            //    error: function (e) {
-            //        if(e.status == "401"){
-            //            //getSession();
-            //        }
-            //    }
-            //})
+        ],"url":"http://192.168.31.12:8888/geoserver/wm/wms"};
+        var taskData = {};
+        //查询任务信息
+            $.ajax({
+                url:window.restUrl+"/api/task/"+taskId,
+                type:"get",
+                data:"",
+                async: false,
+                success:function(data){
+                    data.args.forEach(function(item){
+                        item.name = config.argsKer[item.name];
+                    })
+                taskData.args = data.args;
+                },
+                error: function (e) {
+                    if(e.status == "401"){
+                        //getSession();
+                    }
+                }
+            })
+        //增加坐标信息
+        var ocData = taskData.args;
+        var starData = {"id":startId,"args":ocData};
+        $.ajax({
+            url:window.toolsUrl+"api/imagepointalgorithm/startgc",
+            type:"post",
+            contentType: "application/json",
+            data:JSON.stringify(starData),
+            async: false,
+            success:function(data){
+            mapData.data = data.box;
+            mapData.url = data.url;
+                //参数1：主视图地图 鼠标移动控件内容(经纬度)挂载点，参数2：地图id挂载点，参数三：将控件放到目标位置挂载点
+                //mapControl.createMap("ol-mouse-position2","mapMainContainer","post11",mapData.url);
+                //mapControl.createBox("mapMainContainer",mapData.value);
+
+            },
+            error: function (e) {
+                if(e.status == "401"){
+                    //getSession();
+                }
+            }
+        })
         //参数1：主视图地图 鼠标移动控件内容(经纬度)挂载点，参数2：地图id挂载点，参数三：将控件放到目标位置挂载点
         mapControl.createMap("ol-mouse-position2","mapMainContainer","post11",mapData.url);
         mapControl.createBox("mapMainContainer",mapData.value);
@@ -283,7 +310,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls'],function ($,dhtmlx,ol,mapCo
                                 $('<li style="margin-left: 20px;" class="nav_item clearfix wjj_leftbs" data-text="'+c.path+'" data-type="'+c.type+'" data-url="'+c.url+'" title="' + c.path + '" data-pid="' + c.id + '"  data-id="' + c.id + '" data-type="1">' +
                                         //'<i></i>' +
                                         //'<u></u>' +
-                                    '<input  type="checkbox" class="last_level"/>'+
+                                    //'<input  type="checkbox" checked="checked"  class="last_level"/>'+
                                     '<p>' + c.path + '</p>' +
                                     '<div id="par' + c.id + '" class="nav_item_sWrap clearfix"></div>' +
                                     '</li>').appendTo(treeClickDiv);
@@ -407,6 +434,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls'],function ($,dhtmlx,ol,mapCo
                 return null;
             }
         }
+        return taskData;
     }
     return {
         initTree:_initTree
