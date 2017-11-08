@@ -1,92 +1,288 @@
 define(['jquery','dhtmlx','ol'],function($,dhl,ol){
     var grid_4;
+    //随机生成唯一字符串函数
+    function _uuid() {
+        var s = [];
+        var hexDigits = "0123456789abcdef";
+        for (var i = 0; i < 36; i++) {
+            s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+        }
+        s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
+        s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+        s[8] = s[13] = s[18] = s[23] = "-";
+        var uuid = s.join("");
+        return uuid;
+    }
+    //自动匹配
     var _autoMatch = function(argList){                 //自动匹配函数
-        //"点列表""影像列表",虚拟数据
-        var dataMain={
-            "TiePoint" :
-            {
-                "Property" :
-                    [
-                        {
-                            "imagename" : "TH01-01_R201202210000003_1A_SXZ_1_10_883_123.tif",
-                            "imageid":	"F_1",
-                            "pointid" : 1,
-                            "x" : 44.1632,
-                            "y" : 319.1258
-                        },
-                        {
-                            "imagename" : "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
-                            "imageid":	"F_1",
-                            "pointid" : 6,
-                            "x" : 44.1632,
-                            "y" : 319.1258
-                        },
-                        {
-                            "imagename" : "TH01-01_R201202210000003_1A_SXZ_2_10_883_125.tif",
-                            "imageid":	"N_1",
-                            "pointid" : 1,
-                            "x" : 44.1632,
-                            "y" : 319.1258
-                        },
-                        {
-                            "imagename" : "TH01-01_R201202210000003_1A_SXZ_1_10_883_126.tif",
-                            "imageid":	"F_1",
-                            "pointid" : 2,
-                            "x" : 44.1632,
-                            "y" : 319.1258
-                        },
-                        {
-                            "imagename" : "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
-                            "imageid":	"F_1",
-                            "pointid" : 2,
-                            "x" : 44.1632,
-                            "y" : 319.1258
-                        },
-                        {
-                            "imagename" : "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
-                            "imageid":	"F_1",
-                            "pointid" : 2,
-                            "x" : 44.1632,
-                            "y" : 319.1258
-                        },
-                        {
-                            "imagename" : "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
-                            "imageid":	"F_1",
-                            "pointid" : 4,
-                            "x" : 44.1632,
-                            "y" : 319.1258
-                        },
-                        {
-                            "imagename" : "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
-                            "imageid":	"F_1",
-                            "pointid" : 2,
-                            "x" : 44.1632,
-                            "y" : 319.1258
-                        },
-                        {
-                            "imagename" : "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
-                            "imageid":	"F_1",
-                            "pointid" : 2,
-                            "x" : 44.1632,
-                            "y" : 319.1258
-                        },
-                        {
-                            "imagename" : "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
-                            "imageid":	"F_1",
-                            "pointid" : 4,
-                            "x" : 44.1632,
-                            "y" : 319.1258
-                        }
-                    ]
-            }
+        //"点列表"与"影像列表"的虚拟数据
+        var dataMain= {
+            "id": "db7550e2-17c2-4686-b577-1235645760e9",
+            "data": [
+                {
+                    "imagename": "TH01-01_R201202210000003_1A_SXZ_1_10_883_123.tif",
+                    "imageid": "F_1",
+                    "pointid": 1,
+                    "pointtype": "TiePoint",
+                    "active": 1,
+                    "x": 44.1632,
+                    "y": 319.1258,
+                    "lon": 123.2334,
+                    "lat": 44.1633,
+                    "height": 319.1258
+                },
+                {
+                    "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                    "imageid": "F_1",
+                    "pointid": 6,
+                    "pointtype": "CheckPoint",
+                    "active": 1,
+                    "x": 44.1632,
+                    "y": 319.1258,
+                    "lon": 123.2334,
+                    "lat": 44.1633,
+                    "height": 319.1258
+                },
+                {
+                    "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_125.tif",
+                    "imageid": "N_1",
+                    "pointid": 1,
+                    "pointtype": "TiePoint",
+                    "active": 1,
+                    "x": 44.1632,
+                    "y": 319.1258,
+                    "lon": 123.2334,
+                    "lat": 44.1633,
+                    "height": 319.1258
+                },
+                {
+                    "imagename": "TH01-01_R201202210000003_1A_SXZ_1_10_883_126.tif",
+                    "imageid": "F_1",
+                    "pointid": 2,
+                    "pointtype": "ControlPoint",
+                    "active": 1,
+                    "x": 44.1632,
+                    "y": 319.1258,
+                    "lon": 123.2334,
+                    "lat": 44.1633,
+                    "height": 319.1258
+                },
+                {
+                    "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                    "imageid": "F_1",
+                    "pointid": 2,
+                    "pointtype": "ControlPoint",
+                    "active": 1,
+                    "x": 44.1632,
+                    "y": 319.1258,
+                    "lon": 123.2334,
+                    "lat": 44.1633,
+                    "height": 319.1258
+                },
+                {
+                    "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                    "imageid": "F_1",
+                    "pointid": 2,
+                    "pointtype": "ControlPoint",
+                    "active": 1,
+                    "x": 44.1632,
+                    "y": 319.1258,
+                    "lon": 123.2334,
+                    "lat": 44.1633,
+                    "height": 319.1258
+                },
+                {
+                    "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                    "imageid": "F_1",
+                    "pointid": 4,
+                    "pointtype": "TiePoint",
+                    "active": 1,
+                    "x": 44.1632,
+                    "y": 319.1258,
+                    "lon": 123.2334,
+                    "lat": 44.1633,
+                    "height": 319.1258
+                },
+                {
+                    "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                    "imageid": "F_1",
+                    "pointid": 2,
+                    "pointtype": "ControlPoint",
+                    "active": 1,
+                    "x": 44.1632,
+                    "y": 319.1258,
+                    "lon": 123.2334,
+                    "lat": 44.1633,
+                    "height": 319.1258
+                },
+                {
+                    "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                    "imageid": "F_1",
+                    "pointid": 2,
+                    "pointtype": "ControlPoint",
+                    "active": 1,
+                    "x": 44.1632,
+                    "y": 319.1258,
+                    "lon": 123.2334,
+                    "lat": 44.1633,
+                    "height": 319.1258
+                },
+                {
+                    "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                    "imageid": "F_1",
+                    "pointid": 7,
+                    "pointtype": "TiePoint",
+                    "active": 1,
+                    "x": 44.1632,
+                    "y": 319.1258,
+                    "lon": 123.2334,
+                    "lat": 44.1633,
+                    "height": 319.1258
+                },
+                {
+                    "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_125.tif",
+                    "imageid": "N_1",
+                    "pointid": 9,
+                    "pointtype": "TiePoint",
+                    "active": 1,
+                    "x": 44.1632,
+                    "y": 319.1258,
+                    "lon": 123.2334,
+                    "lat": 44.1633,
+                    "height": 319.1258
+                },
+                {
+                    "imagename": "TH01-01_R201202210000003_1A_SXZ_1_10_883_126.tif",
+                    "imageid": "F_1",
+                    "pointid": 5,
+                    "pointtype": "TiePoint",
+                    "active": 1,
+                    "x": 44.1632,
+                    "y": 319.1258,
+                    "lon": 123.2334,
+                    "lat": 44.1633,
+                    "height": 319.1258
+                },
+                {
+                    "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                    "imageid": "F_1",
+                    "pointid": 7,
+                    "pointtype": "TiePoint",
+                    "active": 1,
+                    "x": 44.1632,
+                    "y": 319.1258,
+                    "lon": 123.2334,
+                    "lat": 44.1633,
+                    "height": 319.1258
+                },
+                {
+                    "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                    "imageid": "F_1",
+                    "pointid": 9,
+                    "pointtype": "TiePoint",
+                    "active": 1,
+                    "x": 44.1632,
+                    "y": 319.1258,
+                    "lon": 123.2334,
+                    "lat": 44.1633,
+                    "height": 319.1258
+                },
+                {
+                    "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                    "imageid": "F_1",
+                    "pointid": 5,
+                    "pointtype": "TiePoint",
+                    "active": 1,
+                    "x": 44.1632,
+                    "y": 319.1258,
+                    "lon": 123.2334,
+                    "lat": 44.1633,
+                    "height": 319.1258
+                },
+                {
+                    "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                    "imageid": "F_1",
+                    "pointid": 5,
+                    "pointtype": "TiePoint",
+                    "active": 1,
+                    "x": 44.1632,
+                    "y": 319.1258,
+                    "lon": 123.2334,
+                    "lat": 44.1633,
+                    "height": 319.1258
+                },
+                {
+                    "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                    "imageid": "F_1",
+                    "pointid": 5,
+                    "pointtype": "TiePoint",
+                    "active": 1,
+                    "x": 44.1632,
+                    "y": 319.1258,
+                    "lon": 123.2334,
+                    "lat": 44.1633,
+                    "height": 319.1258
+                },
+                {
+                    "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                    "imageid": "F_1",
+                    "pointid": 6,
+                    "pointtype": "CheckPoint",
+                    "active": 1,
+                    "x": 44.1632,
+                    "y": 319.1258,
+                    "lon": 123.2334,
+                    "lat": 44.1633,
+                    "height": 319.1258
+                },
+                {
+                    "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                    "imageid": "F_1",
+                    "pointid": 6,
+                    "pointtype": "CheckPoint",
+                    "active": 1,
+                    "x": 44.1632,
+                    "y": 319.1258,
+                    "lon": 123.2334,
+                    "lat": 44.1633,
+                    "height": 319.1258
+                },
+                {
+                    "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                    "imageid": "F_1",
+                    "pointid": 6,
+                    "pointtype": "CheckPoint",
+                    "active": 1,
+                    "x": 44.1632,
+                    "y": 319.1258,
+                    "lon": 123.2334,
+                    "lat": 44.1633,
+                    "height": 319.1258
+                },
+                {
+                    "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
+                    "imageid": "F_1",
+                    "pointid": 4,
+                    "pointtype": "TiePoint",
+                    "active": 1,
+                    "x": 44.1632,
+                    "y": 319.1258,
+                    "lon": 123.2334,
+                    "lat": 44.1633,
+                    "height": 319.1258
+                }
+            ]
         };
+
         $.ajax({
-            url: "http://192.168.31.229:5000/ImageFptRefine",
+            url: "host：192.168.4.221:8285/api/imagepointalgorithm/startimagepoinitmatch",
             type: "post",
+            contentType:"application/json",
             //data:JSON.stringify(dataMain),
-            data:{},
-            dataType: 'JSPON',
+            data:{"id":id,"args":},
+            //dataType: 'JSPON',
             success: function (data) {
+                console(data);
                 datamain=data;
             },
             error: function (e) {
@@ -96,15 +292,15 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             }
         });
 
-        var imageData={};
-        var grid3Detail = argList.arg[2];                 //影像列表显示的data数据
-        var new_imageData = $.extend(imageData, grid3Detail);
+        var imageData={};                                //影像列表显示的数据
+        var grid3Detail = argList.arg[2];                 //影像列表显示的数据
+        var new_imageData = $.extend(imageData, grid3Detail);       //影像列表显示合并后的数据
         //console.log(new_imageData);
         var fun = argList.arg[3];
-        fun(new_imageData);
+        //fun(new_imageData);                             //用函数把生成的new_imageData传回到main.js
         var newdata=[];                             //点列表显示的data数据
         var judgedata=[];                           //存一个遍历过的id集合,用于后面的判断
-        var dataArr = dataMain.TiePoint.Property;
+        var dataArr = dataMain.data;
         var shu=dataArr.length;
         for(var i=0;i<shu;i++){                        //一级遍历
             var degree=0;                               //重叠度数
@@ -116,6 +312,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                 //console.log(i-1);
             }else{
             //console.log(i);
+                var pointtype;                                      //为newdata保存"点列表"上点的类型
                 var keydata={"rows":[]};                            //影像列表data的组成部分
                 var k=0;                                            //只是给影像列表加一个连续的数字序号
             for(var j=i;j<shu;j++) {                                //二级遍历
@@ -123,9 +320,10 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                     //console.log(j);
                     ++degree;
                     id=dataArr[i].pointid;
+                    pointtype=dataArr[i].pointtype;
                     //console.log(degree);
                     k++;
-                    keydata.rows.push({"id":k,"data":[_uuid(),k,dataArr[i].pointid,dataArr[i].imageid,dataArr[i].imagename,"1",dataArr[i].x,dataArr[i].y]});
+                    keydata.rows.push({"id":k,"data":[_uuid(),k,dataArr[i].pointid,dataArr[i].imageid,dataArr[i].imagename,dataArr[i].active,dataArr[i].x,dataArr[i].y]});
                 }
                     }
                 //imageData.push({"key":id,"data":keydata});
@@ -140,24 +338,10 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                 judgedata.push(id);          //存一个遍历过的id集合,用于后面的判断
                 //imageData.push{id:{"rows":[]}}
                 //console.log(imageData);
-                newdata.push({"id":id,"degree":degree});
+                newdata.push({"id":id,"degree":degree,"pointtype":pointtype});
             }
         }
         //console.log(argList.arg[2]);
-        //随机生成唯一字符串函数
-        function _uuid() {
-            var s = [];
-            var hexDigits = "0123456789abcdef";
-            for (var i = 0; i < 36; i++) {
-                s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
-            }
-            s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
-            s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
-            s[8] = s[13] = s[18] = s[23] = "-";
-
-            var uuid = s.join("");
-            return uuid;
-        }
         //点列表
         pointList(dataMain,newdata);                //调用点列表显示函数
         function pointList(dataMain,newdata){       //点列表显示函数
@@ -167,7 +351,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             };
             var shu=newdata.length;
             for(var i=1;i<=shu;i++){
-                data.rows.push({ id:newdata[i-1].id, data: [i,newdata[i-1].id,"TiePoint",newdata[i-1].degree,"1","","",""]});  //动态生成点列表的data数据
+                data.rows.push({ id:newdata[i-1].id, data: [i,newdata[i-1].id,newdata[i-1].pointtype,newdata[i-1].degree,"1","","",""]});  //动态生成点列表的data数据
             }
             argList.arg[0].clearAll();     //显示前先清空表格
             //console.log(data);
@@ -191,6 +375,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             },"json");
         }
     };
+    //区域网平差
     var _blockAdjustment = function(argList){
         //"总结"弹出框
         $("#popBox_wrap").css({width:"auto",height:"auto"});
@@ -216,6 +401,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                         "ImgID" : "F_1",
                         "PointStyle":"Tiepoint",
                         "PointID": 3,
+
                         "Imgx" : 3810.500,
                         "Imgy" : 4943.500,
                         "detImgx" : -1.249,
@@ -438,25 +624,23 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         });
 
         $("#popBox").on('click',"#point_confirm",function() {         //"点数"点击确定按钮后将"点列表""影像列表",是否"有效"同步
-            //$("#popBox_close").trigger();
-            var ids=argList.arg[0].getAllRowIds();
             $.each(id_data, function (index, item) {
                 var ids=argList.arg[0].getAllRowIds().split(",");
-                //console.log(ids);
                 if(ids.indexOf(""+item)!=-1){
-                    //console.log(item);
                 argList.arg[0].cells(item, 4).setValue("0");
-                //argList.arg[0].cellById(item, 4).setValue("0");
                 }
-                //console.log(id_data);
             });
         })
 
         };
+    //保存
+    var _saveDate = function(){
 
+    };
     return {
         autoMatch:_autoMatch,
-        blockAdjustment:_blockAdjustment
+        blockAdjustment:_blockAdjustment,
+        saveDate:_saveDate
     }
 });
 

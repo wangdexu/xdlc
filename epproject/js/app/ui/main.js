@@ -60,6 +60,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     {id : "close", text : "关闭",img : "close.png",isbig : true,  type : "button"},
                     {id : "open", text : "提交",img : "submit.png", isbig : true, type : "button"},
                     {id : "export", text : "导入导出",img : "import.png",isbig : true,  type : "button"},
+                    {id : "save", text : "保存",img : "import.png",isbig : true,  type : "button"},
                     {id : "imageRange", text : "影像范围", type : "checkbox", checked : true},
                     {id : "imageControl", text : "影像", type : "checkbox", checked : true},
                     {id : "controlPoint", text : "控制点", type : "checkbox", checked : true},
@@ -142,7 +143,14 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         var grid_3 = cell_2.attachGrid();
         grid_3.setIconsPath('./codebase/imgs/');
         grid_3.setHeader(["序号","点ID","点类型","重叠度","有效","经度","纬度","高程"]);
-        grid_3.setColTypes("ro,ro,ro,ro,edtxt,edtxt,edtxt,edtxt");
+        grid_3.setColTypes("ro,ro,coro,ro,ed,ed,ed,ed");
+        var combobox = grid_3.getCombo(2);
+        combobox.put("1","TiePoint");
+        combobox.put("2","ControlPoint");
+        combobox.put("3","CheckPoint");
+        //combobox.setHeight('200');
+        grid_3.enableAutoHeight(true);
+        //grid_3.init();
 
         grid_3.setColSorting('str,str,str,str,str,str,str,str');
         grid_3.setInitWidths('*,*,*,*,*,*,*,*');
@@ -456,6 +464,12 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                 case "export":
                     mapControl.export({
                         eventName:"onClick"
+                    });
+                    break;
+                case "save":
+                    mapProduce.saveDate({
+                        eventName:"onClick",
+                        arg: []
                     });
                     break;
                 case "zoomIn":
