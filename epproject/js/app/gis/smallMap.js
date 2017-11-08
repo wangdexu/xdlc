@@ -593,7 +593,7 @@ define(['./config','dhtmlx','ol'],function (config) {
             var y = extent[3]-rows/(rowCount/(extent[3]-extent[1]));
             var img = mapId;
             //添加一行信息  序号，点ID，点类型。。。。。。。
-            var rowData = [uuid,numOrder,pointId,img,3,"1",rows,cols,"0"];
+            var rowData = [uuid,numOrder,pointId,img,3,"1",cols,rows,"0"];
             grid_7.addRow(numOrder,rowData,false);  //行的ID 与序号号值是一样的
             var newData = { id:numOrder, data: rowData};
             //var newData = [img, "imageA", "true", point[0].toFixed(6), point[1].toFixed(6)];

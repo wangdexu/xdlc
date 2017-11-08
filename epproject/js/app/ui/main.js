@@ -1,7 +1,7 @@
 /**
  * Created by domea on 17-6-2.
  */
-define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/produce'],function ($,dhtmlx,ol,mapControl,smallMap,produce) {
+define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/produce','../leftTree/leftTree'],function ($,dhtmlx,ol,mapControl,smallMap,produce,tree) {
     var _test=function(){
         window.restUrl;
         //默认第一个map
@@ -20,6 +20,10 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         var nowPoint = [];
         //保存主视图所有的点
         var manPoints = [];
+
+        //地图操作互斥对象
+        var isEdit = {"addPoint":true,"stabPoint":true,"modifyPoint":true,"deleteSingle":true,"deleteAll":true};
+
         window.dhx4.skin = 'material';
         var main_layout = new dhtmlXLayoutObject(document.body, '2U');
 
@@ -126,7 +130,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
             '<li  class="name mainView"  >主视图</li>'+
             '<li class="number tabLi" >'+
             '<span class="idName"></span>'+
-            '<span class="delete">&times;</span>'+
+            //'<span class="delete">&times;</span>'+
             '</li>'+
             '</ul>'+
             '</div>'+
@@ -143,15 +147,14 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         var grid_3 = cell_2.attachGrid();
         grid_3.setIconsPath('./codebase/imgs/');
         grid_3.setHeader(["序号","点ID","点类型","重叠度","有效","经度","纬度","高程"]);
-        grid_3.setColTypes("ro,ro,coro,ro,ed,ed,ed,ed");
-        var combobox = grid_3.getCombo(2);
+        grid_3.setColTypes("ro,ro,coro,ro,edtxt,edtxt,edtxt,edtxt");
+var combobox = grid_3.getCombo(2);
         combobox.put("1","TiePoint");
         combobox.put("2","ControlPoint");
         combobox.put("3","CheckPoint");
         //combobox.setHeight('200');
         grid_3.enableAutoHeight(true);
         //grid_3.init();
-
         grid_3.setColSorting('str,str,str,str,str,str,str,str');
         grid_3.setInitWidths('*,*,*,*,*,*,*,*');
         grid_3.init();
@@ -242,32 +245,31 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     //var wmtsUrl = "https://services.arcgisonline.com/arcgis/rest/services/Demographics/USA_Population_Density/MapServer/WMTS/";
                     var url = data.rows[i].data[8];
                     var rows = data.rows[i].data[6];
-                    var cols = data.rows[i].data[6];
+                    var cols = data.rows[i].data[5];
                     var uuid = data.rows[i].data[0];
-                    var pointId = data.rows[i].data[1];
+                    //var pointId = data.rows[i].data[1];
                     var mapTemp = smallMap.createMap(uuid,url,oDiv.id,rows,cols,pointId);
                 }
                 i=null;
             }
         };
         //记录影像列表的值
-        var grid3Detail = {"3":{"rows": [{"id":1,"data":["aaa","1","3","img0","2","1","13907.669428881965","13147.054622607193","http://192.168.4.2:18080/geowebcache/service/wms?VERSION:1.1.1&layers=GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020"]},
-            {"id":2,"data":["bbb","2","3","img1","2","1","20549.190592890045","17841.913952814564","http://192.168.4.2:18080/geowebcache/service/wms?VERSION:1.1.1&layers=GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020"]},
-            {"id":3,"data":["ccc","3","3","img2","2","1","5898.776260519281","21325.1966816781","http://192.168.4.2:18080/geowebcache/service/wms?VERSION:1.1.1&layers=GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020"]}]}}
+        var grid3Detail = {"8":{"rows": [{"id":1,"data":["aaa","1","8","img0","2","1","13147.054622607193","13907.669428881965","http://192.168.4.2:18080/geowebcache/service/wms?VERSION:1.1.1&layers=GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020"]},
+            {"id":2,"data":["bbb","2","8","img1","2","1","17841.913952814564","20549.190592890045","http://192.168.4.2:18080/geowebcache/service/wms?VERSION:1.1.1&layers=GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020"]},
+            {"id":3,"data":["ccc","3","8","img2","2","1","21325.1966816781","5898.776260519281","http://192.168.4.2:18080/geowebcache/service/wms?VERSION:1.1.1&layers=GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020"]}]}}
         //记录点列表选中的ID
         var pointId;
         var mapCount;
         var arr = [];
         // 每次单击一行，取得那一行的信息
         grid_3.attachEvent('onRowSelect', function(rId, cInd) {
-            //console.log(grid3Detail);
-            if(cInd == 3){
+            pointId = grid_3.cells(rId, 1).getValue();  //取得点Id
+            if (grid3Detail[pointId] == undefined) {
+                grid3Detail[pointId] = {"rows": []};
+            }            if(cInd == 3){
                 var obj = {};
                 obj.id = rId;   //行ID
-                pointId = grid_3.cells(rId, 3).getValue();  //取得点Id
-                if (grid3Detail[pointId] == undefined) {
-                    grid3Detail[pointId] = {"rows": []};
-                }
+
                 nowPoint = [grid_3.cells(rId, 5).getValue(), grid_3.cells(rId, 6).getValue()];
                 //给右侧影像列表赋值
                 var data = grid3Detail[pointId];
@@ -287,7 +289,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     }
                 }
                 $(".tabLi").css({"display": "block"});   //选择一行，显示其对应的选项卡
-                $('.idName').html(rId);              // 将选择的那一行显示到选项卡
+                $('.idName').html(pointId);              // 将选择的那一行显示到选项卡
                 _showSubView();
                 creatDiv(rId,data,pointId);       //创建每副小地图容器，并且调用地图
                 return arr;
@@ -303,11 +305,13 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         }
         var status_1 = layout_1.attachStatusBar();
         //主视图鼠标移动显示经纬度控件挂载点
-        status_1.setText('<div id="post11"><div class="ol-mouse-position2"></div></div>');
+        status_1.setText("<div class='progress' style='width: 20%;float: left;'><div id='progress-bar' class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: 50%;'>" +
+        " <span class='sr-only'>40% 完成</span></div></div>" +
+        "<div id='post11'><div class='ol-mouse-position2'></div></div>");
         $("#post11").css({
             "position": "relative",
             "top": "0",
-            "left": "80%",
+            "left": "70%",
             "width": "240px",
             "height": "30px",
             "line-height":"30px",
@@ -396,6 +400,11 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         var _returnEditPoint = function(point,pointData){
             pointTemp = point;
             grid3Detail[pointId] = pointData;
+        }
+        //接收预测的信息
+        var _returnPrediction = function(grid3Detail,rId){
+            grid3Detail[pointId] = grid3Detail;
+            creatDiv(rId,grid3Detail[pointId],pointId);
         }
         //接收选中的点
         var _returnSelectLint = function(points){
@@ -517,7 +526,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                         }else {
                             smallMap.toSmall({
                                 eventNme: "onClick",
-                                arg: [itemId, mapId]
+                                arg: [id, mapId]
                             });
                         }
                     }
@@ -613,34 +622,34 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
 
                     break;
                 case "stabPoint":
-                    if($mainViewFlag == true) {
+                    //if($mainViewFlag == true) {
                         $(".mapMainContainer").css({"cursor": "crosshair"});
                         // $(".mapMainContainer").css({"cursor":"default"});
                         mapControl.stabPoint({
                             eventName: "onClick",
                             arg: [grid_3,_returnCiPoint]
                         });
-                    }else{
+                    //}else{
                         $("."+mapId).css({"cursor": "crosshair"});
                         smallMap.addPoint({
                             eventNme: "onClick",
                             arg: [id,grid_2,mapId,_returnAddPoint,pointId]
                         });
-                    }
+                    //}
                     break;
                 case "modifyPoint":
-                    if($mainViewFlag == true) {
+                    //if($mainViewFlag == true) {
                         $(".mapMainContainer").css({"cursor": "pointer"});
                         mapControl.modifyPoint({
                             eventName: "onClick",
                             arg: [grid_3]
                         });
-                    }else{
+                    //}else{
                         smallMap.editPoint({
                             eventNme: "onClick",
                             arg: [id,grid_2,mapId,_returnEditPoint,grid3Detail[pointId],pointId]
                         });
-                    }
+                    //}
                     break;
                 case "deleteSingle":
                     if($mainViewFlag == true) {
@@ -656,12 +665,12 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     }
                     break;
                 case "deleteAll":
-                    if($mainViewFlag == true) {
+                    //if($mainViewFlag == true) {
                         mapControl.deleteAllPoint({
                             eventName: "onClick",
                             arg: [grid_3]
                         });
-                    }else{
+                    //}else{
                         //mapIdArr.forEach(var mapCheckId in mapIdArr){
                         //        if (mapIdArr[mapCheckId] != "" && mapIdArr[mapCheckId] != undefined) {
                         //            smallMap.removePoint({
@@ -676,7 +685,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                                 arg: [id, grid_2, mapId,_returnRemoveAllPoint,grid3Detail[pointId],pointId]
                             });
                         })
-                    }
+                    //}
                     break;_returnRemoveAllPoint
                 case "autoPrediction":
                     //$(".autoMatch").addClass("autoMatchLoading").fadeIn(500);
@@ -686,7 +695,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     //},10000);
                     mapControl.auto({
                         eventName: "onClick",
-                        arg: [grid_3]
+                        arg: [grid_3,grid_2,taskData,_returnPrediction,grid3Detail[pointId]]
                     })
                     break;
                 case "associatedDisplay":
@@ -897,7 +906,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         };
         var $popBox = $("#popBox");
         drapableObj($popBox);                               //弹出层可以拖拽
-
+        var taskData = tree.initTree();
     };
     return {
         test:_test
