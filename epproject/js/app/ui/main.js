@@ -64,6 +64,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     {id : "close", text : "关闭",img : "close.png",isbig : true,  type : "button"},
                     {id : "open", text : "提交",img : "submit.png", isbig : true, type : "button"},
                     {id : "export", text : "导入导出",img : "import.png",isbig : true,  type : "button"},
+                    {id : "save", text : "保存",img : "import.png",isbig : true,  type : "button"},
                     {id : "imageRange", text : "影像范围", type : "checkbox", checked : true},
                     {id : "imageControl", text : "影像", type : "checkbox", checked : true},
                     {id : "controlPoint", text : "控制点", type : "checkbox", checked : true},
@@ -146,8 +147,14 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         var grid_3 = cell_2.attachGrid();
         grid_3.setIconsPath('./codebase/imgs/');
         grid_3.setHeader(["序号","点ID","点类型","重叠度","有效","经度","纬度","高程"]);
-        grid_3.setColTypes("ro,ro,co,ro,edtxt,edtxt,edtxt,edtxt");
-
+        grid_3.setColTypes("ro,ro,coro,ro,edtxt,edtxt,edtxt,edtxt");
+        var combobox = grid_3.getCombo(2);
+        combobox.put("ControlPoint","ControlPoint");
+        combobox.put("TiePoint","TiePoint");
+        combobox.put("CheckPoint","CheckPoint");
+        //combobox.setHeight('200');
+        //grid_3.enableAutoHeight(true);
+        //grid_3.init();
         grid_3.setColSorting('str,str,str,str,str,str,str,str');
         grid_3.setInitWidths('*,*,*,*,*,*,*,*');
         grid_3.init();
@@ -365,7 +372,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         grid_2.setIconsPath('./codebase/imgs/');
 
         grid_2.setHeader(["","序号","点ID","影像ID","影像名称","有效","X","Y"]);
-        grid_2.setColTypes("ro,ro,ro,ro,ro,ro,ro,ro");
+        grid_2.setColTypes("ro,ro,ro,ro,ro,edtxt,edtxt,edtxt");
         grid_2.setStyle(
             "","overflow-x: hidden !important;","color:red;",""
 
@@ -466,6 +473,12 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                 case "export":
                     mapControl.export({
                         eventName:"onClick"
+                    });
+                    break;
+                case "save":
+                    mapProduce.saveDate({
+                        eventName:"onClick",
+                        arg: []
                     });
                     break;
                 case "zoomIn":
@@ -709,7 +722,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     },1000);
                     produce.autoMatch({
                         eventName:"onClick",
-                        arg: [grid_3,grid_2,grid3Detail,_returnDetail]
+                        arg: [grid_3,grid_2,grid3Detail,_returnDetail,taskData]
                     });
                     break;
                 case "blockAdjustment":
@@ -896,6 +909,62 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         drapableObj($popBox);                               //弹出层可以拖拽
         tree.initTree();
         var taskData = tree.getTaskData();
+
+
+
+
+        //监听点列表,并编辑后保存至全局
+        grid_3.attachEvent("onEditCell",function(stage,rowId,cellIndex,newValue,oldValue){
+            if ((stage==2)&&(newValue!=oldValue)){
+                alert("Cell with id="+rowId+" and index="+cellIndex+" was edited");
+                dataMain.data.forEach(function(item,index,arr){
+                    if(item.pointid==rowId){
+                        if(cellIndex==2){
+                            dataMain.data[index].pointtype=grid_3.cells(rowId, cellIndex).getValue();
+                        }else if(cellIndex==4){
+                            dataMain.data[index].active=grid_3.cells(rowId, cellIndex).getValue();
+                            //console.log(dataMain.data[index].active);
+                        }else if(cellIndex==5){
+                            dataMain.data[index].lon=grid_3.cells(rowId, cellIndex).getValue();
+                        }else if(cellIndex==6){
+                            dataMain.data[index].lat=grid_3.cells(rowId, cellIndex).getValue();
+                        }else if(cellIndex==7){
+                            dataMain.data[index].height=grid_3.cells(rowId, cellIndex).getValue();
+                        }
+                    }
+
+                });
+                return true;
+            }
+            //console.log(dataMain);
+            return true;
+        });
+        //监听影像列表,并编辑后保存至全局
+        grid_2.attachEvent("onEditCell",function(stage,rowId,cellIndex,newValue,oldValue){
+            if ((stage==2)&&(newValue!=oldValue)){
+                alert("Cell with id="+rowId+" and index="+cellIndex+" was edited");
+                dataMain.data.forEach(function(item,index){
+                    if(item.uuid==rowId){
+                        if(cellIndex==5){
+                            dataMain.data[index].active=grid_2.cells(rowId, cellIndex).getValue();
+                            console.log(dataMain.data[index].active);
+                        }else if(cellIndex==6){
+                            dataMain.data[index].x=grid_2.cells(rowId, cellIndex).getValue();
+                        }else if(cellIndex==7){
+                            dataMain.data[index].y=grid_2.cells(rowId, cellIndex).getValue();
+                        }
+                    }
+
+                });
+                return true;
+            }
+            console.log(dataMain);
+            return true;
+        });
+
+
+
+
     };
     return {
         test:_test
