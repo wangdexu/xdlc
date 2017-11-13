@@ -165,7 +165,7 @@ define(['./config','dhtmlx','ol'],function (config) {
             }
         });
         var map;
-        var layer="GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020";
+        //var layer="GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020";
         var url =  path.split("?")[0];
         var theRequest = new Object();
         if (path.indexOf("?") != -1) {
@@ -175,7 +175,7 @@ define(['./config','dhtmlx','ol'],function (config) {
                 theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
             }
         }
-        //var layer = theRequest.layers;
+        var layer = theRequest.layers;
         paramsExtend(layer,wmsParamsCallback);
 
         function paramsExtend(layerName,callback){
@@ -593,7 +593,7 @@ define(['./config','dhtmlx','ol'],function (config) {
             var y = extent[3]-rows/(rowCount/(extent[3]-extent[1]));
             var img = mapId;
             //添加一行信息  序号，点ID，点类型。。。。。。。
-            var rowData = [uuid,numOrder,pointId,img,3,"1",cols,rows,"0"];
+            var rowData = [uuid,numOrder,pointId,img,mapId,"1",cols,rows,"0"];
             grid_7.addRow(numOrder,rowData,false);  //行的ID 与序号号值是一样的
             var newData = { id:numOrder, data: rowData};
             //var newData = [img, "imageA", "true", point[0].toFixed(6), point[1].toFixed(6)];
@@ -603,10 +603,10 @@ define(['./config','dhtmlx','ol'],function (config) {
 
         }
 
-        map.on('click', function (evt) {
-            evt;
-            features;
-        })
+        //map.on('click', function (evt) {
+        //    evt;
+        //    features;
+        //})
         /**
          * Handle change event.
          */

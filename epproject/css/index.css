@@ -397,3 +397,15 @@ div.gridbox .objbox {
     -o-transition: width .6s ease;
     transition: width .6s ease;
 }
+
+.dhtmlxribbon_material .dhxrb_highlight1 {
+    background-color: #dcdcdc;
+    border-color: #d2d2d2 !important;
+    box-shadow: 0 0 4px rgba(127,127,127,0.2) inset;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}

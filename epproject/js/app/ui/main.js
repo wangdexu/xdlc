@@ -98,7 +98,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
 
                     {id : "addPoint", text : "添加点",img:"plus_point.png", isbig : true, type : "button"},
                     {id : "stabPoint", text : "刺点",img:"hit_point.png", isbig : true, type : "button"},
-                    {id : "modifyPoint", text : "修改点",img:"change_point.png", isbig : true, type : "button"},
+                    {id : "modifyPoint", text : "修改点",img:"change_point.png", isbig : true, type : "buttonTwoState"},
                     {id : "deleteSingle", text : "删除点",img:"delete_point.png",isbig : true, type : "button"},
                     {id : "deleteAll", text : "删除所有点", img:"delete_all_point.png",isbig : true,type : "button"},
                     //{id : "delete", text : "删除",img:"删除点48px.png", isbig : true, type : "buttonSelect", items : [
@@ -151,7 +151,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         grid_3.setColSorting('str,str,str,str,str,str,str,str');
         grid_3.setInitWidths('*,*,*,*,*,*,*,*');
         grid_3.init();
-        grid_3.load('./data/grid0.xml','xml');
+        //grid_3.load('./data/grid0.xml','xml');
 
       //存储每个创建的小地图，用于地图联动
        var mapLinkMove = [];
@@ -169,14 +169,14 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     }
                 }
             });
-            if(document.getElementById("mapArr"+rId) == undefined){
+            //if(document.getElementById("mapArr"+rId) == undefined){
 
                 //如果没有创建过small，则创建新的
                 //$(".idMapContainer").empty();   //小地图地图容器每次创建前将前一次的小地图清空
                 $(".idMapContainer").append('<div id="mapArr'+rId+'" style="height: 325px;cursor:crosshair;"></div>');
                 //document.getElementById("mapArr").innerHTML = '';
                 mapLinkMove = [];
-                var mapCount = parseInt(arr[0].mapCount);
+                //var mapCount = parseInt(arr[0].mapCount);
                 for(var i=0;i<data.rows.length;i++){
                     //var smallMap =  mapControl.createSmallMap("ol-mouse-position","tabContent"+i);  // 调用地图，第一个参数，鼠标移动控件挂载点，第二个参数：地图控件挂载点
                     //mapLinkMove.push(smallMap);
@@ -244,7 +244,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     var mapTemp = smallMap.createMap(uuid,url,oDiv.id,rows,cols,pointId);
                 }
                 i=null;
-            }
+            //}
         };
         //记录影像列表的值
         var grid3Detail = {"8":{"rows": [{"id":1,"data":["aaa","1","8","img0","2","1","13147.054622607193","13907.669428881965","http://192.168.4.2:18080/geowebcache/service/wms?VERSION:1.1.1&layers=GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020"]},
@@ -639,6 +639,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     //}
                     break;
                 case "deleteSingle":
+                    $(".mapMainContainer").css({"cursor": "crosshair"});
                     if($mainViewFlag == true) {
                         mapControl.deleteSinglePoint({
                             eventName: "onClick",
@@ -893,7 +894,8 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         };
         var $popBox = $("#popBox");
         drapableObj($popBox);                               //弹出层可以拖拽
-        var taskData = tree.initTree();
+        tree.initTree();
+        var taskData = tree.getTaskData();
     };
     return {
         test:_test
