@@ -2,12 +2,19 @@
  * Created by dexu on 2017/10/18.
  */
 define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config,$,dhtmlx,ol,mapControl) {
+    var unSelectData = {};
+    var taskData = {};
+    var newTaskData ={"args":[]};
     var _initTree = function(){
         var taskId = getUrlParam("taskId");
         var startId = getUrlParam("uuid");
+
             //执行加坐标操作
-        var mapData = {"value" :[
-            [
+        var mapData = {"single" :[{"id":"87c841fc-69a7-40f5-94a2-3f6d218f338e",
+            "wmsurl":"http://",
+            "imageName":"ZY3_TLC_E115.6_N40.2_20130530_L1A0001552033-BWD.tiff",
+            "imgageMetaId":"87c841fc-69a7-40f5-94a2-3f6d218f228e",
+            "value":[
                 115.17794880671853,
                 39.597491680578713,
                 0.0,
@@ -23,7 +30,11 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
                 0.0,
                 0.0,
                 0.0
-            ],[
+            ]},{"id":"87c841fc-69a7-40f5-94a2-3f6d218f338e",
+            "wmsurl":"http://",
+            "imageName":"ZY3_TLC_E115.6_N40.2_20121001_L1A0000700607-BWD.tiff",
+            "imgageMetaId":"",
+            "value":[
                 115.20355618262549,
                 40.012037035523946,
                 0.0,
@@ -39,7 +50,11 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
                 0.0,
                 0.0,
                 0.0
-            ],[
+            ]},{"id":"87c841fc-69a7-40f5-94a2-3f6d218f338e",
+            "wmsurl":"http://",
+            "imageName":"",
+            "imgageMetaId":"",
+            "value":[
                 115.23864693192922,
                 40.011046163090761,
                 0.0,
@@ -55,7 +70,11 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
                 0.0,
                 0.0,
                 0.0
-            ],[
+            ]},{"id":"87c841fc-69a7-40f5-94a2-3f6d218f338e",
+            "wmsurl":"http://",
+            "imageName":"",
+            "imgageMetaId":"",
+            "value":[
                 115.38001562934234,
                 39.613828369068109,
                 0.0,
@@ -71,7 +90,11 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
                 0.0,
                 0.0,
                 0.0
-            ],[
+            ]},{"id":"87c841fc-69a7-40f5-94a2-3f6d218f338e",
+            "wmsurl":"http://",
+            "imageName":"",
+            "imgageMetaId":"",
+            "value":[
                 115.49918252296577,
                 39.631636200426392,
                 0.0,
@@ -87,7 +110,11 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
                 0.0,
                 0.0,
                 0.0
-            ],[
+            ]},{"id":"87c841fc-69a7-40f5-94a2-3f6d218f338e",
+            "wmsurl":"http://",
+            "imageName":"",
+            "imgageMetaId":"",
+            "value":[
                 115.49209094717129,
                 40.008695634301844,
                 0.0,
@@ -103,7 +130,11 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
                 0.0,
                 0.0,
                 0.0
-            ],[
+            ]},{"id":"87c841fc-69a7-40f5-94a2-3f6d218f338e",
+            "wmsurl":"http://",
+            "imageName":"",
+            "imgageMetaId":"",
+            "value":[
                 115.6077908124382,
                 39.597233222269061,
                 0.0,
@@ -119,7 +150,11 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
                 0.0,
                 0.0,
                 0.0
-            ],[
+            ]},{"id":"87c841fc-69a7-40f5-94a2-3f6d218f338e",
+            "wmsurl":"http://",
+            "imageName":"",
+            "imgageMetaId":"",
+            "value":[
                 115.63614493153267,
                 39.603024475619719,
                 0.0,
@@ -135,7 +170,11 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
                 0.0,
                 0.0,
                 0.0
-            ],[
+            ]},{"id":"87c841fc-69a7-40f5-94a2-3f6d218f338e",
+            "wmsurl":"http://",
+            "imageName":"",
+            "imgageMetaId":"",
+            "value":[
                 115.6136110811721,
                 40.026669843701413,
                 0.0,
@@ -151,7 +190,11 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
                 0.0,
                 0.0,
                 0.0
-            ],[
+            ]},{"id":"87c841fc-69a7-40f5-94a2-3f6d218f338e",
+            "wmsurl":"http://",
+            "imageName":"",
+            "imgageMetaId":"",
+            "value":[
                 115.71728263978189,
                 39.992233631780039,
                 0.0,
@@ -167,7 +210,11 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
                 0.0,
                 0.0,
                 0.0
-            ],[
+            ]},{"id":"87c841fc-69a7-40f5-94a2-3f6d218f338e",
+            "wmsurl":"http://",
+            "imageName":"",
+            "imgageMetaId":"",
+            "value":[
                 115.70900913399893,
                 39.863689848193644,
                 0.0,
@@ -183,9 +230,9 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
                 0.0,
                 0.0,
                 0.0
-            ]
+            ]}
         ],"url":"http://192.168.31.12:8888/geoserver/wm/wms"};
-        var taskData = {};
+
         //查询任务信息
             $.ajax({
                 url:window.restUrl+"/api/task/"+taskId,
@@ -193,9 +240,11 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
                 data:"",
                 async: false,
                 success:function(data){
-                    data.args.forEach(function(item){
-                        item.name = config.argsKer[item.name];
-                    })
+                    if(data.args != undefined){
+                        data.args.forEach(function(item){
+                            item.name = config.argsKer[item.name];
+                        })
+                    }
                 taskData.args = data.args;
                 },
                 error: function (e) {
@@ -229,7 +278,7 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
         })
         //参数1：主视图地图 鼠标移动控件内容(经纬度)挂载点，参数2：地图id挂载点，参数三：将控件放到目标位置挂载点
         mapControl.createMap("ol-mouse-position2","mapMainContainer","post11",mapData.url);
-        mapControl.createBox("mapMainContainer",mapData.value);
+        mapControl.createBox("mapMainContainer",mapData.single);
             //获取任务目录
             $.ajax({
                 url:window.restUrl+"api/fs/listioput/"+taskId,
@@ -306,14 +355,16 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
                                     '<p>' + c.path + '</p>' +
                                     '<div id="par' + c.id + '" class="nav_item_sWrap clearfix"></div>' +
                                     '</li>').appendTo(treeClickDiv);
-                            }else{
-                                $('<li style="margin-left: 20px;" class="nav_item clearfix wjj_leftbs" data-text="'+c.path+'" data-type="'+c.type+'" data-url="'+c.url+'" title="' + c.path + '" data-pid="' + c.id + '"  data-id="' + c.id + '" data-type="1">' +
-                                        //'<i></i>' +
-                                        //'<u></u>' +
-                                    //'<input  type="checkbox" checked="checked"  class="last_level"/>'+
-                                    '<p>' + c.path + '</p>' +
-                                    '<div id="par' + c.id + '" class="nav_item_sWrap clearfix"></div>' +
-                                    '</li>').appendTo(treeClickDiv);
+                            }else {
+                                if (c.path.indexOf("tiff") >= 0 || c.path.indexOf("tif") >= 0) {
+                                    $('<li style="margin-left: 20px;" class="nav_item clearfix wjj_leftbs" data-text="' + c.path + '" data-type="' + c.type + '" data-url="' + c.url + '" title="' + c.path + '" data-pid="' + c.id + '"  data-id="' + c.id + '" data-type="1">' +
+                                            //'<i></i>' +
+                                            //'<u></u>' +
+                                            '<input  type="checkbox" checked="checked"  class="last_level"/>'+
+                                        '<p>' + c.path + '</p>' +
+                                        '<div id="par' + c.id + '" class="nav_item_sWrap clearfix"></div>' +
+                                        '</li>').appendTo(treeClickDiv);
+                                }
                             }
                         })
                     },
@@ -373,13 +424,22 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
 
                 //勾选框
                 clickObject=this;
-                var number=$(this).children("p").html().split("_")[3];
-                $("p:contains("+number+")").prev().prop("checked",false);
-                if(data.node.original.type != "url"){
-                    map=undefined;
-                    $(".last_level").prop("checked",false);
+                var isShow = $(this).children(".last_level")[0].checked;
+                var id = $(this)[0].innerText;
+                mapControl.showOneImgRange(isShow,id);
+                var metaId = "";
+                //通过名称匹配勾选的metaDataId
+                mapData.single.forEach(function(item){
+                    if(id == item.imageName){
+                        metaId = item.imgageMetaId;
+                    }
+                })
+                if(isShow == true){
+                    unSelectData[metaId] = metaId;
+                }else{
+                    unSelectData[metaId] = undefined;
                 }
-                $(this).children(".last_level").prop("checked",true);
+
 
                 //data.node.original.type = "url";
                 if(data.node.original.type == "file"){
@@ -436,7 +496,20 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
         }
         return taskData;
     }
+    var _getTaskData = function (){
+        if(undefined != taskData.args){
+            taskData.args.forEach(function(tData){
+                for(var k in unSelectData){
+                    if(tData.value != unSelectData[k]){
+                        newTaskData.args.push(tData);
+                    }
+                }
+            })
+        }
+        return newTaskData;
+    }
     return {
-        initTree:_initTree
+        initTree:_initTree,
+        getTaskData:_getTaskData
     };
 })
