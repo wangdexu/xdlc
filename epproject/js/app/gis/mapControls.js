@@ -679,7 +679,14 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
     var FLAGFALSE = 0;   //无效
     var orderList = [] ;
     var pointIdList = [];
-
+    //removeAdd方法
+    var _removeAdd = function(){
+        map.removeInteraction(draw);  //移除交互
+    }
+    //removeAdd方法
+    var _removeEdit = function(){
+        map.removeInteraction(modify);  //移除交互
+    }
     //添加一个点,就是添加一条空数据，手动填入数据
     var _addPoint = function(argList){
         map.removeInteraction(modify);
@@ -712,6 +719,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         var rowData = [numOrder,pointID,pointType[0],"",FLAGTRUE,"","",""];
         leftTable.addRow(numOrder,rowData,false);
     };
+    var pointLayer;
     //自动预测
     var _auto = function(argList) {
         map.removeInteraction(draw);  //移除交互
@@ -756,20 +764,23 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                 })
                 fun(gridData,id);
 
+                if(undefined == pointLayer){
+                    map.addLayer(pointLayer); //将图层添加到目标之上
+                    pointLayer = new ol.layer.Vector({
+                        source: new ol.source.Vector(),
+                        style:new ol.style.Style({
+                            image:new ol.style.Icon({
+                                anchor: [10,10],
+                                anchorXUnits: 'pixels',
+                                anchorYUnits: 'pixels',
+                                imgSize:[21,21],
+                                src:"img/21px.png"
+                            })
+                        }),
+                        wrapX: false
+                    });
+                }
 
-                var pointLayer = new ol.layer.Vector({
-                    source: new ol.source.Vector(),
-                    style:new ol.style.Style({
-                        image:new ol.style.Icon({
-                            anchor: [10,10],
-                            anchorXUnits: 'pixels',
-                            anchorYUnits: 'pixels',
-                            imgSize:[21,21],
-                            src:"img/21px.png"
-                        })
-                    }),
-                    wrapX: false
-                });
 
                 var point = [mainX,mainY];
                 var pointFeature = new ol.Feature({
@@ -785,7 +796,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                     })
                 });
                 pointLayer.getSource().addFeature(pointFeature);
-                map.addLayer(pointLayer); //将图层添加到目标之上
+
 
                 var pointID = leftTable.cells(id, 1).cell.innerHTML;
                 pointFeature.setId(pointID);
@@ -885,6 +896,23 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             },this);//可以传入函数名，不使用匿名函数
         }
     };
+    //修改列表更新点
+    var _editListPoint = function(x,y,id){
+        var selectedPointID = parseInt(id);
+        for(var i=0;i<points.length;i++){          //将当前修改点的坐标替换掉原来的坐标
+            if(points[i].id === selectedPointID){
+                points[i].singlePointtCoordinateX = x;
+                points[i].singlePointtCoordinateY = y;
+                popArr[i].setPosition([x,y]);         //将当前点的显示id 跟着修改点变化
+            }
+        }
+        var features = pointLayerArr;
+        for(var i=0;i<features.length;i++) {
+            if (selectedPointID === parseInt(features[i].id)) {
+                features[i].getSource().getFeatureById(selectedPointID).setGeometry(new ol.geom.Point([x,y]));
+            }
+        }
+        }
     //当前点居中
     var _setPointCenter = function(data){
         //var map = mapTemp[data.arg[1]];
@@ -1026,48 +1054,11 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
     var _deleteSinglePoint = function(data){
         map.removeInteraction(draw);  //移除交互
         var leftTable = data.arg[0];
-        var $pointIdPop = $("#pointIdPop");
+        //var $pointIdPop = $("#pointIdPop");
         if(popArr.length<=0){
             alert("当前没有点可以删除！");
         }else{
-            //$pointIdPop.css({"display":"block"}).fadeIn(500);    //透明蒙层，用于只能操作删除弹出层
-            //$("#popContainer").addClass("popContainer").fadeIn(500); // 显示删除弹出层
-            //drapableObj($pointIdPop);                               //弹出层可以拖拽
-            //$(".deletePop").on('click',function(){     //删除弹出层
-            //    $pointIdPop.css({"display":"none"}).fadeOut(500);
-            //    $("#popContainer").removeClass("popContainer").fadeOut(500);
-            //});
             var features = pointLayerArr;//pointLayer.getSource().getFeatures();   //得到地图所有的 features
-            //$(".pointIdInfo").on('keydown',function(event){   //回车删除要删除的点
-            //    event.stopPropagation();
-            //    var $value = parseInt($(this).val());
-            //    if(event.keyCode == "13") {
-            //        for(var i=0;i<i<features.length;i++){
-            //            if($value === parseInt(features[i].getId())){
-            //                pointLayer.getSource().removeFeature(features[i]);  //移除要删除的features
-            //                map.removeOverlay(popArr[i]);                    //移除其对应的点ID显示层
-            //                popArr.splice(i,1);                        //将对应存储的features 删除
-            //                points.splice(i,1);                        //将对应的点信息删除
-            //                $(this).val("null");                     //输入框置空
-            //
-            //                leftTable.forEachRow(function(id){
-            //                    leftTable.forEachCell(id,function(cellObj,index){
-            //                        if(index == 1){
-            //                            if(cellObj.getValue() == $value){
-            //                                leftTable.deleteRow(id);
-            //                            }
-            //                        }
-            //                    });
-            //                });
-            //            }
-            //        }
-            //        i= null;
-            //        $pointIdPop.css({"display":"none"}).fadeOut(500);
-            //        $("#popContainer").removeClass("popContainer").fadeOut(500);
-            //    }
-            //
-            //});
-
             var selectedPointID ;
             var selectPoint = new ol.interaction.Select();   //实例化交互选择，操作要素
             map.addInteraction(selectPoint);
@@ -1092,18 +1083,20 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                     //}
                 }));
                 selectedPointID = event.selected[0].getId();   // 得到选择的要素的id值
-                map.removeInteraction(selectPoint);           //移除交互
+                //map.removeInteraction(selectPoint);           //移除交互
 
                 for(var i=0;i<features.length;i++){
                     if(selectedPointID === parseInt(features[i].id)){
                         //features[i].getSource().removeFeature(features[i].getSource());  //移除要删除的features
-                        //features[i].getSource().getFeatures().clear();
+
                         //var f = features[i];
                         //    f.getSource().clear();
                         map.removeLayer(features[i]);
+                        //features[i].getSource().getFeatures().clear();
+                        features[i].getSource().removeFeature(features[i].getSource().getFeatureById(selectedPointID))
                         map.removeOverlay(popArr[i]);                    //移除其对应的点ID显示层
-                        popArr.splice(i,1);                        //将对应存储的features 删除
-                        points.splice(i,1);                        //将对应的点信息删除
+                        //popArr.splice(i,1);                        //将对应存储的features 删除
+                        //points.splice(i,1);                        //将对应的点信息删除
                         $(this).val("null");                     //输入框置空
 
                         leftTable.forEachRow(function(id){
@@ -1115,34 +1108,55 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                                 }
                             });
                         });
+                        dataMain.data.forEach(function(item){
+                            if(item.pointid == selectedPointID){
+                                item.active = 0;
+                            }
+                        })
                     }
                 }
-                //for(var i=0;i<points.length;i++){          //将当前修改点的坐标替换掉原来的坐标
-                //    if(points[i].id === selectedPointID){
-                //        features[i].getSource().clear();
-                //        map.removeOverlay(features[i]);
-                //        map.removeOverlay(popArr[i]);
-                //        popArr.splice(i,1);                        //将对应存储的features 删除
-                //        points.splice(i,1);
-                //        features.splice(i,1);
-                //        leftTable.forEachRow(function(id){
-                //            leftTable.forEachCell(id,function(cellObj,index){
-                //                if(index == 1){
-                //                    if(cellObj.getValue() == selectedPointID){
-                //                        leftTable.deleteRow(id);
-                //                    }
-                //                }
-                //            });
-                //        });
-                //        //points[i].singlePointtCoordinateX = x;
-                //        //points[i].singlePointtCoordinateY = y;
-                //        //popArr[i].setPosition([x,y]);         //将当前点的显示id 跟着修改点变化
-                //    }
-                //}
             })
+
+
         }
     };
+    //右键删除单点操作
+    var _deletePoint = function(leftTable,selectedPointID){
+        map.removeInteraction(draw);  //移除交互
+        //var $pointIdPop = $("#pointIdPop");
+            var features = pointLayerArr;//pointLayer.getSource().getFeatures();   //得到地图所有的 features
+            //new ol.interaction.Select();   //实例化交互选择，操作要素
+                for(var i=0;i<features.length;i++){
+                    if(selectedPointID == features[i].id){
+                        //features[i].getSource().removeFeature(features[i].getSource());  //移除要删除的features
 
+                        //var f = features[i];
+                        //    f.getSource().clear();
+                        map.removeLayer(features[i]);
+                        //features[i].getSource().getFeatures().clear();
+                        features[i].getSource().removeFeature(features[i].getSource().getFeatureById(selectedPointID))
+                        map.removeOverlay(popArr[i]);                    //移除其对应的点ID显示层
+                        //popArr.splice(i,1);                        //将对应存储的features 删除
+                        //points.splice(i,1);                        //将对应的点信息删除
+                        $(this).val("null");                     //输入框置空
+
+                        leftTable.forEachRow(function(id){
+                            leftTable.forEachCell(id,function(cellObj,index){
+                                if(index == 1){
+                                    if(cellObj.getValue() == selectedPointID){
+                                        leftTable.deleteRow(id);
+                                    }
+                                }
+                            });
+                        });
+                        dataMain.data.forEach(function(item){
+                            if(item.pointid == selectedPointID){
+                                item.active = 0;
+                            }
+                        })
+                    }
+                }
+    };
     //删除全部点
     var _deleteAllPoint = function(data){
         map.removeInteraction(draw);  //移除交互
@@ -1227,7 +1241,11 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         showTiepointPoint:_showTiepointPoint,
         showPoint:_showPoint,
         auto:_auto,
-        showOneImgRange:_showOneImgRange
+        showOneImgRange:_showOneImgRange,
+        editListPoint:_editListPoint,
+        removeAdd:_removeAdd,
+        removeEdit:_removeEdit,
+        deletePoint:_deletePoint
     }
 });
 

@@ -240,9 +240,11 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
                 data:"",
                 async: false,
                 success:function(data){
-                    data.args.forEach(function(item){
-                        item.name = config.argsKer[item.name];
-                    })
+                    if(data.args != undefined){
+                        data.args.forEach(function(item){
+                            item.name = config.argsKer[item.name];
+                        })
+                    }
                 taskData.args = data.args;
                 },
                 error: function (e) {
@@ -495,13 +497,15 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
         return taskData;
     }
     var _getTaskData = function (){
-        taskData.args.forEach(function(tData){
+        if(undefined != taskData.args){
+            taskData.args.forEach(function(tData){
                 for(var k in unSelectData){
-                if(tData.value != unSelectData[k]){
-                    newTaskData.args.push(tData);
+                    if(tData.value != unSelectData[k]){
+                        newTaskData.args.push(tData);
+                    }
                 }
-            }
-        })
+            })
+        }
         return newTaskData;
     }
     return {
