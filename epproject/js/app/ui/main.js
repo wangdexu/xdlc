@@ -718,7 +718,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     _removeState();
                     produce.blockAdjustment({
                         eventName:"onClick",
-                        arg: [grid_3,grid_2]
+                        arg: [grid_3,grid_2,taskData]
                     });
                     break;
             }
@@ -1050,21 +1050,21 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
             _removeState();
             if ((stage==2)&&(newValue!=oldValue)){
                 //alert("Cell with id="+rowId+" and index="+cellIndex+" was edited");
-                dataMain.data.forEach(function(item,index,arr){
+                dataMain.data.forEach(function(item){
                     if(item.pointid==rowId){
                         if(cellIndex==2){
-                            dataMain.data[index].pointtype=grid_3.cells(rowId, cellIndex).getValue();
+                            item.pointtype=grid_3.cells(rowId, cellIndex).getValue();
                         }else if(cellIndex==4){
-                            dataMain.data[index].active=grid_3.cells(rowId, cellIndex).getValue();
+                            item.active=grid_3.cells(rowId, cellIndex).getValue();
                             //console.log(dataMain.data[index].active);
                         }else if(cellIndex==5){
-                            dataMain.data[index].lon=grid_3.cells(rowId, cellIndex).getValue();
+                            item.lon=grid_3.cells(rowId, cellIndex).getValue();
                             mapControl.editListPoint(grid_3.cells(rowId, 5).getValue(),grid_3.cells(rowId, 6).getValue(),grid_3.cells(rowId, 1).getValue())
                         }else if(cellIndex==6){
-                            dataMain.data[index].lat=grid_3.cells(rowId, cellIndex).getValue();
+                            item.lat=grid_3.cells(rowId, cellIndex).getValue();
                             mapControl.editListPoint(grid_3.cells(rowId, 5).getValue(),grid_3.cells(rowId, 6).getValue(),grid_3.cells(rowId, 1).getValue())
                         }else if(cellIndex==7){
-                            dataMain.data[index].height=grid_3.cells(rowId, cellIndex).getValue();
+                            item.height=grid_3.cells(rowId, cellIndex).getValue();
                         }
                     }
 
@@ -1078,15 +1078,15 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         grid_2.attachEvent("onEditCell",function(stage,rowId,cellIndex,newValue,oldValue){
             if ((stage==2)&&(newValue!=oldValue)){
                 //alert("Cell with id="+rowId+" and index="+cellIndex+" was edited");
-                dataMain.data.forEach(function(item,index){
+                dataMain.data.forEach(function(item){
                     if(item.uuid==rowId){
                         if(cellIndex==5){
-                            dataMain.data[index].active=grid_2.cells(rowId, cellIndex).getValue();
-                            console.log(dataMain.data[index].active);
+                            item.active=grid_2.cells(rowId, cellIndex).getValue();
+                            console.log(item.active);
                         }else if(cellIndex==6){
-                            dataMain.data[index].x=grid_2.cells(rowId, cellIndex).getValue();
+                            item.x=grid_2.cells(rowId, cellIndex).getValue();
                         }else if(cellIndex==7){
-                            dataMain.data[index].y=grid_2.cells(rowId, cellIndex).getValue();
+                            item.y=grid_2.cells(rowId, cellIndex).getValue();
                         }
                     }
 

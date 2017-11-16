@@ -1,8 +1,11 @@
+//声明全局的"点列表"与"影像列表"显示函数
+var dataDisplay;
 var dataMain;
 dataMain= {
         "id": "db7550e2-17c2-4686-b577-1235645760e9",
         "data": [
             {
+                "url":"info='' data=''",
                 "imagename": "TH01-01_R201202210000003_1A_SXZ_1_10_883_123.tif",
                 "imageid": 11,
                 "imagemateid": "90c4bf93-06f0-4091-80e2-7c2ab5567b1a",
@@ -17,6 +20,7 @@ dataMain= {
                 "height": 319.1258
             },
             {
+                "url":"info='' data=''",
                 "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_125.tif",
                 "imageid": 12,
                 "imagemateid": "90c4bf93-06f0-4091-80e2-7c2ab5567b1a",
@@ -31,6 +35,7 @@ dataMain= {
                 "height": 319.1258
             },
             {
+                "url":"info='' data=''",
                 "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                 "imageid": "F_3",
                 "imagemateid": "90c4bf93-06f0-4091-80e2-7c2ab5567b1a",
@@ -45,6 +50,7 @@ dataMain= {
                 "height": 319.1258
             },
             {
+                "url":"info='' data=''",
                 "imagename": "TH01-01_R201202210000003_1A_SXZ_1_10_883_126.tif",
                 "imageid": "F_4",
                 "imagemateid": "90c4bf93-06f0-4091-80e2-7c2ab5567b1a",
@@ -59,6 +65,7 @@ dataMain= {
                 "height": 319.1258
             },
             {
+                "url":"info='' data=''",
                 "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                 "imageid": "F_5",
                 "imagemateid": "90c4bf93-06f0-4091-80e2-7c2ab5567b1a",
@@ -73,6 +80,7 @@ dataMain= {
                 "height": 319.1258
             },
             {
+                "url":"info='' data=''",
                 "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                 "imageid": "F_6",
                 "imagemateid": "90c4bf93-06f0-4091-80e2-7c2ab5567b1a",
@@ -87,6 +95,7 @@ dataMain= {
                 "height": 319.1258
             },
             {
+                "url":"info='' data=''",
                 "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                 "imageid": "F_7",
                 "imagemateid": "90c4bf93-06f0-4091-80e2-7c2ab5567b1a",
@@ -101,6 +110,7 @@ dataMain= {
                 "height": 319.1258
             },
             {
+                "url":"info='' data=''",
                 "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                 "imageid": "F_8",
                 "imagemateid": "90c4bf93-06f0-4091-80e2-7c2ab5567b1a",
@@ -115,6 +125,7 @@ dataMain= {
                 "height": 319.1258
             },
             {
+                "url":"info='' data=''",
                 "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                 "imageid": "F_9",
                 "imagemateid": "90c4bf93-06f0-4091-80e2-7c2ab5567b1a",
@@ -129,6 +140,7 @@ dataMain= {
                 "height": 319.1258
             },
             {
+                "url":"info='' data=''",
                 "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                 "imageid": "F_10",
                 "imagemateid": "90c4bf93-06f0-4091-80e2-7c2ab5567b1a",
@@ -143,6 +155,7 @@ dataMain= {
                 "height": 319.1258
             },
             {
+                "url":"info='' data=''",
                 "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_125.tif",
                 "imageid": "N_11",
                 "imagemateid": "90c4bf93-06f0-4091-80e2-7c2ab5567b1a",
@@ -157,6 +170,7 @@ dataMain= {
                 "height": 319.1258
             },
             {
+                "url":"info='' data=''",
                 "imagename": "TH01-01_R201202210000003_1A_SXZ_1_10_883_126.tif",
                 "imageid": "F_12",
                 "imagemateid": "90c4bf93-06f0-4091-80e2-7c2ab5567b1a",
@@ -171,6 +185,7 @@ dataMain= {
                 "height": 319.1258
             },
             {
+                "url":"info='' data=''",
                 "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                 "imageid": "F_13",
                 "imagemateid": "90c4bf93-06f0-4091-80e2-7c2ab5567b1a",
@@ -185,6 +200,7 @@ dataMain= {
                 "height": 319.1258
             },
             {
+                "url":"info='' data=''",
                 "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                 "imageid": "F_14",
                 "imagemateid": "90c4bf93-06f0-4091-80e2-7c2ab5567b1a",
@@ -199,6 +215,7 @@ dataMain= {
                 "height": 319.1258
             },
             {
+                "url":"info='' data=''",
                 "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                 "imageid": "F_15",
                 "imagemateid": "90c4bf93-06f0-4091-80e2-7c2ab5567b1a",
@@ -213,6 +230,7 @@ dataMain= {
                 "height": 319.1258
             },
             {
+                "url":"info='' data=''",
                 "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                 "imageid": "F_16",
                 "imagemateid": "90c4bf93-06f0-4091-80e2-7c2ab5567b1a",
@@ -227,6 +245,7 @@ dataMain= {
                 "height": 319.1258
             },
             {
+                "url":"info='' data=''",
                 "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                 "imageid": "F_17",
                 "imagemateid": "90c4bf93-06f0-4091-80e2-7c2ab5567b1a",
@@ -241,6 +260,7 @@ dataMain= {
                 "height": 319.1258
             },
             {
+                "url":"info='' data=''",
                 "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                 "imageid": "F_18",
                 "imagemateid": "90c4bf93-06f0-4091-80e2-7c2ab5567b1a",
@@ -255,6 +275,7 @@ dataMain= {
                 "height": 319.1258
             },
             {
+                "url":"info='' data=''",
                 "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                 "imageid": "F_19",
                 "imagemateid": "90c4bf93-06f0-4091-80e2-7c2ab5567b1a",
@@ -269,6 +290,7 @@ dataMain= {
                 "height": 319.1258
             },
             {
+                "url":"info='' data=''",
                 "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                 "imageid": "F_20",
                 "imagemateid": "90c4bf93-06f0-4091-80e2-7c2ab5567b1a",
@@ -283,6 +305,7 @@ dataMain= {
                 "height": 319.1258
             },
             {
+                "url":"info='' data=''",
                 "imagename": "TH01-01_R201202210000003_1A_SXZ_2_10_883_126.tif",
                 "imageid": "F_21",
                 "imagemateid": "90c4bf93-06f0-4091-80e2-7c2ab5567b1a",
@@ -300,9 +323,11 @@ dataMain= {
     };
 
 define(['jquery','dhtmlx','ol'],function($,dhl,ol){
+
     //var dataAccuracy;       //精度报告数据
     //var pointData;          //残差列表数据
     //"残差列表"弹出框,虚拟数据
+    var startId;     //uuid  从地址栏获取
     var pointData={
         "Review":
             [
@@ -427,133 +452,173 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
     }
     //自动匹配
     var _autoMatch = function(argList){
-        var startId = getUrlParam("uuid");//自动匹配函数
+        startId = getUrlParam("uuid");//自动匹配函数
         //"点列表"与"影像列表"的虚拟数据
+        console.log(argList.arg[4]);
         var dataArgs = [];
             dataArgs.push(argList.arg[4].args[0]);
             dataArgs.push(argList.arg[4].args[6]);
             dataArgs.push(argList.arg[4].args[1]);
             dataArgs.push(argList.arg[4].args[7]);
         var dataStr = {"id":startId,"args":dataArgs};
+        //像点量测匹配结果 方式POST{"id":fsdfadfadf}
         $.ajax({
-            url: "http://192.168.4.221:8285/api/imagepointalgorithm/startimagepoinitmatch",
+            url: "http://192.168.4.221:8285/api/imagepointalgorithm/readpointresults",
             type: "post",
             contentType:"application/json",
             data:JSON.stringify(dataStr),
             //dataType: 'JSPON',
+            async:false,
             success: function (data) {
                 console.log(data);
-                datamain=data;
+                dataMain=data;
+                //dataMain=$.parseJSON(data);
+                dataDisplay(dataMain);
             },
-            error: function (e) {
-                if(e.status == "401"){
-                    console.log("请求失败");
-                }
+            error: function () {
+                console.log("二次连接点,请求失败");
             }
         });
-        console.log("jiaoke");
-        var imageData={};                                //影像列表显示的数据
-        var grid3Detail = argList.arg[2];                 //影像列表显示的数据
-        var new_imageData = $.extend(imageData, grid3Detail);       //影像列表显示合并后的数据
-        //console.log(new_imageData);
-        var fun = argList.arg[3];
-        //fun(new_imageData);                             //用函数把生成的new_imageData传回到main.js
-        var newdata=[];                             //点列表显示的data数据
-        var judgedata=[];                           //存一个遍历过的id集合,用于后面的判断
-        var dataArr = dataMain.data;
-        var shu=dataArr.length;
-        dataArr.forEach(function(item){              //每个数组里面加"uuid"这样的随机数作为行id,
-            var uuid= _uuid();
-            item.uuid=uuid;
-        });
-        for(var i=0;i<shu;i++){                        //一级遍历
-            var judgeAvailability=0;
-            var degree=0;                               //重叠度数
-            var id;                                     //点id
-            var judge=judgedata.indexOf(dataArr[i].pointid);        //判断参数
-            //var uuid= _uuid();
-            //dataMain.data[i].uuid=uuid;
-            //console.log(judge);
-            //console.log(judgedata);
-            if(judge!=-1) {                                         //判断之前是否有同样的id,有就跨过,执行下一轮
-                //console.log(i-1);
-            }else{
-            //console.log(i);
-
-                var keydata={"rows":[]};                            //影像列表data的组成部分
-                var k=0;                                            //只是给影像列表加一个连续的数字序号
-            for(var j=i;j<shu;j++) {                                //二级遍历
-
-                if (dataArr[i].pointid == dataArr[j].pointid){      //判断后面是否有同样的id
-                    //console.log(j);
-                    ++degree;
-                    id=dataArr[i].pointid;
-
-                    //console.log(degree);
-                    k++;
-                    if(dataArr[j].active==1){
-                        judgeAvailability=1;
-                    }
-                    keydata.rows.push({"id":dataArr[j].uuid,"data":[dataArr[j].uuid,k,dataArr[j].pointid,dataArr[j].imageid,dataArr[j].imagename,dataArr[j].active+"",dataArr[j].x,dataArr[j].y]});
+        //$.ajax({
+        //    url: "http://192.168.4.221:8285/api/imagepointalgorithm/startimagepoinitmatch",
+        //    type: "post",
+        //    contentType:"application/json",
+        //    data:JSON.stringify(dataStr),
+        //    //dataType: 'JSPON',
+        //    async:false,
+        //    success: function (data) {
+        //        console.log(data);
+        //    },
+        //    error: function () {
+        //            console.log("连接点,请求失败");
+        //    }
+        //});
+        window.setTimeout(function(){
+            //像点量测匹配结果 方式POST{"id":fsdfadfadf}
+            $.ajax({
+                url: "http://192.168.4.221:8285/api/imagepointalgorithm/readpointresults",
+                type: "post",
+                contentType:"application/json",
+                data:JSON.stringify(dataStr),
+                //dataType: 'JSPON',
+                async:false,
+                success: function (data) {
+                    dataMain=$.parseJSON(data);
+                    dataDisplay(dataMain);
+                },
+                error: function () {
+                    console.log("二次连接点,请求失败");
                 }
-                    }
-                //imageData.push({"key":id,"data":keydata});
-                //imageData.dataid.push(keydata);
-                //console.log(id);
-                imageData[id]=keydata;         //关键一步,用动态生成的id作为key
-                //{"3":{"rows": [{"id":1,"data":["aaa","1","3","img0","2","1","13907.669428881965","13147.054622607193","http://192.168.4.2:18080/geowebcache/service/wms?VERSION:1.1.1&layers=GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020"]},
-                //    {"id":2,"data":["bbb","2","3","img1","2","1","20549.190592890045","17841.913952814564","http://192.168.4.2:18080/geowebcache/service/wms?VERSION:1.1.1&layers=GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020"]},
-                //    {"id":3,"data":["ccc","3","3","img2","2","1","5898.776260519281","21325.1966816781","http://192.168.4.2:18080/geowebcache/service/wms?VERSION:1.1.1&layers=GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020"]}]}}
+            });
+        },300000);
+        //console.log(dataMain);
 
-                //console.log(j);
-                judgedata.push(id);       //存一个遍历过的id集合,用于后面的判断
-                //imageData.push{id:{"rows":[]}}
-
-                //console.log(judgeAvailability);
-                newdata.push({"id":id,"degree":degree,"pointtype":dataArr[i].pointtype,"lon":dataArr[i].lon,"lat":dataArr[i].lat,"height":dataArr[i].height,"active":judgeAvailability+""});
-            }
-
-        }
-        console.log(dataMain);
-        //console.log(argList.arg[2]);
-
-        //点列表
-        pointList(dataMain,newdata);                //调用点列表显示函数
-        function pointList(dataMain,newdata){       //点列表显示函数
-            //生成点信息数据
-            var data= {
-                rows: []
-            };
-            var shu=newdata.length;
-            for(var i=1;i<=shu;i++){
-                if(newdata[i-1].pointtype=="TiePoint"){
-                data.rows.push({ id:newdata[i-1].id, data: [i,newdata[i-1].id,newdata[i-1].pointtype,newdata[i-1].degree,newdata[i-1].active+"","","",""]});  //动态生成点列表的data数据
+        function dataDisplay(dataMain){
+            var imageData={};                                //影像列表显示的数据
+            var grid3Detail = argList.arg[2];                 //影像列表显示的数据
+            var new_imageData = $.extend(imageData, grid3Detail);       //影像列表显示合并后的数据
+            //console.log(new_imageData);
+            var fun = argList.arg[3];
+            //fun(new_imageData);                             //用函数把生成的new_imageData传回到main.js
+            var newdata=[];                             //点列表显示的data数据
+            var judgedata=[];                           //存一个遍历过的id集合,用于后面的判断
+            var dataArr = dataMain.data;
+            var shu=dataArr.length;
+            dataArr.forEach(function(item){              //每个数组里面加"uuid"这样的随机数作为行id,
+                var uuid= _uuid();
+                item.uuid=uuid;
+            });
+            for(var i=0;i<shu;i++){                        //一级遍历
+                var judgeAvailability=0;
+                var degree=0;                               //重叠度数
+                var id;                                     //点id
+                var judge=judgedata.indexOf(dataArr[i].pointid);        //判断参数
+                //var uuid= _uuid();
+                //dataMain.data[i].uuid=uuid;
+                //console.log(judge);
+                //console.log(judgedata);
+                if(judge!=-1) {                                         //判断之前是否有同样的id,有就跨过,执行下一轮
+                    //console.log(i-1);
                 }else{
-                data.rows.push({ id:newdata[i-1].id, data: [i,newdata[i-1].id,newdata[i-1].pointtype,newdata[i-1].degree,newdata[i-1].active+"",newdata[i-1].lon,newdata[i-1].lat,newdata[i-1].height]});  //动态生成点列表的data数据
-                }
-            }
-            argList.arg[0].clearAll();     //显示前先清空表格
-            //console.log(data);
-            argList.arg[0].parse(data,function(){    //将数据加载到表格
-                //alert(1);
-            },"json");
-        }
-        //影像列表
-        imageList(argList.arg[0].getRowId(0),imageData);  //默认显示点列表第一行的数据到影像列表
+                    //console.log(i);
 
-        argList.arg[0].attachEvent('onRowSelect', function(rId, cInd){
-            imageList(rId,imageData);                       //点击调用影像列表显示函数
-        });
-        function imageList(rId,imageData) {            //影像列表显示函数
-            var data=imageData[rId];
-            console.log(data);
-            //console.log(data);
-            argList.arg[1].clearAll();
-            //console.log(data);
-            argList.arg[1].parse(data,function(){
-                //alert(1);
-            },"json");
-        }
+                    var keydata={"rows":[]};                            //影像列表data的组成部分
+                    var k=0;                                            //只是给影像列表加一个连续的数字序号
+                    for(var j=i;j<shu;j++) {                                //二级遍历
+
+                        if (dataArr[i].pointid == dataArr[j].pointid){      //判断后面是否有同样的id
+                            //console.log(j);
+                            ++degree;
+                            id=dataArr[i].pointid;
+
+                            //console.log(degree);
+                            k++;
+                            if(dataArr[j].active==1){
+                                judgeAvailability=1;
+                            }
+                            keydata.rows.push({"id":dataArr[j].uuid,"data":[dataArr[j].uuid,k,dataArr[j].pointid,dataArr[j].imageid,dataArr[j].imagename,dataArr[j].active+"",dataArr[j].x,dataArr[j].y]});
+                        }
+                    }
+                    //imageData.push({"key":id,"data":keydata});
+                    //imageData.dataid.push(keydata);
+                    //console.log(id);
+                    imageData[id]=keydata;         //关键一步,用动态生成的id作为key
+                    //{"3":{"rows": [{"id":1,"data":["aaa","1","3","img0","2","1","13907.669428881965","13147.054622607193","http://192.168.4.2:18080/geowebcache/service/wms?VERSION:1.1.1&layers=GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020"]},
+                    //    {"id":2,"data":["bbb","2","3","img1","2","1","20549.190592890045","17841.913952814564","http://192.168.4.2:18080/geowebcache/service/wms?VERSION:1.1.1&layers=GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020"]},
+                    //    {"id":3,"data":["ccc","3","3","img2","2","1","5898.776260519281","21325.1966816781","http://192.168.4.2:18080/geowebcache/service/wms?VERSION:1.1.1&layers=GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020"]}]}}
+
+                    //console.log(j);
+                    judgedata.push(id);       //存一个遍历过的id集合,用于后面的判断
+                    //imageData.push{id:{"rows":[]}}
+
+                    //console.log(judgeAvailability);
+                    newdata.push({"id":id,"degree":degree,"pointtype":dataArr[i].pointtype,"lon":dataArr[i].lon,"lat":dataArr[i].lat,"height":dataArr[i].height,"active":judgeAvailability+""});
+                }
+
+            }
+            //console.log(dataMain);
+            //console.log(argList.arg[2]);
+
+            //点列表
+            pointList(dataMain,newdata);                //调用点列表显示函数
+            function pointList(dataMain,newdata){       //点列表显示函数
+                //生成点信息数据
+                var data= {
+                    rows: []
+                };
+                var shu=newdata.length;
+                for(var i=1;i<=shu;i++){
+                    if(newdata[i-1].pointtype=="TiePoint"){
+                        data.rows.push({ id:newdata[i-1].id, data: [i,newdata[i-1].id,newdata[i-1].pointtype,newdata[i-1].degree,newdata[i-1].active+"","","",""]});  //动态生成点列表的data数据
+                    }else{
+                        data.rows.push({ id:newdata[i-1].id, data: [i,newdata[i-1].id,newdata[i-1].pointtype,newdata[i-1].degree,newdata[i-1].active+"",newdata[i-1].lon,newdata[i-1].lat,newdata[i-1].height]});  //动态生成点列表的data数据
+                    }
+                }
+                argList.arg[0].clearAll();     //显示前先清空表格
+                //console.log(data);
+                argList.arg[0].parse(data,function(){    //将数据加载到表格
+                    //alert(1);
+                },"json");
+            }
+            //影像列表
+            imageList(argList.arg[0].getRowId(0),imageData);  //默认显示点列表第一行的数据到影像列表
+
+            argList.arg[0].attachEvent('onRowSelect', function(rId, cInd){
+                imageList(rId,imageData);                       //点击调用影像列表显示函数
+            });
+            function imageList(rId,imageData) {            //影像列表显示函数
+                var data=imageData[rId];
+                //console.log(data);
+                //console.log(data);
+                argList.arg[1].clearAll();
+                //console.log(data);
+                argList.arg[1].parse(data,function(){
+                    //alert(1);
+                },"json");
+            }
+
+        };
+
 
 
 
@@ -561,6 +626,14 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
     };
     //区域网平差
     var _blockAdjustment = function(argList){
+        //startId = getUrlParam("uuid");//拿到地址栏uuid
+        //var dataArgs = [];
+        //dataArgs.push(argList.arg[2].args[0]);
+        //dataArgs.push(argList.arg[2].args[6]);
+        //dataArgs.push(argList.arg[2].args[1]);
+        //dataArgs.push(argList.arg[2].args[7]);
+
+        var dataStr = {"id":startId,"args":dataArgs};
             //请求保存dataMain
         $.ajax({
             url: "http://192.168.4.221:8285/api/imagepointalgorithm/dataSave",
@@ -577,11 +650,11 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         });
             //请求精度报告
         $.ajax({
-            url: "http://192.168.4.221:8285/api/imagepointalgorithm/dataAccuracy",
+            url: "http://192.168.4.221:8285/api/imagepointalgorithm/startba",
             type: "post",
             contentType:"application/json",
-            //data:JSON.stringify(dataMain),
-            data:{},
+            data:JSON.stringify(dataStr),
+            //data:{},
             success: function (data) {
                 console.log(data);
                 dataAccuracy=data;
@@ -611,12 +684,13 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         $("#popBox").on('click',"#totall_check",function(){     //弹出残差列表框
             $("#popBox_name").html("残差列表");
             $("#popBox_wrap").empty();
+            //请求残差列表数据
             $.ajax({
                 url: "http://192.168.4.221:8285/api/imagepointalgorithm/residual",
                 type: "post",
                 contentType:"application/json",
-                //data:JSON.stringify(dataMain),
-                data:{},
+                data:JSON.stringify({"id":startId}),
+                //data:{},
                 success: function (data) {
                     console.log(data);
                     pointData=data;
