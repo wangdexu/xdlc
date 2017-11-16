@@ -497,7 +497,7 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
         return taskData;
     }
     var _getTaskData = function (){
-        if(undefined != taskData.args){
+        if(undefined != taskData.args && JSON.stringify(unSelectData) != "{}"){
             taskData.args.forEach(function(tData){
                 for(var k in unSelectData){
                     if(tData.value != unSelectData[k]){
@@ -505,9 +505,11 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
                     }
                 }
             })
+        }else {
+            newTaskData.args = taskData.args;
         }
         return newTaskData;
-    }
+    };
     return {
         initTree:_initTree,
         getTaskData:_getTaskData
