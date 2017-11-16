@@ -162,7 +162,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         grid_3.setInitWidths('*,*,*,*,*,*,*,*');
         grid_3.init();
         grid_3.enableMultiselect(true);
-        grid_3.load('./data/grid0.xml','xml');
+        //grid_3.load('./data/grid0.xml','xml');
 
       //存储每个创建的小地图，用于地图联动
        var mapLinkMove = [];
@@ -393,9 +393,14 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
             grid3Detail = Detail;
         }
         //接收疵的点
-        var _returnCiPoint =  function(point,points){
+        var _returnCiPoint =  function(point,points,pid){
             nowPoint = point;
             manPoints = points;
+            grid3Detail[pid] = {"rows": []};
+            mapControl.auto({
+                eventName: "onClick",
+                arg: [grid_3,grid_2,taskData,_returnPrediction,grid3Detail[pid],pid]
+            })
         }
         //接收添加的点
         var _returnAddPoint = function(point,newData){
@@ -409,6 +414,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         }
         //接收预测的信息
         var _returnPrediction = function(grid3Detail,rId){
+            _showSubView();
             grid3Detail[pointId] = grid3Detail;
             creatDiv(rId,grid3Detail[pointId],pointId);
         }
@@ -453,28 +459,16 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
             $(".mapMainContainer").css({"cursor": "default"});
             mapControl.removeAdd();
             smallMap.removeAdd(mapId);
-            mapControl.removeAdd();
-            smallMap.removeAdd(mapId);
+            mapControl.removeEdit();
+            smallMap.removeEdit(mapId);
+            mapControl.removeDelete();
+            smallMap.removeDelete();
         }
         //监听菜单是否点击了
         ribbon_1.attachEvent("onClick", function(id) {
             switch(id){
                 case "open":
-                    //$.ajax({
-                    //    url:window.restUrl+"api/fs/listioput/"+taskId,
-                    //    type:"get",
-                    //    data:"",
-                    //    async: false,
-                    //    success:function(data){
-                    //
-                    //        alert("提交成功！");
-                    //    },
-                    //    error: function (e) {
-                    //        if(e.status == "401"){
-                    //            //getSession();
-                    //        }
-                    //    }
-                    //})
+                    tree.commit();
                     _removeState();
                    console.log(id);
                     break;
@@ -492,7 +486,8 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                 case "export":
                     _removeState();
                     mapControl.export({
-                        eventName:"onClick"
+                        eventName:"onClick",
+                        arg: [grid_3]
                     });
                     break;
                 case "save":
@@ -687,7 +682,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                         var pointId = grid_3.cells(id, 1).cell.innerHTML
                         mapControl.auto({
                             eventName: "onClick",
-                            arg: [grid_3,grid_2,taskData,_returnPrediction,grid3Detail[pointId]]
+                            arg: [grid_3,grid_2,taskData,_returnPrediction,grid3Detail[pointId],pointId]
                         })
                     })
                     break;
@@ -734,6 +729,10 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                 case "stabPoint":
                     ribbon_1.setItemState("modifyPoint", "false", "");
                     ribbon_1.setItemState("deleteSingle", "false", "");
+                    mapControl.removeEdit();
+                    mapControl.removeDelete();
+                    smallMap.removeEdit(mapId);
+                    smallMap.removeDelete();
                     if(value == true) {
                         $(".mapMainContainer").css({"cursor": "crosshair"});
                         // $(".mapMainContainer").css({"cursor":"default"});
@@ -746,6 +745,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                             eventNme: "onClick",
                             arg: [id, grid_2, mapId, _returnAddPoint, pointId]
                         });
+
                     }else{
                         $(".mapMainContainer").css({"cursor": "default"});
                         mapControl.removeAdd();
@@ -755,6 +755,10 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                 case "modifyPoint":
                     ribbon_1.setItemState("stabPoint", "false", "");
                     ribbon_1.setItemState("deleteSingle", "false", "");
+                    mapControl.removeAdd();
+                    mapControl.removeDelete();
+                    smallMap.removeAdd(mapId);
+                    smallMap.removeDelete();
                     if($mainViewFlag == true) {
                         $(".mapMainContainer").css({"cursor": "pointer"});
                         mapControl.modifyPoint({
@@ -775,6 +779,10 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     if(value == true){
                         ribbon_1.setItemState("stabPoint", "false", "");
                         ribbon_1.setItemState("modifyPoint", "false", "");
+                        mapControl.removeAdd();
+                        mapControl.removeEdit();
+                        smallMap.removeAdd(mapId);
+                        smallMap.removeEdit(mapId);
                         $(".mapMainContainer").css({"cursor": "pointer"});
                         if($mainViewFlag == true) {
                             mapControl.deleteSinglePoint({

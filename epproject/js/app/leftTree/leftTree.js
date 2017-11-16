@@ -5,10 +5,9 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
     var unSelectData = {};
     var taskData = {};
     var newTaskData ={"args":[]};
+    var taskId = getUrlParam("taskId");
+    var startId = getUrlParam("uuid");
     var _initTree = function(){
-        var taskId = getUrlParam("taskId");
-        var startId = getUrlParam("uuid");
-
             //执行加坐标操作
         var mapData = {"single" :[{"id":"87c841fc-69a7-40f5-94a2-3f6d218f338e",
             "wmsurl":"http://",
@@ -276,6 +275,60 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
                 }
             }
         })
+        //查询进度条
+        var t1;
+        var _queryPace = function(){
+            window.clearTimeout(timer1);
+            if(t1 != undefined){
+                //去掉定时器
+                window.clearInterval(t1);
+            }
+            //t1 = window.setInterval("_pollingPace()",5000);
+        }
+        var _pollingPace = function(){
+            $.ajax({
+                url:window.paceUrl+"ImageFptRefineProcess",
+                type:"post",
+                contentType: "application/json",
+                data:JSON.stringify({"rediskey":startId}),
+                async: false,
+                success:function(data){
+                    $("#progress-bar").css("width",data+"%");
+                   if(data == "100"){
+                       window.clearInterval(t1);
+                   }
+                },
+                error: function (e) {
+                    if(e.status == "401"){
+                        //getSession();
+                    }
+                }
+            })
+        }
+        var timer1=window.setTimeout(_queryPace,1000);  //timer1->1 当前是第一个定时器
+        //查询快速正射返回值
+        var _queryGc = function(){
+            var starData = {"id":startId,"args":ocData};
+            $.ajax({
+                url:window.toolsUrl+"api/imagepointalgorithm/startgc",
+                type:"post",
+                contentType: "application/json",
+                data:JSON.stringify(starData),
+                async: false,
+                success:function(data){
+                    mapData.url = data.url;
+                    //参数1：主视图地图 鼠标移动控件内容(经纬度)挂载点，参数2：地图id挂载点，参数三：将控件放到目标位置挂载点
+                    //mapControl.createMap("ol-mouse-position2","mapMainContainer","post11",mapData.url);
+                    //mapControl.createBox("mapMainContainer",mapData.value);
+
+                },
+                error: function (e) {
+                    if(e.status == "401"){
+                        //getSession();
+                    }
+                }
+            })
+        }
         //参数1：主视图地图 鼠标移动控件内容(经纬度)挂载点，参数2：地图id挂载点，参数三：将控件放到目标位置挂载点
         mapControl.createMap("ol-mouse-position2","mapMainContainer","post11",mapData.url);
         mapControl.createBox("mapMainContainer",mapData.single);
@@ -485,19 +538,38 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
 
         })
 
-        function getUrlParam(name){
-            var reg = new RegExp("(^|&)"+name+"=([^&]*)(&|$)");
-            var r = window.location.search.substr(1).match(reg);
-            if(r!=null){
-                return unescape(r[2])
-            }else{
-                return null;
-            }
-        }
+
         return taskData;
     }
+    function getUrlParam(name){
+        var reg = new RegExp("(^|&)"+name+"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null){
+            return unescape(r[2])
+        }else{
+            return null;
+        }
+    }
+    var _commit = function(){
+        var data = {"id":startId}
+        $.ajax({
+            url:window.toolsUrl+"api/imagepointalgorithm/commitresult",
+            type:"post",
+            data:JSON.stringify(data),
+            async: false,
+            success:function(){
+                alert("提交成功！");
+            },
+            error: function (e) {
+                alert("提交失败！");
+                if(e.status == "401"){
+                    //getSession();
+                }
+            }
+        })
+    }
     var _getTaskData = function (){
-        if(undefined != taskData.args){
+        if(undefined != taskData.args && JSON.stringify(unSelectData) != "{}"){
             taskData.args.forEach(function(tData){
                 for(var k in unSelectData){
                     if(tData.value != unSelectData[k]){
@@ -505,11 +577,14 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
                     }
                 }
             })
+        }else {
+            newTaskData.args = taskData.args;
         }
         return newTaskData;
     }
     return {
         initTree:_initTree,
-        getTaskData:_getTaskData
+        getTaskData:_getTaskData,
+        commit:_commit
     };
 })
