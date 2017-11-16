@@ -455,6 +455,12 @@ define(['./config','dhtmlx','ol'],function (config) {
             mapTemp[mapId].removeInteraction(modify);  //移除交互
         }
     }
+    //删除删除点监听方法
+    var _removeDelete = function(mapId){
+        if(undefined != mapTemp[mapId]){
+            mapTemp[mapId].removeInteraction(selectPoint);  //移除交互
+        }
+    }
     //添加点操作
     var featureOverlayTemp = {};
     var featuresTemp = {};
@@ -658,7 +664,9 @@ define(['./config','dhtmlx','ol'],function (config) {
         var features = featuresTemp[mapId];
         var uuid;
         var selectedPointID ;
-        var selectPoint = new ol.interaction.Select();   //实例化交互选择，操作要素
+        var selectPoint = new ol.interaction.Select(
+            {"hitTolerance":10}
+        );   //实例化交互选择，操作要素
         map.addInteraction(selectPoint);
         selectPoint.on('select',function(event){
             event.preventDefault();
@@ -801,7 +809,9 @@ define(['./config','dhtmlx','ol'],function (config) {
         var vectorSource = vectorSourceTemp[mapId];
         var fun = data.arg[3]
         // a normal select interaction to handle click
-        var select = new ol.interaction.Select();
+        var select = new ol.interaction.Select(
+            {"hitTolerance":10}
+        );
 
         map.addInteraction(select);
         select.setActive(true);
@@ -881,6 +891,7 @@ define(['./config','dhtmlx','ol'],function (config) {
             }
         }
     }
+    var selectPoint
     function _removeOnePoint(data) {
         var grid_7 = data.arg[1];
         var mapId = data.arg[2];
@@ -889,7 +900,9 @@ define(['./config','dhtmlx','ol'],function (config) {
         var map = mapTemp[mapId];
         var features = featuresTemp[mapId];
         var selectedPointID ;
-        var selectPoint = new ol.interaction.Select();   //实例化交互选择，操作要素
+        selectPoint = new ol.interaction.Select(
+            {"hitTolerance":10}
+        );   //实例化交互选择，操作要素
         map.addInteraction(selectPoint);
         selectPoint.on('select',function(event) {
             event.preventDefault();
@@ -912,7 +925,7 @@ define(['./config','dhtmlx','ol'],function (config) {
                 //}
             }));
             selectedPointID = event.selected[0].id;   // 得到选择的要素的id值
-            map.removeInteraction(selectPoint);
+            //map.removeInteraction(selectPoint);
 
             var tempPoint = {};
             for (var i = 0; i < features.getLength(); i++) {
@@ -1102,6 +1115,7 @@ define(['./config','dhtmlx','ol'],function (config) {
         editListPoint:_editListPoint,
         removeAdd:_removeAdd,
         removeEdit:_removeEdit,
-        deletePoint:_deletePoint
+        deletePoint:_deletePoint,
+        removeDelete:_removeDelete
     };
 });
