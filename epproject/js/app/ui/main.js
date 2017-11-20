@@ -754,7 +754,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                         // $(".mapMainContainer").css({"cursor":"default"});
                         mapControl.stabPoint({
                             eventName: "onClick",
-                            arg: [grid_3, _returnCiPoint]
+                            arg: [grid_3, deletePoint]
                         });
                         for(mapId in checkAllTemp) {
                             if (checkAllTemp[mapId] != "" && checkAllTemp[mapId] != undefined) {

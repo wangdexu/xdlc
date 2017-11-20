@@ -582,7 +582,7 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
             newTaskData.args = taskData.args;
         }
         return newTaskData;
-    }
+    };
     return {
         initTree:_initTree,
         getTaskData:_getTaskData,
