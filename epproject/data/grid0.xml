@@ -2,14 +2,14 @@
 <rows>
 	<row id="1">
 		<cell>1</cell>
-		<cell>2</cell>
+		<cell>1</cell>
 		<!--<cell>Tiepoint</cell>-->
 		<cell xmlcontent="1" editable="0">Tiepoint
 			<option value="1">Tiepoint</option>
 			<option value="2">Controlpoint</option>
 			<option value="3">Checkpoint</option>
 		</cell>
-		<cell>2</cell>
+		<cell>1</cell>
 		<cell>1</cell>
 		<cell>24</cell>
 		<cell>1</cell>
@@ -17,13 +17,13 @@
 	</row>
 	<row id="2">
 		<cell>2</cell>
-		<cell>4</cell>
+		<cell>2</cell>
 		<cell xmlcontent="1" editable="0">Tiepoint
 			<option value="1">Tiepoint</option>
 			<option value="2">Controlpoint</option>
 			<option value="3">Checkpoint</option>
 		</cell>
-		<cell>3</cell>
+		<cell>2</cell>
 		<cell>1</cell>
 		<cell>24</cell>
 		<cell>0</cell>
@@ -45,7 +45,7 @@
 	</row>
 	<row id="4" selected="1">
 		<cell>4</cell>
-		<cell>7</cell>
+		<cell>4</cell>
 		<cell xmlcontent="1" editable="0">Tiepoint
 			<option value="1">Tiepoint</option>
 			<option value="2">Controlpoint</option>
@@ -59,7 +59,7 @@
 	</row>
 	<row id="5" selected="1">
 		<cell>5</cell>
-		<cell>6</cell>
+		<cell>5</cell>
 		<cell xmlcontent="1" editable="0">Tiepoint
 			<option value="1">Tiepoint</option>
 			<option value="2">Controlpoint</option>
@@ -73,7 +73,7 @@
 	</row>
 	<row id="6" selected="1">
 		<cell>6</cell>
-		<cell>8</cell>
+		<cell>6</cell>
 		<cell xmlcontent="1" editable="0">Tiepoint
 			<option value="1">Tiepoint</option>
 			<option value="2">Controlpoint</option>

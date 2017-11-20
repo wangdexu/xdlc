@@ -4,7 +4,7 @@
 define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config,$,dhtmlx,ol,mapControl) {
     var unSelectData = {};
     var taskData = {};
-    var newTaskData ={"args":[]};
+
     var taskId = getUrlParam("taskId");
     var startId = getUrlParam("uuid");
     var _initTree = function(){
@@ -12,7 +12,7 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
         var mapData = {"single" :[{"id":"87c841fc-69a7-40f5-94a2-3f6d218f338e",
             "wmsurl":"http://",
             "imageName":"ZY3_TLC_E115.6_N40.2_20130530_L1A0001552033-BWD.tiff",
-            "imgageMetaId":"87c841fc-69a7-40f5-94a2-3f6d218f228e",
+            "imgageMetaId":"29e3c2b4-e861-44e4-85b1-159ad2c9df42",
             "value":[
                 115.17794880671853,
                 39.597491680578713,
@@ -29,7 +29,7 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
                 0.0,
                 0.0,
                 0.0
-            ]},{"id":"87c841fc-69a7-40f5-94a2-3f6d218f338e",
+            ]},{"id":"86dfb306-0136-4f9e-94e7-a9be6520ffc7",
             "wmsurl":"http://",
             "imageName":"ZY3_TLC_E115.6_N40.2_20121001_L1A0000700607-BWD.tiff",
             "imgageMetaId":"",
@@ -488,9 +488,9 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
                     }
                 })
                 if(isShow == true){
-                    unSelectData[metaId] = metaId;
-                }else{
                     unSelectData[metaId] = undefined;
+                }else{
+                    unSelectData[metaId] = metaId;
                 }
 
 
@@ -569,6 +569,7 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
         })
     }
     var _getTaskData = function (){
+        var newTaskData ={"args":[]};
         if(undefined != taskData.args && JSON.stringify(unSelectData) != "{}"){
             taskData.args.forEach(function(tData){
                 for(var k in unSelectData){
