@@ -585,6 +585,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
     var __drawPoint = function(pointLayer){
         draw = new ol.interaction.Draw({
             type: 'Point',
+            
             source: pointLayer.getSource(),
             style:function(feature) {
                 return [
