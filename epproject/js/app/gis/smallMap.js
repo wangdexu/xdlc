@@ -342,7 +342,7 @@ define(['./config','dhtmlx','ol'],function (config) {
         pointLayer.getSource().addFeature(pointFeature);
         mapTemp[mapId].addLayer(pointLayer); //将图层添加到目标之上
         pointFeature.id = uuid;
-
+        pointLayer.id = uuid;
         //给每个刺点显示其点ID的容器
         $('#smallPop').append('<div id="pop'+index+pointID+'" style="color: red;font-size: 14px;">&nbsp;'+pointID+'</div>');
         var pop = new ol.Overlay({
@@ -444,21 +444,23 @@ define(['./config','dhtmlx','ol'],function (config) {
     }
     //删除添加点监听方法
     var _removeAdd = function(mapId){
-        if(undefined != mapTemp[mapId]){
-            mapTemp[mapId].removeInteraction(draw);  //移除交互
+        if(undefined != mapTemp[mapId] && undefined != drawArr[mapId]){
+            $("#"+mapId).css({"cursor": "default"});
+            mapTemp[mapId].removeInteraction(drawArr[mapId]);  //移除交互
         }
-
     }
     //删除编辑监听方法
     var _removeEdit = function(mapId){
-        if(undefined != mapTemp[mapId]){
-            mapTemp[mapId].removeInteraction(modify);  //移除交互
+        if(undefined != mapTemp[mapId] && undefined != modifyArr[mapId]){
+            $("#"+mapId).css({"cursor": "default"});
+            mapTemp[mapId].removeInteraction(modifyArr[mapId]);  //移除交互
         }
     }
     //删除删除点监听方法
     var _removeDelete = function(mapId){
-        if(undefined != mapTemp[mapId]){
-            mapTemp[mapId].removeInteraction(selectPoint);  //移除交互
+        if(undefined != mapTemp[mapId] && undefined != selectPointArr[mapId]){
+            $("#"+mapId).css({"cursor": "default"});
+            mapTemp[mapId].removeInteraction(selectPointArr[mapId]);  //移除交互
         }
     }
     //添加点操作
@@ -471,13 +473,13 @@ define(['./config','dhtmlx','ol'],function (config) {
     var popArr = [];
     var popArrObj = {};
     var pointLayerArr = [];
-    var draw;
+    var drawArr = {};
     function _addPoint(data) {
         var grid_7 = data.arg[1];
         var mapId = data.arg[2];
         var point = [];
         var fun = data.arg[3];
-        //var pointID = data.arg[4];
+        var leftPointID = data.arg[4];
         //for(var key in mapTemp) {//不使用过滤
         var map = mapTemp[mapId];
         if(undefined == map){
@@ -522,11 +524,11 @@ define(['./config','dhtmlx','ol'],function (config) {
         featureOverlay.id = uuid;
         //featureOverlay.setId(uuid);
         pointLayerArr.push(featureOverlay);
-        featureOverlay.setMap(map);
+
 
         //var draw; // global so we can remove it later
         function addInteraction() {
-            draw = new ol.interaction.Draw({
+            var draw = new ol.interaction.Draw({
                 features: features,
                 type: /** @type {ol.geom.GeometryType} */ ("Point"),
                 style:function(feature) {
@@ -551,16 +553,41 @@ define(['./config','dhtmlx','ol'],function (config) {
                     ]
                 }
             });
+            drawArr[mapId] = draw;
             map.addInteraction(draw);
             draw.on("drawend", onDrawEnd, this);
         }
 
 
         function onDrawEnd(evt) {
+            var tempUUid;
+            var tempRowid;
+            var tempLaysers = map.getLayers();
+            tempLaysers.forEach(function(l){
+                if(undefined != l.id){
+                    tempUUid = l.id;
+                    l.getSource().clear();
+                    map.removeLayer(l);
+                    map.removeOverlay(popArrObj[tempUUid]);
+                }
+            })
             features;
 
+            //删除当前点
+            if (grid_7.getRowsNum() > 0) {
+                grid_7.forEachRow(function (id) {  //循环每一行
+                    grid_7.forEachCell(id, function (cellObj, index) {  //循环每一行的每一个cell,每个cell的id为index，对象为cellObj
+                        if (index === 0) {
+                            if(tempUUid == cellObj.getValue()){
+                                tempRowid = id;
+                                grid_7.deleteRow(id);
+                            }
+                        }
+                    });
+                });
+            }
             evt.feature.id = uuid;
-            mapTemp[mapId].removeInteraction(draw);
+            mapTemp[mapId].removeInteraction(drawArr[mapId]);
             var coordinates = evt.feature.getGeometry().getCoordinates();   //获取坐标
             var lon = coordinates[0];// target.a[0];
             var lat = coordinates[1];//event.target.a[1];
@@ -599,15 +626,18 @@ define(['./config','dhtmlx','ol'],function (config) {
             pointIdList = [];
             orderList.push(numOrder);
             pointIdList.push(pointID);
+            //pointID = 6
 
             //给每个刺点显示其点ID的容器
-            $('#smallPop').append('<div id="pop'+index+pointID+'" style="color: red;font-size: 14px;">&nbsp;'+pointID+'</div>');
+            $('#smallPop').append('<div id="pop'+index+leftPointID+'" style="color: red;font-size: 14px;">&nbsp;'+leftPointID+'</div>');
 
             var pop = new ol.Overlay({
-                element:document.getElementById('pop'+index+pointID), //挂载点
+                element:document.getElementById('pop'+index+leftPointID), //挂载点
                 position: coordinates,    //设置其位置
                 positioning: 'top-left'   //显示位置的方向
             });
+            //featureOverlay.setMap(map);
+            map.addLayer(featureOverlay);
             map.addOverlay(pop);  // 地图添加
             popArr.push(pop);
             popArrObj[uuid] = pop;
@@ -621,12 +651,15 @@ define(['./config','dhtmlx','ol'],function (config) {
             var y = extent[3]-rows/(rowCount/(extent[3]-extent[1]));
             var img = mapId;
             //添加一行信息  序号，点ID，点类型。。。。。。。
-            var rowData = [uuid,numOrder,pointID,img,mapId,"1",cols,rows,"0"];
+            if(undefined != tempRowid){
+                numOrder = tempRowid;
+            }
+            var rowData = [uuid,numOrder,leftPointID,img,mapId,"1",cols,rows,"0"];
             grid_7.addRow(numOrder,rowData,false);  //行的ID 与序号号值是一样的
             var newData = { id:pointID, data: rowData};
             //var newData = [img, "imageA", "true", point[0].toFixed(6), point[1].toFixed(6)];
             //grid_7.addRow(3, newData);
-            fun(tempPoint,newData) ;
+            fun(tempPoint,newData,tempUUid) ;
 
             var args = {"arg":[data.arg[0],data.arg[1],data.arg[2],data.arg[3],data.arg[4]]};
             _addPoint(args);
@@ -653,7 +686,7 @@ define(['./config','dhtmlx','ol'],function (config) {
         return  (Math.round(target *10000))/10000;
     };
     //编辑点操作
-    var modify;
+    var modifyArr = {};
     function _editPoint(data) {
         var grid_7 = data.arg[1];
         var mapId = data.arg[2];
@@ -661,6 +694,7 @@ define(['./config','dhtmlx','ol'],function (config) {
         var fun = data.arg[3];
         var gridData = data.arg[4];
         var map = mapTemp[mapId];
+        $("#"+mapId).css({"cursor": "pointer"});
         var features = featuresTemp[mapId];
         var uuid;
         var selectedPointID ;
@@ -671,36 +705,38 @@ define(['./config','dhtmlx','ol'],function (config) {
         selectPoint.on('select',function(event){
             event.preventDefault();
             event.stopPropagation();
-            event.selected[0].setStyle(new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: '#ffcc33',
-                    width: 10
-                }),
-                image:new ol.style.Icon({
-                    anchor: [10,10],
-                    anchorXUnits: 'pixels',
-                    anchorYUnits: 'pixels',
-                    imgSize:[21,21],
-                    src:"img/21px.png"
-                })
-                //geometry:function(feature){
-                //    var coordinates = feature.getGeometry().getCoordinates()[0];
-                //    return feature.getGeometry();
-                //}
-            }));
-            selectedPointID = event.selected[0].getId();   // 得到选择的要素的id值
-            uuid = event.selected[0].id;
-            map.removeInteraction(selectPoint);           //移除交互
+            if(undefined != event.selected[0]) {
+                event.selected[0].setStyle(new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: '#ffcc33',
+                        width: 10
+                    }),
+                    image: new ol.style.Icon({
+                        anchor: [10, 10],
+                        anchorXUnits: 'pixels',
+                        anchorYUnits: 'pixels',
+                        imgSize: [21, 21],
+                        src: "img/21px.png"
+                    })
+                    //geometry:function(feature){
+                    //    var coordinates = feature.getGeometry().getCoordinates()[0];
+                    //    return feature.getGeometry();
+                    //}
+                }));
+                selectedPointID = event.selected[0].getId();   // 得到选择的要素的id值
+                uuid = event.selected[0].id;
+                //map.removeInteraction(selectPoint);           //移除交互
+            }
         });
-        modify = new ol.interaction.Modify({            // 修改要素
+        var modify = new ol.interaction.Modify({            // 修改要素
             features:selectPoint.getFeatures()
         });
         map.addInteraction(modify);                //添加修改交互
-
+        modifyArr[mapId] = modify;
         modify.on('modifyend',function(event){     //修改完成后，将修改的要素坐标更新到 points中
             event.preventDefault();
             event.stopPropagation();
-            map.removeInteraction(modify);
+            //map.removeInteraction(modify);
 
             var lon=event.mapBrowserEvent.coordinate[0];   //当鼠标松开时，获取当前点坐标
             var x =__mapCoordinateFixed4(lon);
@@ -718,22 +754,6 @@ define(['./config','dhtmlx','ol'],function (config) {
             //    }
             //}
             i = null;
-                //没点时，获取最大的行号、点ID号
-                //var numOrder = 0;
-                //var pointIdList = [];
-                //if(orderList.length<=0 && pointIdList.length <= 0){
-                //    grid_7.forEachRow(function(id){  //循环每一行
-                //        grid_7.forEachCell(id,function(cellObj,index){  //循环每一行的每一个cell,每个cell的id为index，对象为cellObj
-                //            if(index === 1){
-                //                if(uuid == cellObj.getValue()){
-                //                    numOrder = id;
-                //                    pointIdList.push(cellObj.getValue());
-                //                }
-                //            }
-                //        });
-                //    });
-                //}
-                //var pointID= Math.max.apply(null,pointIdList);
                 var img = "img"+mapId;
                 //var rowData = [numOrder,pointID,img,3,"1",__mapCoordinateFixed4(x),__mapCoordinateFixed4(y),"0"];
                 //grid_7.addRow(numOrder,rowData,false);
@@ -891,7 +911,7 @@ define(['./config','dhtmlx','ol'],function (config) {
             }
         }
     }
-    var selectPoint
+    var selectPointArr = {};
     function _removeOnePoint(data) {
         var grid_7 = data.arg[1];
         var mapId = data.arg[2];
@@ -904,60 +924,63 @@ define(['./config','dhtmlx','ol'],function (config) {
             {"hitTolerance":10}
         );   //实例化交互选择，操作要素
         map.addInteraction(selectPoint);
+        selectPointArr[mapId] = selectPoint;
         selectPoint.on('select',function(event) {
             event.preventDefault();
             event.stopPropagation();
-            event.selected[0].setStyle(new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: '#ffcc33',
-                    width: 10
-                }),
-                image: new ol.style.Icon({
-                    anchor: [10, 10],
-                    anchorXUnits: 'pixels',
-                    anchorYUnits: 'pixels',
-                    imgSize: [21, 21],
-                    src: "img/21px.png"
-                })
-                //geometry:function(feature){
-                //    var coordinates = feature.getGeometry().getCoordinates()[0];
-                //    return feature.getGeometry();
-                //}
-            }));
-            selectedPointID = event.selected[0].id;   // 得到选择的要素的id值
-            //map.removeInteraction(selectPoint);
+            if(undefined != event.selected[0]) {
+                event.selected[0].setStyle(new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: '#FB8383',
+                        width: 0
+                    })
+                    //,
+                    //image: new ol.style.Icon({
+                    //    anchor: [10, 10],
+                    //    anchorXUnits: 'pixels',
+                    //    anchorYUnits: 'pixels',
+                    //    imgSize: [21, 21],
+                    //    src: "img/21px.png"
+                    //})
+                    //geometry:function(feature){
+                    //    var coordinates = feature.getGeometry().getCoordinates()[0];
+                    //    return feature.getGeometry();
+                    //}
+                }));
+                selectedPointID = event.selected[0].id;   // 得到选择的要素的id值
+                //map.removeInteraction(selectPoint);
 
-            var tempPoint = {};
-            for (var i = 0; i < features.getLength(); i++) {
-                var tempFeature = features.item(i);
-                grid_7.forEachRow(function (id) {
-                    grid_7.forEachCell(id, function (cellObj, index) {
-                        if (index == 0) {
-                            if (cellObj.getValue() == selectedPointID) {
-                                var uuid = grid_7.cells(id, 0).cell.innerHTML;
-                                if (tempFeature.id == uuid) {
-                                    features.removeAt(i);
-                                    grid_7.deleteRow(id);
-                                    var index = _getArrIndex(gridData.rows, uuid);
-                                    gridData.rows.splice(index, 1);
-                                    map.removeOverlay(popArrObj[uuid]);
-                                    tempPoint = {
-                                        id: tempFeature.id,
-                                        point: [0, 0]
+                var tempPoint = {};
+                for (var i = 0; i < features.getLength(); i++) {
+                    var tempFeature = features.item(i);
+                    grid_7.forEachRow(function (id) {
+                        grid_7.forEachCell(id, function (cellObj, index) {
+                            if (index == 0) {
+                                if (cellObj.getValue() == selectedPointID) {
+                                    var uuid = grid_7.cells(id, 0).cell.innerHTML;
+                                    if (tempFeature.id == uuid) {
+                                        features.removeAt(i);
+                                        grid_7.deleteRow(id);
+                                        var index = _getArrIndex(gridData.rows, uuid);
+                                        gridData.rows.splice(index, 1);
+                                        map.removeOverlay(popArrObj[uuid]);
+                                        tempPoint = {
+                                            id: tempFeature.id,
+                                            point: [0, 0]
+                                        }
                                     }
                                 }
                             }
-                        }
+                        });
                     });
-                });
-            }
-            dataMain.data.forEach(function(item){
-                if(item.pointid == selectedPointID){
-                    item.active = 0;
                 }
-            })
-            fun(tempPoint, gridData);
-
+                dataMain.data.forEach(function (item) {
+                    if (item.pointid == selectedPointID) {
+                        item.active = 0;
+                    }
+                })
+                fun(tempPoint, gridData);
+            }
 
             //var tempPoint;
             //for(var i = 0;i<features.getLength();i++){
