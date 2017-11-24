@@ -176,13 +176,13 @@ html, body{
     position:relative;
     /*right:-170px;*/
     /*top:-10px;*/
-    font-size:30px;
+    font-size:18px;
 }
 .deletePointPopClose{
     position:relative;
     right: -20px;
     top: -20px;
-    font-size: 30px;
+    font-size: 20px;
     cursor: pointer;
 }
 
@@ -280,20 +280,39 @@ html, body{
     border: 1px solid #999999;
     z-index: 99;
 }
-#deletepointIdPop {
+.pointDeletepointIdPop {
     position: absolute;
     padding: 20px 20px;
-    top: 50%;
-    left: 50%;
+    top: 90%;
+    left: 45%;
     -webkit-transform: translate3d(-50%,-50%,0);
-    transform: translate3d(-50%,-50%,0);
-    width: 350px;
-    height: 150px;
-    /*text-align: center;*/
+    /* transform: translate3d(-50%,-50%,0); */
+    width: 230px;
+    height: 90px;
+    /* text-align: center; */
     background-color: #fff;
-    /*color: #999999;*/
-    font-size: 20px;
-    /*padding: 20px 0;*/
+    /* color: #999999; */
+    font-size: 14px;
+    /* padding: 20px 0; */
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.7);
+    border-radius: 6px;
+    border: 1px solid #999999;
+    z-index: 99;
+}
+.imgDeletepointIdPop {
+    position: absolute;
+    padding: 20px 20px;
+    top: 90%;
+    left: 65%;
+    -webkit-transform: translate3d(-50%,-50%,0);
+    /* transform: translate3d(-50%,-50%,0); */
+    width: 230px;
+    height: 90px;
+    /* text-align: center; */
+    background-color: #fff;
+    /* color: #999999; */
+    font-size: 14px;
+    /* padding: 20px 0; */
     box-shadow: 2px 2px 2px rgba(0,0,0,0.7);
     border-radius: 6px;
     border: 1px solid #999999;
@@ -460,4 +479,11 @@ div.gridbox .objbox {
     -o-user-select: none;
     user-select: none;
     display: none;
+}
+
+.dhx_combo_select, .gridbox_material.gridbox .dhx_combo_edit, .gridbox_material.gridbox .dhx_textarea {
+    font-size: 14px;
+    font-family: Roboto,Arial,Helvetica;
+    color: #404040;
+    bottom: 0px;
 }

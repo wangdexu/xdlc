@@ -765,6 +765,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         //var id = leftTable.getSelectedId();
         var mainX = leftTable.cells(id, 5).cell.innerHTML;
         var mainY = leftTable.cells(id, 6).cell.innerHTML;
+        var pointType = leftTable.cells(id, 2).cell.innerHTML;
         var jsonData = {"id":startId,"args":treeData.args,"x":mainX,"y":mainY,"z":"0"};
         //_mainAddPoint(map,leftTable,"115.8","40.1",id);
         //自动预测
@@ -794,6 +795,9 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                         index++;
                         var newData = { id:index, data: rowData};
 
+                        if (gridData == undefined) {
+                            gridData = {"rows": []};
+                        }
                         gridData.rows.push(newData);
 
                     })
@@ -807,7 +811,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                         }
                     }
                     if(flag){
-                        _mainAddPoint(map,leftTable,mainX,mainY,id);
+                        _mainAddPoint(map,leftTable,mainX,mainY,id,pointType);
                     }
                 }else{
                     alert("当前点无重叠！")
@@ -823,21 +827,52 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
     }
 
     //主视图添加预测的点
-    var _mainAddPoint = function(map,leftTable,mainX,mainY,id){
+    var _mainAddPoint = function(map,leftTable,mainX,mainY,id,pointType){
         if(undefined == controlPointLayer){
-            controlPointLayer = new ol.layer.Vector({
-                source: new ol.source.Vector(),
-                style:new ol.style.Style({
-                    image:new ol.style.Icon({
-                        anchor: [10,10],
-                        anchorXUnits: 'pixels',
-                        anchorYUnits: 'pixels',
-                        imgSize:[21,21],
-                        src:"img/21px.png"
-                    })
-                }),
-                wrapX: false
-            });
+            if(pointType == "ControlPoint"){
+                controlPointLayer = new ol.layer.Vector({
+                    source: new ol.source.Vector(),
+                    style:new ol.style.Style({
+                        image:new ol.style.Icon({
+                            anchor: [10,10],
+                            anchorXUnits: 'pixels',
+                            anchorYUnits: 'pixels',
+                            imgSize:[21,21],
+                            src:"img/controlPoint.png"
+                        })
+                    }),
+                    wrapX: false
+                });
+            }else if(pointType == "CheckPoint"){
+                controlPointLayer = new ol.layer.Vector({
+                    source: new ol.source.Vector(),
+                    style:new ol.style.Style({
+                        image:new ol.style.Icon({
+                            anchor: [10,10],
+                            anchorXUnits: 'pixels',
+                            anchorYUnits: 'pixels',
+                            imgSize:[21,21],
+                            src:"img/checkPoint.png"
+                        })
+                    }),
+                    wrapX: false
+                });
+            }else{
+                controlPointLayer = new ol.layer.Vector({
+                    source: new ol.source.Vector(),
+                    style:new ol.style.Style({
+                        image:new ol.style.Icon({
+                            anchor: [10,10],
+                            anchorXUnits: 'pixels',
+                            anchorYUnits: 'pixels',
+                            imgSize:[21,21],
+                            src:"img/21px.png"
+                        })
+                    }),
+                    wrapX: false
+                });
+            }
+
             map.addLayer(controlPointLayer); //将图层添加到目标之上
         }
         if(undefined == checkPointLayer){
@@ -995,6 +1030,53 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             },this);//可以传入函数名，不使用匿名函数
         }
     };
+    //修改列表点类型更新点样式
+    var _editListPointType = function(type,id){
+        var selectedPointID = parseInt(id);
+        var features = pointLayerArr;
+        for(var i=0;i<features.length;i++) {
+            if (selectedPointID === parseInt(features[i].id)) {
+                //features[i].getSource().getFeatureById(selectedPointID).getStyle().getImage();
+                if(type == "TiePoint"){
+                    features[i].setStyle( new ol.style.Style({
+                        image:new ol.style.Icon({
+                            anchor: [10,10],
+                            anchorXUnits: 'pixels',
+                            anchorYUnits: 'pixels',
+                            imgSize:[21,21],
+                            src:"img/212px.png"
+                        })
+                    }));
+                    //popArr[i].element_.style.color = "blue";
+                    $("#"+popArr[i].values_.element.id).css("color","black");
+                }else if(type == "CheckPoint"){
+                    features[i].setStyle( new ol.style.Style({
+                        image:new ol.style.Icon({
+                            anchor: [10,10],
+                            anchorXUnits: 'pixels',
+                            anchorYUnits: 'pixels',
+                            imgSize:[21,21],
+                            src:"img/21px.png"
+                        })
+                    }));
+                    //popArr[i].element_.style.color = "blue";
+                    $("#"+popArr[i].values_.element.id).css("color","green");
+                }else{
+                    features[i].setStyle( new ol.style.Style({
+                        image:new ol.style.Icon({
+                            anchor: [10,10],
+                            anchorXUnits: 'pixels',
+                            anchorYUnits: 'pixels',
+                            imgSize:[21,21],
+                            src:"img/network.png"
+                        })
+                    }));
+                    //popArr[i].element_.style.color = "blue";
+                    $("#"+popArr[i].values_.element.id).css("color","red");
+                }
+            }
+        }
+    }
     //修改列表更新点
     var _editListPoint = function(x,y,id){
         var selectedPointID = parseInt(id);
@@ -1330,7 +1412,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
     var _deleteAllPoint = function(data){
         map.removeInteraction(draw);  //移除交互
         if(popArr.length<=0){
-            alert("当前没有点可以删除！");
+            //alert("当前没有点可以删除！");
         }else{
             var leftTable = data.arg[0];
             var rightTable = data.arg[1];
@@ -1418,7 +1500,8 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         removeAdd:_removeAdd,
         removeEdit:_removeEdit,
         deletePoint:_deletePoint,
-        removeDelete:_removeDelete
+        removeDelete:_removeDelete,
+        editListPointType:_editListPointType
     }
 });
 

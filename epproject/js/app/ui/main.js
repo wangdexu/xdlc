@@ -231,16 +231,16 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     mapIdArr.push(oDiv.id);
                     if(i == "0"){
                         mapId = oDiv.id;
-                        oDiv.style.border = "1px red solid";
+                        oDiv.style.border = "1px #989696 solid";
                     }else{
                         oDiv.style.border = "1px #989696 solid";
                     }
                     oDiv.onclick = function(event){
                         mapId = event.currentTarget.id;
-                        document.getElementById(mapId).style.border = "1px red solid";
+                        //document.getElementById(mapId).style.border = "1px red solid";
                         for(var i=0;i<data.rows.length;i++){
                             if(mapId != data.rows[i].data[3]){
-                                document.getElementById(data.rows[i].data[3]).style.border = "1px #989696 solid";
+                                //document.getElementById(data.rows[i].data[3]).style.border = "1px #989696 solid";
                             }
                         }
                     }
@@ -271,7 +271,8 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
             pointId = grid_3.cells(rId, 1).getValue();  //取得点Id
             if (grid3Detail[pointId] == undefined) {
                 grid3Detail[pointId] = {"rows": []};
-            }            if(cInd == 3){
+            }
+            if(cInd == 3){
                 var obj = {};
                 obj.id = rId;   //行ID
 
@@ -426,8 +427,9 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         //接收预测的信息
         var _returnPrediction = function(grid3Detail,rId){
             _showSubView();
-            grid3Detail[pointId] = grid3Detail;
-            creatDiv(rId,grid3Detail[pointId],pointId);
+            pointId = rId;
+            grid3Detail[rId] = grid3Detail;
+            creatDiv(rId,grid3Detail[rId],rId);
         }
         //接收选中的点
         var _returnSelectLint = function(points){
@@ -691,8 +693,9 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     var pointArr = grid_3.getSelectedRowId().split(",");
                     var tempId;
                     pointArr.forEach(function(id){
-                        var pointId = grid_3.cells(id, 1).cell.innerHTML;
-                        tempId = pointId;
+                        var tpointId = grid_3.cells(id, 1).cell.innerHTML;
+                        tempId = tpointId;
+                        pointId = tpointId;
                         var taskData = tree.getTaskData();
                         mapControl.auto({
                             eventName: "onClick",
@@ -754,7 +757,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                         // $(".mapMainContainer").css({"cursor":"default"});
                         mapControl.stabPoint({
                             eventName: "onClick",
-                            arg: [grid_3, deletePoint]
+                            arg: [grid_3, _returnCiPoint]
                         });
                         for(mapId in checkAllTemp) {
                             if (checkAllTemp[mapId] != "" && checkAllTemp[mapId] != undefined) {
@@ -1033,6 +1036,8 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         grid_3.attachEvent("onRightClick", function(id,ind,obj){
             dPid = id;
             var $pointIdPop = $("#deletepointIdPop");
+            $("#deletepointIdPop").removeClass("imgDeletepointIdPop");
+            $("#deletepointIdPop").addClass("pointDeletepointIdPop");
             $pointIdPop.css({"display":"block"}).fadeIn(500);    //透明蒙层，用于只能操作删除弹出层
             $("#deleteContainer").addClass("popContainer").fadeIn(500); // 显示删除弹出层
             drapableObj($pointIdPop);                               //弹出层可以拖拽
@@ -1067,6 +1072,8 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
             _removeState();
             dyPid = id;
             var $pointIdPop = $("#deletepointIdPop");
+            $("#deletepointIdPop").removeClass("pointDeletepointIdPop");
+            $("#deletepointIdPop").addClass("imgDeletepointIdPop");
             $pointIdPop.css({"display":"block"}).fadeIn(500);    //透明蒙层，用于只能操作删除弹出层
             $("#deleteContainer").addClass("popContainer").fadeIn(500); // 显示删除弹出层
             drapableObj($pointIdPop);                               //弹出层可以拖拽
@@ -1118,6 +1125,9 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     }
 
                 });
+                if(cellIndex == 2){
+                    mapControl.editListPointType(grid_3.cells(rowId, 2).getValue(),grid_3.cells(rowId, 1).getValue());
+                }
                 return true;
             }
             //console.log(dataMain);
