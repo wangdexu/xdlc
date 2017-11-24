@@ -323,7 +323,7 @@ dataMain= {
     };
 
 define(['jquery','dhtmlx','ol'],function($,dhl,ol){
-
+    var dataurl="http://192.168.4.221:8285/api/imagepointalgorithm";
     //var dataAccuracy;       //精度报告数据
     //var pointData;          //残差列表数据
     //"残差列表"弹出框,虚拟数据
@@ -457,66 +457,78 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         console.log(argList.arg[4]);
         var dataArgs = [];
             dataArgs.push(argList.arg[4].args[0]);
-            dataArgs.push(argList.arg[4].args[6]);
             dataArgs.push(argList.arg[4].args[1]);
+            dataArgs.push(argList.arg[4].args[2]);
+            dataArgs.push(argList.arg[4].args[3]);
+            dataArgs.push(argList.arg[4].args[4]);
+            dataArgs.push(argList.arg[4].args[5]);
+            dataArgs.push(argList.arg[4].args[6]);
             dataArgs.push(argList.arg[4].args[7]);
+            dataArgs.push(argList.arg[4].args[8]);
+            dataArgs.push(argList.arg[4].args[9]);
+            dataArgs.push(argList.arg[4].args[10]);
+            dataArgs.push(argList.arg[4].args[11]);
+
         var dataStr = {"id":startId,"args":dataArgs};
+        console.log(dataStr);
         //像点量测匹配结果 方式POST{"id":fsdfadfadf}
         //启动匹配接口
         $.ajax({
-            url: "http://192.168.4.221:8285/api/imagepointalgorithm/startimagepoinitmatch",
+            url: dataurl+"/startimagepoinitmatch",
             type: "post",
             contentType:"application/json",
             data:JSON.stringify(dataStr),
             //dataType: 'JSPON',
             async:false,
             success: function (data) {
-                console.log(data);
-                //dataMain=data;
-                //dataMain=$.parseJSON(data);
-                //dataDisplay(dataMain);
+                console.log("1:"+data.code);
+                if(data.code==0){
+                    console.log("jiaoke");
+                    time();
+                }else{
+                    console.log(data);
+                }
             },
             error: function () {
                 console.log("启动匹配接口,请求失败");
             }
         });
-
-
-        var time=window.setInterval(function() {
-            $.ajax({
-                url: "http://192.168.4.221:8285/api/imagepointalgorithm/returnmatchstatus",
-                type: "post",
-                contentType: "application/json",
-                data: JSON.stringify(dataStr),
-                //data:{},
-                success: function (data) {
-                    console.log(data.code);
-                    if (data.code == 0) {
-                        $.ajax({
-                            url: "http://192.168.4.221:8285/api/imagepointalgorithm/readimagepointmatchresults",
-                            type: "post",
-                            contentType:"application/json",
-                            data:JSON.stringify(dataStr),
-                            //data:{},
-                            success: function (data) {
-                                dataMain=data;
-                                dataDisplay(dataMain);
-                            },
-                            error: function () {
-                                console.log("请求精度报告失败");
-                            }
-                        });
-                        window.clearInterval(time);
+        function time() {
+            var time = window.setInterval(function () {
+                $.ajax({
+                    url: dataurl + "/returnmatchstatus",
+                    type: "post",
+                    contentType: "application/json",
+                    data: JSON.stringify(dataStr),
+                    //data:{},
+                    success: function (data) {
+                        console.log(data.code);
+                        if (data.code == 0) {
+                            $.ajax({
+                                url: dataurl + "/readimagepointmatchresults",
+                                type: "post",
+                                contentType: "application/json",
+                                data: JSON.stringify(dataStr),
+                                //data:{},
+                                success: function (data) {
+                                    dataMain = data;
+                                    dataDisplay(dataMain);
+                                },
+                                error: function () {
+                                    console.log("请求精度报告失败");
+                                }
+                            });
+                            window.clearInterval(time);
+                        }
+                    },
+                    error: function () {
+                        console.log("查询匹配状态接口失败");
                     }
-                },
-                error: function () {
-                    console.log("查询匹配状态接口失败");
-                }
-            });
-        },5000);
-
+                });
+            }, 5000);
+        }
         //$.ajax({
-        //    url: "http://192.168.4.221:8285/api/imagepointalgorithm/startimagepoinitmatch",
+        //    url: dataurl+"/startimagepoinitmatch",
         //    type: "post",
         //    contentType:"application/json",
         //    data:JSON.stringify(dataStr),
@@ -532,7 +544,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         //window.setTimeout(function(){
         //    //像点量测匹配结果 方式POST{"id":fsdfadfadf}
         //    $.ajax({
-        //        url: "http://192.168.4.221:8285/api/imagepointalgorithm/readpointresults",
+        //        url: dataurl+"/readpointresults",
         //        type: "post",
         //        contentType:"application/json",
         //        data:JSON.stringify(dataStr),
@@ -665,14 +677,22 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         startId = getUrlParam("uuid");//拿到地址栏uuid
         var dataArgs = [];
         dataArgs.push(argList.arg[2].args[0]);
-        dataArgs.push(argList.arg[2].args[6]);
         dataArgs.push(argList.arg[2].args[1]);
+        dataArgs.push(argList.arg[2].args[2]);
+        dataArgs.push(argList.arg[2].args[3]);
+        dataArgs.push(argList.arg[2].args[4]);
+        dataArgs.push(argList.arg[2].args[5]);
+        dataArgs.push(argList.arg[2].args[6]);
         dataArgs.push(argList.arg[2].args[7]);
+        dataArgs.push(argList.arg[2].args[8]);
+        dataArgs.push(argList.arg[2].args[9]);
+        dataArgs.push(argList.arg[2].args[10]);
+        dataArgs.push(argList.arg[2].args[11]);
 
         var dataStr = {"id":startId,"args":dataArgs};
             //请求保存dataMain
         $.ajax({
-            url: "http://192.168.4.221:8285/api/imagepointalgorithm/dataSave",
+            url: dataurl+"/dataSave",
             type: "post",
             contentType:"application/json",
             data:JSON.stringify(dataMain),
@@ -686,53 +706,58 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         });
             //启用平差接口
         $.ajax({
-            url: "http://192.168.4.221:8285/api/imagepointalgorithm/startba",
+            url: dataurl+"/startba",
             type: "post",
             contentType:"application/json",
             data:JSON.stringify(dataStr),
             //data:{},
             success: function (data) {
-                console.log(data);
-                //dataAccuracy=data;
+                console.log("1:"+data.code);
+                if(data.code==0){
+                    console.log("jiaoke");
+                    time();
+                }else{
+                    console.log(data);
+                }
             },
             error: function () {
                     console.log("启用平差接口失败");
             }
         });
-
-        //var time=window.setInterval(function() {
-        //    $.ajax({
-        //        url: "http://192.168.4.221:8285/api/imagepointalgorithm/returnbastatus",
-        //        type: "post",
-        //        contentType: "application/json",
-        //        data: JSON.stringify(dataStr),
-        //        //data:{},
-        //        success: function (data) {
-        //            console.log(data.code);
-        //            if (data.code == 0) {
-        //                $.ajax({
-        //                    url: "http://192.168.4.221:8285/api/imagepointalgorithm/dataAccuracy",
-        //                    type: "post",
-        //                    contentType:"application/json",
-        //                    data:JSON.stringify(dataStr),
-        //                    //data:{},
-        //                    success: function (data) {
-        //                        console.log(data);
-        //                        totallInformation(data);
-        //                    },
-        //                    error: function () {
-        //                        console.log("请求精度报告失败");
-        //                    }
-        //                });
-        //                window.clearInterval(time);
-        //            }
-        //        },
-        //        error: function () {
-        //            console.log("请求精度报告失败");
-        //        }
-        //    });
-        //},5000);
-
+        function time(){
+            var time=window.setInterval(function() {
+                $.ajax({
+                    url: dataurl+"/returnbastatus",
+                    type: "post",
+                    contentType: "application/json",
+                    data: JSON.stringify(dataStr),
+                    //data:{},
+                    success: function (data) {
+                        console.log(data.code);
+                        if (data.code == 0) {
+                            $.ajax({
+                                url: dataurl+"/dataAccuracy",
+                                type: "post",
+                                contentType:"application/json",
+                                data:JSON.stringify(dataStr),
+                                //data:{},
+                                success: function (data) {
+                                    console.log(data);
+                                    totallInformation(data);
+                                },
+                                error: function () {
+                                    console.log("请求精度报告失败");
+                                }
+                            });
+                            window.clearInterval(time);
+                        }
+                    },
+                    error: function () {
+                        console.log("请求精度报告失败");
+                    }
+                });
+            },5000);
+        }
 
 
 
@@ -754,11 +779,10 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         });
         //点击"检查"弹出残差列表
         $("#popBox").on('click',"#totall_check",function(){     //弹出残差列表框
-            $("#popBox_name").html("残差列表");
-            $("#popBox_wrap").empty();
+
             //请求残差列表数据
             $.ajax({
-                url: "http://192.168.4.221:8285/api/imagepointalgorithm/residual",
+                url: dataurl+"/residual",
                 type: "post",
                 contentType:"application/json",
                 data:JSON.stringify({"id":startId}),
@@ -766,6 +790,8 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                 success: function (data) {
                     console.log(data);
                     //pointData=data;
+                    $("#popBox_name").html("残差列表");
+                    $("#popBox_wrap").empty();
                     pointNumber(data);
                 },
                 error: function () {
@@ -903,7 +929,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
 
                 //请求保存dataMain
                 $.ajax({
-                    url: "http://192.168.4.221:8285/api/imagepointalgorithm/dataSave",
+                    url: dataurl+"/dataSave",
                     type: "post",
                     contentType:"application/json",
                     data:JSON.stringify(dataMain),
