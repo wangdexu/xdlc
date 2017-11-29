@@ -10,6 +10,7 @@
             window.toolsUrl = 'http://192.168.4.221:8285/';
             window.paceUrl = "http://192.168.31.233:5000/";
             window.getLayerUrl = "http://192.168.4.2:18080/geowebcache/api/layers/get/";
+            window.dataurl="http://192.168.4.221:8285/api/imagepointalgorithm";
             ui.test();
 
         });

@@ -344,7 +344,7 @@ define(['./config','dhtmlx','ol'],function (config) {
         pointFeature.id = uuid;
         pointLayer.id = uuid;
         //给每个刺点显示其点ID的容器
-        $('#smallPop').append('<div id="pop'+index+pointID+'" style="color: red;font-size: 14px;">&nbsp;'+pointID+'</div>');
+        $('#smallPop').append('<div id="pop'+index+pointID+'" style="color: #FFB300;font-size: 14px;">&nbsp;'+pointID+'</div>');
         var pop = new ol.Overlay({
             element:document.getElementById('pop'+index+pointID), //挂载点
             position: [lon,lat],    //设置其位置
@@ -390,15 +390,15 @@ define(['./config','dhtmlx','ol'],function (config) {
     }
     //添加全选
     var _checkAll = function(checkAllTemp){
-        for (k in checkAllTemp) {
-            document.getElementsByName(k)[0].checked = true;
-        }
+        //for (k in checkAllTemp) {
+        //    document.getElementsByName(k)[0].checked = true;
+        //}
     }
     //清除全选
     var _unCheckAll = function(checkAllTemp){
-        for (k in checkAllTemp) {
-            document.getElementsByName(k)[0].checked = false;
-        }
+        //for (k in checkAllTemp) {
+        //    document.getElementsByName(k)[0].checked = false;
+        //}
     }
     //全图操作
     var _fullView = function(data){
@@ -537,14 +537,14 @@ define(['./config','dhtmlx','ol'],function (config) {
                             stroke: new ol.style.Stroke({
                                 color: '#ffcc33',
                                 width: 2
-                            }),
-                            image:new ol.style.Icon({
-                                anchor: [10,10],
-                                anchorXUnits: 'pixels',
-                                anchorYUnits: 'pixels',
-                                imgSize:[21,21],
-                                src:"img/21px.png"
                             })
+                            // ,image:new ol.style.Icon({
+                            //    anchor: [10,10],
+                            //    anchorXUnits: 'pixels',
+                            //    anchorYUnits: 'pixels',
+                            //    imgSize:[21,21],
+                            //    src:"img/21px.png"
+                            //})
                             //geometry:function(feature){
                             //    var coordinates = feature.getGeometry().getCoordinates()[0];
                             //    return feature.getGeometry();
@@ -629,7 +629,7 @@ define(['./config','dhtmlx','ol'],function (config) {
             //pointID = 6
 
             //给每个刺点显示其点ID的容器
-            $('#smallPop').append('<div id="pop'+index+leftPointID+'" style="color: red;font-size: 14px;">&nbsp;'+leftPointID+'</div>');
+            $('#smallPop').append('<div id="pop'+index+leftPointID+'" style="color: #FFB300;font-size: 14px;">&nbsp;'+leftPointID+'</div>');
 
             var pop = new ol.Overlay({
                 element:document.getElementById('pop'+index+leftPointID), //挂载点
@@ -654,7 +654,7 @@ define(['./config','dhtmlx','ol'],function (config) {
             if(undefined != tempRowid){
                 numOrder = tempRowid;
             }
-            var rowData = [uuid,numOrder,leftPointID,img,mapId,"1",cols,rows,"0"];
+            var rowData = [uuid,numOrder,leftPointID,img,mapId,"active",cols,rows,"0"];
             grid_7.addRow(numOrder,rowData,false);  //行的ID 与序号号值是一样的
             var newData = { id:pointID, data: rowData};
             //var newData = [img, "imageA", "true", point[0].toFixed(6), point[1].toFixed(6)];
@@ -699,7 +699,7 @@ define(['./config','dhtmlx','ol'],function (config) {
         var uuid;
         var selectedPointID ;
         var selectPoint = new ol.interaction.Select(
-            {"hitTolerance":10}
+            {"hitTolerance":20}
         );   //实例化交互选择，操作要素
         map.addInteraction(selectPoint);
         selectPoint.on('select',function(event){
@@ -830,7 +830,7 @@ define(['./config','dhtmlx','ol'],function (config) {
         var fun = data.arg[3]
         // a normal select interaction to handle click
         var select = new ol.interaction.Select(
-            {"hitTolerance":10}
+            {"hitTolerance":20}
         );
 
         map.addInteraction(select);
@@ -921,7 +921,7 @@ define(['./config','dhtmlx','ol'],function (config) {
         var features = featuresTemp[mapId];
         var selectedPointID ;
         selectPoint = new ol.interaction.Select(
-            {"hitTolerance":10}
+            {"hitTolerance":20}
         );   //实例化交互选择，操作要素
         map.addInteraction(selectPoint);
         selectPointArr[mapId] = selectPoint;

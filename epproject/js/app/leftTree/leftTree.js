@@ -234,7 +234,7 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
 
         //查询任务信息
             $.ajax({
-                url:window.restUrl+"/api/task/"+taskId,
+                url:window.restUrl+"api/task/"+taskId,
                 type:"get",
                 data:"",
                 async: false,
@@ -255,29 +255,6 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
         //增加坐标信息
         var ocData = taskData.args;
         var starData = {"id":startId,"args":ocData};
-        //计算四角坐标
-        $.ajax({
-            url:window.toolsUrl+"api/imagepointalgorithm/startgconlycorners",
-            type:"post",
-            contentType: "application/json",
-            data:JSON.stringify(starData),
-            async: false,
-            success:function(data){
-                //mapData.data = data.box;
-                //mapData.url = data.url;
-                //参数1：主视图地图 鼠标移动控件内容(经纬度)挂载点，参数2：地图id挂载点，参数三：将控件放到目标位置挂载点
-                //mapControl.createMap("ol-mouse-position2","mapMainContainer","post11",mapData.url);
-                //mapControl.createBox("mapMainContainer",mapData.value);
-
-            },
-            error: function (e) {
-                if(e.status == "401"){
-                    //getSession();
-                }
-            }
-        })
-        //查询进度条
-
         //查询四角坐标返回值
         var _queryGc2 = function(){
             var starData = {"id":startId,"args":ocData};
@@ -302,6 +279,7 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
                 }
             })
         }
+        //查询进度条
         var t2;
         var _queryPace2 = function(){
             window.clearTimeout(timer2);
@@ -332,8 +310,34 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
             },3000);
         }
         //查询计算四角坐标状态
+        //计算四角坐标
+        var timer2;
+        $.ajax({
+            url:window.toolsUrl+"api/imagepointalgorithm/startgconlycorners",
+            type:"post",
+            contentType: "application/json",
+            data:JSON.stringify(starData),
+            async: false,
+            success:function(data){
+                if(data.code == 0){
+                    timer2 = window.setTimeout(_queryPace2,1000);  //timer1->1 当前是第一个定时器
+                }
+                //mapData.data = data.box;
+                //mapData.url = data.url;
+                //参数1：主视图地图 鼠标移动控件内容(经纬度)挂载点，参数2：地图id挂载点，参数三：将控件放到目标位置挂载点
+                //mapControl.createMap("ol-mouse-position2","mapMainContainer","post11",mapData.url);
+                //mapControl.createBox("mapMainContainer",mapData.value);
 
-        var timer2=window.setTimeout(_queryPace2,1000);  //timer1->1 当前是第一个定时器
+            },
+            error: function (e) {
+                if(e.status == "401"){
+                    //getSession();
+                }
+            }
+        })
+
+
+        //var timer2=window.setTimeout(_queryPace2,1000);  //timer1->1 当前是第一个定时器
 
         //计算镶嵌影像
         $.ajax({
@@ -347,7 +351,7 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
             //mapData.url = data.url;
                 //参数1：主视图地图 鼠标移动控件内容(经纬度)挂载点，参数2：地图id挂载点，参数三：将控件放到目标位置挂载点
                 //mapControl.createMap("ol-mouse-position2","mapMainContainer","post11",mapData.url);
-                //mapControl.createBox("mapMainContainer",mapData.value);
+
 
             },
             error: function (e) {
@@ -362,7 +366,7 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
         var _queryGc = function(){
             var starData = {"id":startId,"args":ocData};
             $.ajax({
-                url:window.toolsUrl+"api/imagepointalgorithm/startgc",
+                url:window.toolsUrl+"api/imagepointalgorithm/needgcresults",
                 type:"post",
                 contentType: "application/json",
                 data:JSON.stringify(starData),
@@ -372,7 +376,7 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
                     //参数1：主视图地图 鼠标移动控件内容(经纬度)挂载点，参数2：地图id挂载点，参数三：将控件放到目标位置挂载点
                     //mapControl.createMap("ol-mouse-position2","mapMainContainer","post11",mapData.url);
                     //mapControl.createBox("mapMainContainer",mapData.value);
-
+                    mapControl.addLayer("mapMainContainer",data.url);
                 },
                 error: function (e) {
                     if(e.status == "401"){
@@ -390,10 +394,10 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
             }
             t1 = window.setInterval(function _pollingPace (){
                 $.ajax({
-                    url:window.toolsUrl+"ImageFptRefineProcess",
+                    url:window.toolsUrl+"api/imagepointalgorithm/returngcstatus",
                     type:"post",
                     contentType: "application/json",
-                    data:JSON.stringify({"rediskey":startId}),
+                    data:JSON.stringify({"id":startId}),
                     async: false,
                     success:function(data){
                         $("#progress-bar").css("width",data+"%");
@@ -403,6 +407,7 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
                         }
                     },
                     error: function (e) {
+                        window.clearInterval(t1);
                         if(e.status == "401"){
                             //getSession();
                         }
@@ -411,7 +416,7 @@ define(['./config','jquery','dhtmlx','ol','../gis/mapControls'],function (config
             },3000);
         }
 
-        //var timer1=window.setTimeout(_queryPace,1000);  //timer1->1 当前是第一个定时器
+        var timer1=window.setTimeout(_queryPace,1000);  //timer1->1 当前是第一个定时器
 
         //参数1：主视图地图 鼠标移动控件内容(经纬度)挂载点，参数2：地图id挂载点，参数三：将控件放到目标位置挂载点
         mapControl.createMap("ol-mouse-position2","mapMainContainer","post11",mapData.url);

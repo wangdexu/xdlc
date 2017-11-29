@@ -323,7 +323,7 @@ dataMain= {
     };
 
 define(['jquery','dhtmlx','ol'],function($,dhl,ol){
-    var dataurl="http://192.168.4.221:8285/api/imagepointalgorithm";
+    //var dataurl="http://192.168.4.221:8285/api/imagepointalgorithm";
     //var dataAccuracy;       //精度报告数据
     //var pointData;          //残差列表数据
     //"残差列表"弹出框,虚拟数据
@@ -468,13 +468,13 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             dataArgs.push(argList.arg[4].args[9]);
             dataArgs.push(argList.arg[4].args[10]);
             dataArgs.push(argList.arg[4].args[11]);
-
+        //rediskey
         var dataStr = {"id":startId,"args":dataArgs};
         console.log(dataStr);
         //像点量测匹配结果 方式POST{"id":fsdfadfadf}
         //启动匹配接口
         $.ajax({
-            url: dataurl+"/startimagepoinitmatch",
+            url: window.dataurl+"/startimagepoinitmatch",
             type: "post",
             contentType:"application/json",
             data:JSON.stringify(dataStr),
@@ -496,16 +496,17 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         function time() {
             var time = window.setInterval(function () {
                 $.ajax({
-                    url: dataurl + "/returnmatchstatus",
+                    url: window.dataurl + "/returnmatchstatus",
                     type: "post",
                     contentType: "application/json",
                     data: JSON.stringify(dataStr),
                     //data:{},
                     success: function (data) {
                         console.log(data.code);
+                        $( "#progress-bar").attr("style","width:"+data.code+"%");
                         if (data.code == 0) {
                             $.ajax({
-                                url: dataurl + "/readimagepointmatchresults",
+                                url: window.dataurl + "/readimagepointmatchresults",
                                 type: "post",
                                 contentType: "application/json",
                                 data: JSON.stringify(dataStr),
@@ -692,7 +693,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         var dataStr = {"id":startId,"args":dataArgs};
             //请求保存dataMain
         $.ajax({
-            url: dataurl+"/dataSave",
+            url: window.dataurl+"/dataSave",
             type: "post",
             contentType:"application/json",
             data:JSON.stringify(dataMain),
@@ -701,12 +702,12 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                 console.log(data);
             },
             error: function () {
-                    console.log("请求保存dataMain失败");
+                console.log("请求保存dataMain失败");
             }
         });
             //启用平差接口
         $.ajax({
-            url: dataurl+"/startba",
+            url: window.dataurl+"/startba",
             type: "post",
             contentType:"application/json",
             data:JSON.stringify(dataStr),
@@ -727,16 +728,17 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         function time(){
             var time=window.setInterval(function() {
                 $.ajax({
-                    url: dataurl+"/returnbastatus",
+                    url: window.dataurl+"/returnbastatus",
                     type: "post",
                     contentType: "application/json",
                     data: JSON.stringify(dataStr),
                     //data:{},
                     success: function (data) {
                         console.log(data.code);
+                        $( "#progress-bar").attr("style","width:"+data.code+"%");
                         if (data.code == 0) {
                             $.ajax({
-                                url: dataurl+"/dataAccuracy",
+                                url: window.dataurl+"/dataAccuracy",
                                 type: "post",
                                 contentType:"application/json",
                                 data:JSON.stringify(dataStr),
@@ -782,7 +784,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
 
             //请求残差列表数据
             $.ajax({
-                url: dataurl+"/residual",
+                url: window.dataurl+"/residual",
                 type: "post",
                 contentType:"application/json",
                 data:JSON.stringify({"id":startId}),
@@ -929,7 +931,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
 
                 //请求保存dataMain
                 $.ajax({
-                    url: dataurl+"/dataSave",
+                    url: window.dataurl+"/dataSave",
                     type: "post",
                     contentType:"application/json",
                     data:JSON.stringify(dataMain),

@@ -182,18 +182,18 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
     var mainLayer;
     //创建主视图的地图，禁用了双击放大、旋转
     var _creatMap = function(positionControl,target,mouseControlTarget,url){
-        layer =  new ol.layer.Image({
-            source: new ol.source.ImageWMS({
-                //ratio: 1,
-                url: 'http://192.168.31.12:8888/geoserver/wm/wms',
-                params: {'FORMAT': 'image/jpeg',
-                    'VERSION': '1.1.1',
-                    STYLES: '',
-                    LAYERS: 'wm:ImageMosic',
-                }
-            }),
-            visible:true
-        })
+        //layer =  new ol.layer.Image({
+        //    source: new ol.source.ImageWMS({
+        //        //ratio: 1,
+        //        url: 'http://192.168.31.12:8888/geoserver/wm/wms',
+        //        params: {'FORMAT': 'image/jpeg',
+        //            'VERSION': '1.1.1',
+        //            STYLES: '',
+        //            LAYERS: 'wm:ImageMosic',
+        //        }
+        //    }),
+        //    visible:true
+        //})
         mainLayer = new ol.layer.Tile({
             source: new ol.source.Stamen({
                 layer: 'terrain'
@@ -214,7 +214,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             layers: [
                //默认调取瓦片地图
                 mainLayer,
-                layer,
+                //layer,
                 //new ol.source.ImageWMS({
                 //    //ratio: 1,
                 //    url: 'http://192.168.31.12:8888/geoserver/wm/wms',
@@ -264,8 +264,53 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
 
         mapTemp[target] = map;
         rasterTemp[target] = raster;
+        _queryOldFile();
         return mapTemp;
     };
+    var _addLayer = function(path){
+        var url =  path.split("?")[0];
+        var theRequest = new Object();
+        if (path.indexOf("?") != -1) {
+            var str = path.substr(1);
+            var strs = str.split("&");
+            for(var i = 0; i < strs.length; i ++) {
+                theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+            }
+        }
+        var layers = theRequest.layers;
+        layer =  new ol.layer.Image({
+            source: new ol.source.ImageWMS({
+                //ratio: 1,
+                url: url,
+                params: {'FORMAT': 'image/jpeg',
+                    'VERSION': '1.1.1',
+                    STYLES: '',
+                    LAYERS: layers,
+                }
+            }),
+            visible:true
+        })
+        map.addLayer(layer);
+    }
+    var _queryOldFile = function(){
+        var startId = getUrlParam("uuid");
+        //$.ajax({
+        //    url:window.toolsUrl+"api/imagepointalgorithm/loadfilesdata",
+        //    type:"post",
+        //    data:{"id": startId},
+        //    async: true,
+        //    success:function(data){
+        //        if(true){
+        //            dataDisplay(data);
+        //        }
+        //    },
+        //    error: function (e) {
+        //        if(e.status == "401"){
+        //            //getSession();
+        //        }
+        //    }
+        //})
+    }
     var drawOverlay;
     var _createBox = function(divId,data){
         var featuresArr = [];
@@ -667,7 +712,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             pointIdList.push(pointID);
             coordinates = event.feature.getGeometry().getCoordinates();   //获取坐标
             //添加一行信息  序号，点ID，点类型。。。。。。。
-            var rowData = [numOrder,pointID,pointType[0],3,"1",__mapCoordinateFixed4(coordinates[0]),__mapCoordinateFixed4(coordinates[1]),"0"];
+            var rowData = [numOrder,pointID,pointType[0],3,"active",__mapCoordinateFixed4(coordinates[0]),__mapCoordinateFixed4(coordinates[1]),"0"];
             leftTable.addRow(numOrder,rowData,false);  //行的ID 与序号号值是一样的
             if(undefined == gpcData){
                 gpcData = {"data":[]};
@@ -684,7 +729,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             points.push(singlePoint);   //所有点的存储集合
 
             //给每个刺点显示其点ID的容器
-           $('#pop').append('<div id="pop'+pointID+'" style="color: red">&nbsp;'+pointID+'</div>');
+           $('#pop').append('<div id="pop'+pointID+'" style="color: #FFB300">&nbsp;'+pointID+'</div>');
 
            var pop = new ol.Overlay({
                 element:document.getElementById('pop'+pointID), //挂载点
@@ -703,8 +748,8 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
 
    //处理表格前列的最大值
     var pointType = ['TiePoint','ControlPoint','CheckPoint']; //点类型
-    var FLAGTRUE = 1;    //有效
-    var FLAGFALSE = 0;   //无效
+    var FLAGTRUE = "active";    //有效
+    var FLAGFALSE = "unactive";   //无效
     var orderList = [] ;
     var pointIdList = [];
     //removeAdd方法
@@ -777,6 +822,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             data:JSON.stringify(jsonData),
             async: false,
             success:function(data){
+                $(".autoMatch").removeClass('.autoMatchLoading').fadeOut(500);
                 returnData = data;
                 if(undefined != returnData.xy && returnData.xy.length>0){
                     leftTable.cells(id, 3).cell.innerHTML = returnData.overlap;
@@ -819,6 +865,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                 }
             },
             error: function (e) {
+                $(".autoMatch").removeClass('.autoMatchLoading').fadeOut(500);
                 if(e.status == "401"){
                     //getSession();
                 }
@@ -942,7 +989,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         //pointLayer.id = pointID;
         //pointLayerArr.push(pointLayer);
         //给每个刺点显示其点ID的容器
-        $('#pop').append('<div id="pop'+pointID+'" style="color: red">&nbsp;'+pointID+'</div>');
+        $('#pop').append('<div id="pop'+pointID+'" style="color: #FFB300">&nbsp;'+pointID+'</div>');
 
         var pop = new ol.Overlay({
             element:document.getElementById('pop'+pointID), //挂载点
@@ -967,7 +1014,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             var leftTable = data.arg[0];
             var selectedPointID ;
             var selectPoint = new ol.interaction.Select(
-                {"hitTolerance":10}
+                {"hitTolerance":20}
             );   //实例化交互选择，操作要素
             map.addInteraction(selectPoint);
             selectPoint.on('select',function(event){
@@ -1044,36 +1091,36 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
                             anchor: [10,10],
                             anchorXUnits: 'pixels',
                             anchorYUnits: 'pixels',
-                            imgSize:[21,21],
-                            src:"img/212px.png"
+                            imgSize:[24,24],
+                            src:"img/21px.png"
                         })
                     }));
                     //popArr[i].element_.style.color = "blue";
-                    $("#"+popArr[i].values_.element.id).css("color","black");
+                    $("#"+popArr[i].values_.element.id).css("color","#FFB300");
                 }else if(type == "CheckPoint"){
                     features[i].setStyle( new ol.style.Style({
                         image:new ol.style.Icon({
                             anchor: [10,10],
                             anchorXUnits: 'pixels',
                             anchorYUnits: 'pixels',
-                            imgSize:[21,21],
-                            src:"img/21px.png"
+                            imgSize:[24,24],
+                            src:"img/checkPoint.png"
                         })
                     }));
                     //popArr[i].element_.style.color = "blue";
-                    $("#"+popArr[i].values_.element.id).css("color","green");
+                    $("#"+popArr[i].values_.element.id).css("color","#00A8FF");
                 }else{
                     features[i].setStyle( new ol.style.Style({
                         image:new ol.style.Icon({
                             anchor: [10,10],
                             anchorXUnits: 'pixels',
                             anchorYUnits: 'pixels',
-                            imgSize:[21,21],
-                            src:"img/network.png"
+                            imgSize:[24,24],
+                            src:"img/controlPoint.png"
                         })
                     }));
                     //popArr[i].element_.style.color = "blue";
-                    $("#"+popArr[i].values_.element.id).css("color","red");
+                    $("#"+popArr[i].values_.element.id).css("color","#FF1E1E");
                 }
             }
         }
@@ -1280,7 +1327,7 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
             var features = pointLayerArr;//pointLayer.getSource().getFeatures();   //得到地图所有的 features
             var selectedPointID ;
             selectPoint = new ol.interaction.Select(
-                {"hitTolerance":10}
+                {"hitTolerance":20}
             );   //实例化交互选择，操作要素
             map.addInteraction(selectPoint);
             selectPoint.on('select',function(event){
@@ -1502,7 +1549,8 @@ define(['jquery','dhtmlx','ol'],function($,dhl,ol){
         removeEdit:_removeEdit,
         deletePoint:_deletePoint,
         removeDelete:_removeDelete,
-        editListPointType:_editListPointType
+        editListPointType:_editListPointType,
+        addLayer:_addLayer
     }
 });
 

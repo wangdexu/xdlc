@@ -22,17 +22,27 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="main.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/app/ui/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4602804">
-              <caret line="1031" column="0" selection-start-line="1031" selection-start-column="0" selection-end-line="1031" selection-end-column="0" />
+            <state vertical-scroll-proportion="-7.625">
+              <caret line="163" column="32" selection-start-line="163" selection-start-column="26" selection-end-line="163" selection-end-column="32" />
               <folding>
-                <marker date="1511438151413" expanded="true" signature="9723:9754" placeholder="..." />
-                <marker date="1511438151413" expanded="true" signature="10689:10702" placeholder="..." />
-                <marker date="1511438151413" expanded="true" signature="16370:16393" placeholder="..." />
-                <marker date="1511438151413" expanded="true" signature="16522:16533" placeholder="..." />
+                <marker date="1511947866490" expanded="true" signature="9727:9758" placeholder="..." />
+                <marker date="1511947866490" expanded="true" signature="10693:10706" placeholder="..." />
+                <marker date="1511947866490" expanded="true" signature="16374:16397" placeholder="..." />
+                <marker date="1511947866490" expanded="true" signature="16526:16537" placeholder="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/css/index.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-3.662162">
+              <caret line="451" column="0" selection-start-line="451" selection-start-column="0" selection-end-line="461" selection-end-column="1" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -41,17 +51,7 @@
         <entry file="file://$PROJECT_DIR$/js/app.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="10" column="51" selection-start-line="10" selection-start-column="48" selection-end-line="10" selection-end-column="51" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/css/index.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-17.785715">
-              <caret line="486" column="19" selection-start-line="486" selection-start-column="19" selection-end-line="486" selection-end-column="19" />
+              <caret line="12" column="19" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="19" />
               <folding />
             </state>
           </provider>
@@ -60,8 +60,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="43" column="32" selection-start-line="43" selection-start-column="20" selection-end-line="43" selection-end-column="32" />
+            <state vertical-scroll-proportion="-2.3243244">
+              <caret line="17" column="21" selection-start-line="17" selection-start-column="12" selection-end-line="17" selection-end-column="21" />
               <folding>
                 <element signature="n#style#0;n#div#3;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#4;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -76,8 +76,8 @@
       <file leaf-file-name="leftTree.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/app/leftTree/leftTree.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-17.15625">
-              <caret line="391" column="24" selection-start-line="391" selection-start-column="24" selection-end-line="391" selection-end-column="24" />
+            <state vertical-scroll-proportion="-2.71875">
+              <caret line="626" column="0" selection-start-line="626" selection-start-column="0" selection-end-line="626" selection-end-column="0" />
               <folding>
                 <element signature="e#612#1061#0" expanded="false" />
                 <element signature="e#1272#1721#0" expanded="false" />
@@ -90,11 +90,10 @@
                 <element signature="e#5526#5973#0" expanded="false" />
                 <element signature="e#6132#6579#0" expanded="false" />
                 <element signature="e#6738#7187#0" expanded="false" />
-                <element signature="e#7289#7928#0" expanded="false" />
-                <marker date="1511263661122" expanded="true" signature="14818:14836" placeholder="..." />
-                <marker date="1511263661122" expanded="true" signature="15357:15375" placeholder="..." />
-                <marker date="1511263661122" expanded="true" signature="18504:18522" placeholder="..." />
-                <marker date="1511263661122" expanded="true" signature="25134:25620" placeholder="{...}" />
+                <marker date="1511921379294" expanded="true" signature="15043:15061" placeholder="..." />
+                <marker date="1511921379294" expanded="true" signature="15582:15600" placeholder="..." />
+                <marker date="1511921379294" expanded="true" signature="18729:18747" placeholder="..." />
+                <marker date="1511921379294" expanded="true" signature="25359:25845" placeholder="{...}" />
               </folding>
             </state>
           </provider>
@@ -103,29 +102,17 @@
       <file leaf-file-name="mapControls.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/app/gis/mapControls.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.90625">
-              <caret line="754" column="13" selection-start-line="754" selection-start-column="9" selection-end-line="754" selection-end-column="13" />
+            <state vertical-scroll-proportion="-6.59375">
+              <caret line="1018" column="44" selection-start-line="1018" selection-start-column="44" selection-end-line="1018" selection-end-column="44" />
               <folding>
                 <element signature="e#2404#2469#0" expanded="false" />
                 <element signature="e#2495#2553#0" expanded="false" />
                 <element signature="e#2579#2673#0" expanded="false" />
-                <element signature="e#2699#2808#0" expanded="false" />
-                <element signature="e#35318#35332#0" expanded="false" />
-                <element signature="e#35497#35582#0" expanded="false" />
-                <element signature="e#35699#37198#0" expanded="false" />
-                <marker date="1511349016029" expanded="true" signature="23073:23083" placeholder="..." />
-                <marker date="1511349016029" expanded="true" signature="33218:33228" placeholder="..." />
+                <marker date="1511948128571" expanded="true" signature="24547:24554" placeholder="..." />
+                <marker date="1511948128571" expanded="true" signature="24547:24561" placeholder="..." />
+                <marker date="1511948128571" expanded="true" signature="34870:34877" placeholder="..." />
+                <marker date="1511948128571" expanded="true" signature="34870:34884" placeholder="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="grid0.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/data/grid0.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.357142">
-              <caret line="79" column="37" selection-start-line="79" selection-start-column="27" selection-end-line="79" selection-end-column="37" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -133,8 +120,8 @@
       <file leaf-file-name="produce.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/app/gis/produce.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="404" column="35" selection-start-line="404" selection-start-column="35" selection-end-line="404" selection-end-column="35" />
+            <state vertical-scroll-proportion="-5.15625">
+              <caret line="470" column="18" selection-start-line="470" selection-start-column="18" selection-end-line="470" selection-end-column="18" />
               <folding />
             </state>
           </provider>
@@ -150,24 +137,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="smallMap.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="smallMap.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/app/gis/smallMap.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="4.5">
-              <caret line="502" column="38" selection-start-line="502" selection-start-column="38" selection-end-line="502" selection-end-column="38" />
+            <state vertical-scroll-proportion="0.2431694">
+              <caret line="925" column="40" selection-start-line="925" selection-start-column="40" selection-end-line="925" selection-end-column="40" />
               <folding>
-                <element signature="e#1295#2123#0" expanded="false" />
                 <element signature="e#2354#3029#0" expanded="false" />
                 <element signature="e#4812#4968#0" expanded="false" />
-                <element signature="e#13325#13437#0" expanded="false" />
-                <element signature="e#13493#13606#0" expanded="false" />
-                <element signature="e#13652#13920#0" expanded="false" />
-                <element signature="e#14294#14514#0" expanded="false" />
-                <element signature="e#25112#25793#0" expanded="false" />
-                <element signature="e#34319#35036#0" expanded="false" />
-                <marker date="1511146734378" expanded="true" signature="11739:11766" placeholder="..." />
-                <marker date="1511146734378" expanded="true" signature="22058:22068" placeholder="..." />
-                <marker date="1511146734378" expanded="true" signature="22058:22085" placeholder="..." />
+                <element signature="e#13668#13936#0" expanded="false" />
+                <element signature="e#25152#25833#0" expanded="false" />
+                <element signature="e#34359#35076#0" expanded="false" />
+                <marker date="1511948156902" expanded="true" signature="11739:11770" placeholder="..." />
+                <marker date="1511948156902" expanded="true" signature="22089:22103" placeholder="..." />
+                <marker date="1511948156902" expanded="true" signature="22089:22120" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -214,13 +197,14 @@
         <option value="$PROJECT_DIR$/js/app/gis/config.js" />
         <option value="$PROJECT_DIR$/js/app/leftTree/config.js" />
         <option value="$PROJECT_DIR$/index.html" />
-        <option value="$PROJECT_DIR$/js/app.js" />
-        <option value="$PROJECT_DIR$/js/app/gis/smallMap.js" />
-        <option value="$PROJECT_DIR$/js/app/leftTree/leftTree.js" />
-        <option value="$PROJECT_DIR$/data/grid0.xml" />
         <option value="$PROJECT_DIR$/css/index.css" />
-        <option value="$PROJECT_DIR$/js/app/gis/mapControls.js" />
+        <option value="$PROJECT_DIR$/data/grid0.xml" />
+        <option value="$PROJECT_DIR$/js/app/leftTree/leftTree.js" />
+        <option value="$PROJECT_DIR$/js/app.js" />
+        <option value="$PROJECT_DIR$/js/app/gis/produce.js" />
         <option value="$PROJECT_DIR$/js/app/ui/main.js" />
+        <option value="$PROJECT_DIR$/js/app/gis/mapControls.js" />
+        <option value="$PROJECT_DIR$/js/app/gis/smallMap.js" />
       </list>
     </option>
   </component>
@@ -587,7 +571,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29356357" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="运行" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17494714" sideWeight="0.5064935" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="找到" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297062" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="找到" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13492927" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -889,13 +873,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/libs/dhtmlx/codebase/dhtmlx.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.34498835">
-          <caret line="8" column="799323" selection-start-line="8" selection-start-column="799323" selection-end-line="8" selection-end-column="799323" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/libs/bootstrap/dist/css/bootstrap.css">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -926,10 +903,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/DHTML.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33333334">
+          <caret line="1179" column="0" selection-start-line="1179" selection-start-column="0" selection-end-line="1179" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/grid0.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-14.642858">
+          <caret line="84" column="28" selection-start-line="84" selection-start-column="28" selection-end-line="84" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="43" column="32" selection-start-line="43" selection-start-column="20" selection-end-line="43" selection-end-column="32" />
+        <state vertical-scroll-proportion="-2.3243244">
+          <caret line="17" column="21" selection-start-line="17" selection-start-column="12" selection-end-line="17" selection-end-column="21" />
           <folding>
             <element signature="n#style#0;n#div#3;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#4;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -948,34 +941,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/app/gis/produce.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="404" column="35" selection-start-line="404" selection-start-column="35" selection-end-line="404" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/DHTML.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334">
-          <caret line="1179" column="0" selection-start-line="1179" selection-start-column="0" selection-end-line="1179" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="10" column="51" selection-start-line="10" selection-start-column="48" selection-end-line="10" selection-end-column="51" />
+          <caret line="12" column="19" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/dhtmlx/codebase/dhtmlx.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.34498835">
+          <caret line="8" column="406866" selection-start-line="8" selection-start-column="406866" selection-end-line="8" selection-end-column="406866" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/app/leftTree/leftTree.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-17.15625">
-          <caret line="391" column="24" selection-start-line="391" selection-start-column="24" selection-end-line="391" selection-end-column="24" />
+        <state vertical-scroll-proportion="-2.71875">
+          <caret line="626" column="0" selection-start-line="626" selection-start-column="0" selection-end-line="626" selection-end-column="0" />
           <folding>
             <element signature="e#612#1061#0" expanded="false" />
             <element signature="e#1272#1721#0" expanded="false" />
@@ -988,79 +973,72 @@
             <element signature="e#5526#5973#0" expanded="false" />
             <element signature="e#6132#6579#0" expanded="false" />
             <element signature="e#6738#7187#0" expanded="false" />
-            <element signature="e#7289#7928#0" expanded="false" />
-            <marker date="1511263661122" expanded="true" signature="14818:14836" placeholder="..." />
-            <marker date="1511263661122" expanded="true" signature="15357:15375" placeholder="..." />
-            <marker date="1511263661122" expanded="true" signature="18504:18522" placeholder="..." />
-            <marker date="1511263661122" expanded="true" signature="25134:25620" placeholder="{...}" />
+            <marker date="1511921379294" expanded="true" signature="15043:15061" placeholder="..." />
+            <marker date="1511921379294" expanded="true" signature="15582:15600" placeholder="..." />
+            <marker date="1511921379294" expanded="true" signature="18729:18747" placeholder="..." />
+            <marker date="1511921379294" expanded="true" signature="25359:25845" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/app/gis/produce.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.15625">
+          <caret line="470" column="18" selection-start-line="470" selection-start-column="18" selection-end-line="470" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/app/ui/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-7.625">
+          <caret line="163" column="32" selection-start-line="163" selection-start-column="26" selection-end-line="163" selection-end-column="32" />
+          <folding>
+            <marker date="1511947866490" expanded="true" signature="9727:9758" placeholder="..." />
+            <marker date="1511947866490" expanded="true" signature="10693:10706" placeholder="..." />
+            <marker date="1511947866490" expanded="true" signature="16374:16397" placeholder="..." />
+            <marker date="1511947866490" expanded="true" signature="16526:16537" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/app/gis/mapControls.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.59375">
+          <caret line="1018" column="44" selection-start-line="1018" selection-start-column="44" selection-end-line="1018" selection-end-column="44" />
+          <folding>
+            <element signature="e#2404#2469#0" expanded="false" />
+            <element signature="e#2495#2553#0" expanded="false" />
+            <element signature="e#2579#2673#0" expanded="false" />
+            <marker date="1511948128571" expanded="true" signature="24547:24554" placeholder="..." />
+            <marker date="1511948128571" expanded="true" signature="24547:24561" placeholder="..." />
+            <marker date="1511948128571" expanded="true" signature="34870:34877" placeholder="..." />
+            <marker date="1511948128571" expanded="true" signature="34870:34884" placeholder="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/css/index.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-17.785715">
-          <caret line="486" column="19" selection-start-line="486" selection-start-column="19" selection-end-line="486" selection-end-column="19" />
+        <state vertical-scroll-proportion="-3.662162">
+          <caret line="451" column="0" selection-start-line="451" selection-start-column="0" selection-end-line="461" selection-end-column="1" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/app/gis/smallMap.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="4.5">
-          <caret line="502" column="38" selection-start-line="502" selection-start-column="38" selection-end-line="502" selection-end-column="38" />
+        <state vertical-scroll-proportion="0.2431694">
+          <caret line="925" column="40" selection-start-line="925" selection-start-column="40" selection-end-line="925" selection-end-column="40" />
           <folding>
-            <element signature="e#1295#2123#0" expanded="false" />
             <element signature="e#2354#3029#0" expanded="false" />
             <element signature="e#4812#4968#0" expanded="false" />
-            <element signature="e#13325#13437#0" expanded="false" />
-            <element signature="e#13493#13606#0" expanded="false" />
-            <element signature="e#13652#13920#0" expanded="false" />
-            <element signature="e#14294#14514#0" expanded="false" />
-            <element signature="e#25112#25793#0" expanded="false" />
-            <element signature="e#34319#35036#0" expanded="false" />
-            <marker date="1511146734378" expanded="true" signature="11739:11766" placeholder="..." />
-            <marker date="1511146734378" expanded="true" signature="22058:22068" placeholder="..." />
-            <marker date="1511146734378" expanded="true" signature="22058:22085" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/grid0.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.357142">
-          <caret line="79" column="37" selection-start-line="79" selection-start-column="27" selection-end-line="79" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/app/gis/mapControls.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.90625">
-          <caret line="754" column="13" selection-start-line="754" selection-start-column="9" selection-end-line="754" selection-end-column="13" />
-          <folding>
-            <element signature="e#2404#2469#0" expanded="false" />
-            <element signature="e#2495#2553#0" expanded="false" />
-            <element signature="e#2579#2673#0" expanded="false" />
-            <element signature="e#2699#2808#0" expanded="false" />
-            <element signature="e#35318#35332#0" expanded="false" />
-            <element signature="e#35497#35582#0" expanded="false" />
-            <element signature="e#35699#37198#0" expanded="false" />
-            <marker date="1511349016029" expanded="true" signature="23073:23083" placeholder="..." />
-            <marker date="1511349016029" expanded="true" signature="33218:33228" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/app/ui/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4602804">
-          <caret line="1031" column="0" selection-start-line="1031" selection-start-column="0" selection-end-line="1031" selection-end-column="0" />
-          <folding>
-            <marker date="1511438151413" expanded="true" signature="9723:9754" placeholder="..." />
-            <marker date="1511438151413" expanded="true" signature="10689:10702" placeholder="..." />
-            <marker date="1511438151413" expanded="true" signature="16370:16393" placeholder="..." />
-            <marker date="1511438151413" expanded="true" signature="16522:16533" placeholder="..." />
+            <element signature="e#13668#13936#0" expanded="false" />
+            <element signature="e#25152#25833#0" expanded="false" />
+            <element signature="e#34359#35076#0" expanded="false" />
+            <marker date="1511948156902" expanded="true" signature="11739:11770" placeholder="..." />
+            <marker date="1511948156902" expanded="true" signature="22089:22103" placeholder="..." />
+            <marker date="1511948156902" expanded="true" signature="22089:22120" placeholder="..." />
           </folding>
         </state>
       </provider>

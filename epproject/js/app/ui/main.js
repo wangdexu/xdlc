@@ -67,7 +67,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     {id : "close", text : "关闭",img : "close.png",isbig : true,  type : "button"},
                     {id : "open", text : "提交",img : "submit.png", isbig : true, type : "button"},
                     {id : "export", text : "导入导出",img : "import.png",isbig : true,  type : "button"},
-                    {id : "save", text : "保存",img : "import.png",isbig : true,  type : "button"},
+                    //{id : "save", text : "保存",img : "import.png",isbig : true,  type : "button"},
                     {id : "imageRange", text : "影像范围", type : "checkbox", checked : true},
                     {id : "imageControl", text : "影像", type : "checkbox", checked : true},
                     {id : "controlPoint", text : "控制点", type : "checkbox", checked : true},
@@ -162,7 +162,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         grid_3.setInitWidths('*,*,*,*,*,*,*,*');
         grid_3.init();
         grid_3.enableMultiselect(true);
-        grid_3.load('./data/grid0.xml','xml');
+        //grid_3.load('./data/grid0.xml','xml');
 
       //存储每个创建的小地图，用于地图联动
        var mapLinkMove = [];
@@ -248,8 +248,8 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     document.getElementById("mapArr"+rId).appendChild(oDiv);
                     //var wmtsUrl = "https://services.arcgisonline.com/arcgis/rest/services/Demographics/USA_Population_Density/MapServer/WMTS/";
                     var url = data.rows[i].data[8];
-                    var rows = data.rows[i].data[6];
-                    var cols = data.rows[i].data[5];
+                    var rows = data.rows[i].data[7];
+                    var cols = data.rows[i].data[6];
                     var uuid = data.rows[i].data[0];
                     //var pointId = data.rows[i].data[1];
                     var mapTemp = smallMap.createMap(uuid,url,oDiv.id,rows,cols,pointId);
@@ -258,9 +258,9 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
             }
         };
         //记录影像列表的值http://192.168.31.12:8888/geoserver/wm/wms?VERSION:1.1.1&layers=wm:ImageMosic
-        var grid3Detail = {"6":{"rows": [{"id":1,"data":["aaa","1","6","img0","2","1","13147.054622607193","30549.669428881965","http://192.168.4.2:18080/geowebcache/service/wms?VERSION:1.1.1&layers=GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020"]},
-            {"id":2,"data":["bbb","2","6","img1","2","1","17841.913952814564","30549.190592890045","http://192.168.4.2:18080/geowebcache/service/wms?VERSION:1.1.1&layers=GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020"]},
-            {"id":3,"data":["ccc","3","6","img2","2","1","21325.1966816781","30549.776260519281","http://192.168.4.2:18080/geowebcache/service/wms?VERSION:1.1.1&layers=GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020"]}]}}
+        var grid3Detail = {"6":{"rows": [{"id":1,"data":["aaa","1","6","img0","2","1","13147.054622607193","10549.669428881965","http://192.168.4.2:18080/geowebcache/service/wms?VERSION:1.1.1&layers=GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020"]},
+            {"id":2,"data":["bbb","2","6","img1","2","1","17841.913952814564","10549.190592890045","http://192.168.4.2:18080/geowebcache/service/wms?VERSION:1.1.1&layers=GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020"]},
+            {"id":3,"data":["ccc","3","6","img2","2","1","21325.1966816781","10549.776260519281","http://192.168.4.2:18080/geowebcache/service/wms?VERSION:1.1.1&layers=GF2_PMS1_E113.6_N40.1_20160308_L1A0001458090-PAN1_20171020"]}]}}
         //记录点列表选中的ID
         var pointId;
         var mapCount;
@@ -379,10 +379,10 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
 
         grid_2.setHeader(["","序号","点ID","影像ID","影像名称","有效","X","Y"]);
         grid_2.setColTypes("ro,ro,ro,ro,ro,edtxt,edtxt,edtxt");
-        grid_2.setStyle(
-            "","overflow-x: hidden !important;","color:red;",""
-
-        );
+        //grid_2.setStyle(
+        //    "","overflow-x: hidden !important;","color:red;",""
+        //
+        //);
         grid_2.setColSorting('str,str,str,str,str,str,str,str');
         grid_2.setInitWidths('0,*,*,*,*,*,*,*');
         grid_2.init();
@@ -429,6 +429,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
             _showSubView();
             pointId = rId;
             grid3Detail[rId] = grid3Detail;
+
             creatDiv(rId,grid3Detail[rId],rId);
         }
         //接收选中的点
@@ -471,124 +472,159 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
             ribbon_1.setItemState("stabPoint", "false", "");
             $(".mapMainContainer").css({"cursor": "default"});
             mapControl.removeAdd();
-            smallMap.removeAdd(mapId);
             mapControl.removeEdit();
-            smallMap.removeEdit(mapId);
             mapControl.removeDelete();
-            smallMap.removeDelete();
+            for(mapId in checkAllTemp) {
+                if (checkAllTemp[mapId] != "" && checkAllTemp[mapId] != undefined) {
+                    smallMap.removeAdd(mapId);
+                    smallMap.removeEdit(mapId);
+                    smallMap.removeDelete(mapId);
+                }
+            }
         }
         //监听菜单是否点击了
         ribbon_1.attachEvent("onClick", function(id) {
-            switch(id){
+            switch(id) {
                 case "open":
                     tree.commit();
                     _removeState();
-                   console.log(id);
+                    console.log(id);
                     break;
                 case "close":
                     _removeState();
                     if
-                    (confirm("您确定要关闭本系统吗？")){
-                        window.opener=null;
-                        window.open('','_self');
+                    (confirm("您确定要关闭本系统吗？")) {
+                        window.opener = null;
+                        window.open('', '_self');
                         window.close();
                     }
-                    else{}
+                    else {
+                    }
                     console.log(id);
                     break;
                 case "export":
                     _removeState();
                     mapControl.export({
-                        eventName:"onClick",
+                        eventName: "onClick",
                         arg: [grid_3]
                     });
                     break;
                 case "save":
                     mapProduce.saveDate({
-                        eventName:"onClick",
+                        eventName: "onClick",
                         arg: []
                     });
                     break;
                 case "zoomIn":
                     _removeState();
-                    if($mainViewFlag == true) {
+                    if ($mainViewFlag == true) {
                         $("#mapMainContainer").css({"cursor": "crosshair"});
                         mapControl.zoomIn({
                             eventName: "onClick",
                             arg: []
                         });
-                    }else{
-                        if(isLink == true){
-                            for(var cid in checkTemp){
-                                if (checkTemp[cid] != "" && checkTemp[cid] != undefined) {
-                                    smallMap.toBig({
-                                        eventNme: "onClick",
-                                        arg: [id,cid]
-                                    });
-                                };
+                    } else {
+                        //if (isLink == true) {
+                        //    for (var cid in checkTemp) {
+                        //        if (checkTemp[cid] != "" && checkTemp[cid] != undefined) {
+                        //            smallMap.toBig({
+                        //                eventNme: "onClick",
+                        //                arg: [id, cid]
+                        //            });
+                        //        }
+                        //        ;
+                        //    }
+                        //} else {
+                        //    smallMap.toBig({
+                        //        eventNme: "onClick",
+                        //        arg: [id, mapId]
+                        //    });
+                        //}
+
+                        for (mapId in checkAllTemp) {
+                            if (checkAllTemp[mapId] != "" && checkAllTemp[mapId] != undefined) {
+                                smallMap.toBig({
+                                    eventNme: "onClick",
+                                    arg: [id, mapId]
+                                });
                             }
-                        }else {
-                            smallMap.toBig({
-                                eventNme: "onClick",
-                                arg: [id, mapId]
-                            });
                         }
                     }
                     break;
                 case "zoomOut":
                     _removeState();
-                    if($mainViewFlag == true) {
+                    if ($mainViewFlag == true) {
                         $("#mapMainContainer").css({"cursor": "crosshair"});
                         mapControl.zoomOut({
                             eventName: "onClick"
                             //  arg: [id,"mapMainContainer"]
                         });
-                    }else{
-                        if(isLink == true){
-                            for(var cid in checkTemp){
-                                if (checkTemp[cid] != "" && checkTemp[cid] != undefined) {
-                                    smallMap.toSmall({
-                                        eventNme: "onClick",
-                                        arg: [id,cid]
-                                    });
-                                };
+                    } else {
+                        //if (isLink == true) {
+                        //    for (var cid in checkTemp) {
+                        //        if (checkTemp[cid] != "" && checkTemp[cid] != undefined) {
+                        //            smallMap.toSmall({
+                        //                eventNme: "onClick",
+                        //                arg: [id, cid]
+                        //            });
+                        //        }
+                        //        ;
+                        //    }
+                        //} else {
+                        //    smallMap.toSmall({
+                        //        eventNme: "onClick",
+                        //        arg: [id, mapId]
+                        //    });
+                        //}
+
+                        for (mapId in checkAllTemp) {
+                            if (checkAllTemp[mapId] != "" && checkAllTemp[mapId] != undefined) {
+                                smallMap.toSmall({
+                                    eventNme: "onClick",
+                                    arg: [id, mapId]
+                                });
                             }
-                        }else {
-                            smallMap.toSmall({
-                                eventNme: "onClick",
-                                arg: [id, mapId]
-                            });
                         }
                     }
                     break;
                 case "fullView":
                     _removeState();
-                    if($mainViewFlag == true) {
+                    if ($mainViewFlag == true) {
                         mapControl.fullView({
                             eventName: "onClick"
                             //arg: [id,mapId]
                         });
-                    }else{
-                        if(isLink == true){
-                            for(var cid in checkTemp){
+                    } else {
+                        if (isLink == true) {
+                            for (var cid in checkTemp) {
                                 if (checkTemp[cid] != "" && checkTemp[cid] != undefined) {
                                     smallMap.fullView({
                                         eventNme: "onClick",
-                                        arg: [id,cid]
+                                        arg: [id, cid]
                                     });
-                                };
+                                }
+                                ;
                             }
-                        }else{
+                        } else {
                             smallMap.fullView({
                                 eventNme: "onClick",
-                                arg: [id,mapId]
+                                arg: [id, mapId]
                             });
+                        }
+
+                        for (mapId in checkAllTemp) {
+                            if (checkAllTemp[mapId] != "" && checkAllTemp[mapId] != undefined) {
+                                smallMap.fullView({
+                                    eventNme: "onClick",
+                                    arg: [id, mapId]
+                                });
+                            }
                         }
                     }
                     break;
                 case "translate":
                     _removeState();
-                    $(".mapMainContainer").css({"cursor":"move"});
+                    $(".mapMainContainer").css({"cursor": "move"});
                     //mapControl.translate({
                     //    eventName:"onClick"
                     //    //arg: [id,mapId]
@@ -596,29 +632,38 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     break;
                 case "setPointCenter":
                     _removeState();
-                    if($mainViewFlag == true) {
+                if(nowPoint.length>0){
+                    if ($mainViewFlag == true) {
                         mapControl.setPointCenter({
                             eventNme: "onClick",
                             arg: [id, mapId, nowPoint]
                         });
-                    }else{
-                        if(isLink == true){
-                            for(var cid in checkTemp){
-                                if (checkTemp[cid] != "" && checkTemp[cid] != undefined) {
-                                    smallMap.setPointCenter({
-                                        eventNme: "onClick",
-                                        arg: [id, cid, nowPoint]
-                                    });
-                                };
+                    } else {
+                        //if(isLink == true){
+                        //    for(var cid in checkTemp){
+                        //        if (checkTemp[cid] != "" && checkTemp[cid] != undefined) {
+                        //            smallMap.setPointCenter({
+                        //                eventNme: "onClick",
+                        //                arg: [id, cid, nowPoint]
+                        //            });
+                        //        };
+                        //    }
+                        //}else {
+                        //    smallMap.setPointCenter({
+                        //        eventNme: "onClick",
+                        //        arg: [id, mapId, nowPoint]
+                        //    });
+                        //}
+                        for (mapId in checkAllTemp) {
+                            if (checkAllTemp[mapId] != "" && checkAllTemp[mapId] != undefined) {
+                                smallMap.setPointCenter({
+                                    eventNme: "onClick",
+                                    arg: [id, mapId, nowPoint]
+                                });
                             }
-                        }else {
-                            smallMap.setPointCenter({
-                                eventNme: "onClick",
-                                arg: [id, mapId, nowPoint]
-                            });
                         }
                     }
-
+            }
                     break;
                 case "oneRatioOne":
                     _removeState();
@@ -628,20 +673,28 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                             //arg: [id,mapId]
                         });
                     }else{
-                        if(isLink == true){
-                            for(var cid in checkTemp){
-                                if (checkTemp[cid] != "" && checkTemp[cid] != undefined) {
-                                    smallMap.oneToOne({
-                                        eventNme: "onClick",
-                                        arg: [id, cid]
-                                    });
-                                };
+                        //if(isLink == true){
+                        //    for(var cid in checkTemp){
+                        //        if (checkTemp[cid] != "" && checkTemp[cid] != undefined) {
+                        //            smallMap.oneToOne({
+                        //                eventNme: "onClick",
+                        //                arg: [id, cid]
+                        //            });
+                        //        };
+                        //    }
+                        //}else {
+                        //    smallMap.oneToOne({
+                        //        eventNme: "onClick",
+                        //        arg: [id, mapId]
+                        //    });
+                        //}
+                        for(mapId in checkAllTemp) {
+                            if (checkAllTemp[mapId] != "" && checkAllTemp[mapId] != undefined) {
+                                smallMap.setPointCenter({
+                                    eventNme: "onClick",
+                                    arg: [id, mapId]
+                                });
                             }
-                        }else {
-                            smallMap.oneToOne({
-                                eventNme: "onClick",
-                                arg: [id, mapId]
-                            });
                         }
                     }
                     break;
@@ -685,7 +738,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     break;_returnRemoveAllPoint
                 case "autoPrediction":
                     _removeState();
-                    //$(".autoMatch").addClass("autoMatchLoading").fadeIn(500);
+                    $(".autoMatch").addClass("autoMatchLoading").fadeIn(500);
                     //这里写的只是测试加载动画，真实情况要从后台处理数据进度判断动画消失的时间
                     //setTimeout(function(){
                     //    $(".autoMatch").removeClass('.autoMatchLoading').fadeOut(500);
@@ -713,10 +766,10 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     //});
                     if(state == true){
                         isLink = true;
-                        smallMap.moveMap(checkTemp);
+                        smallMap.moveMap(checkAllTemp);
                     }else{
                         isLink = false;
-                        smallMap.unMoveMap(checkTemp);
+                        smallMap.unMoveMap(checkAllTemp);
                     }
                     break;
 
@@ -748,10 +801,16 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                 case "stabPoint":
                     ribbon_1.setItemState("modifyPoint", "false", "");
                     ribbon_1.setItemState("deleteSingle", "false", "");
+                    mapControl.removeAdd();
                     mapControl.removeEdit();
                     mapControl.removeDelete();
-                    smallMap.removeEdit(mapId);
-                    smallMap.removeDelete();
+                    for(mapId in checkAllTemp) {
+                        if (checkAllTemp[mapId] != "" && checkAllTemp[mapId] != undefined) {
+                            smallMap.removeAdd(mapId);
+                            smallMap.removeEdit(mapId);
+                            smallMap.removeDelete(mapId);
+                        }
+                    }
                     if(value == true) {
                         $(".mapMainContainer").css({"cursor": "crosshair"});
                         // $(".mapMainContainer").css({"cursor":"default"});
@@ -761,7 +820,7 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                         });
                         for(mapId in checkAllTemp) {
                             if (checkAllTemp[mapId] != "" && checkAllTemp[mapId] != undefined) {
-                                $("." + mapId).css({"cursor": "crosshair"});
+                                $("#" + mapId).css({"cursor": "crosshair"});
                                 smallMap.addPoint({
                                     eventNme: "onClick",
                                     arg: [id, grid_2, mapId, _returnAddPoint, pointId]
@@ -782,10 +841,12 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                     ribbon_1.setItemState("stabPoint", "false", "");
                     ribbon_1.setItemState("deleteSingle", "false", "");
                     mapControl.removeAdd();
+                    mapControl.removeEdit();
                     mapControl.removeDelete();
                     for(mapId in checkAllTemp) {
                         if (checkAllTemp[mapId] != "" && checkAllTemp[mapId] != undefined) {
                             smallMap.removeAdd(mapId);
+                            smallMap.removeEdit(mapId);
                             smallMap.removeDelete(mapId);
                         }
                     }
@@ -819,10 +880,12 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
                         ribbon_1.setItemState("modifyPoint", "false", "");
                         mapControl.removeAdd();
                         mapControl.removeEdit();
+                        mapControl.removeDelete();
                         for(mapId in checkAllTemp) {
                             if (checkAllTemp[mapId] != "" && checkAllTemp[mapId] != undefined) {
                                 smallMap.removeAdd(mapId);
                                 smallMap.removeEdit(mapId);
+                                smallMap.removeDelete(mapId);
                             }
                         }
                         $(".mapMainContainer").css({"cursor": "pointer"});
@@ -1031,6 +1094,32 @@ define(['jquery','dhtmlx','ol','../gis/mapControls','../gis/smallMap','../gis/pr
         var taskData = tree.getTaskData();
 
 
+        //监听点列表是否有效点击事件
+        grid_3.attachEvent("onRowSelect", function(rId,cInd){
+            if(cInd == 4){
+                var active = grid_3.cells(rId, 4).getValue();
+                if(active == "active"){
+                    grid_3.cells(rId, 4).setValue("unactive");
+                }else{
+                    grid_3.cells(rId, 4).setValue("active");
+                }
+            }else{
+                return;
+            }
+        });
+        //监听影像列表是否有效点击事件
+        grid_2.attachEvent("onRowSelect", function(rId,cInd){
+            if(cInd == 5){
+                var active = grid_2.cells(rId, 5).getValue();
+                if(active == "active"){
+                    grid_2.cells(rId, 5).setValue("unactive");
+                }else{
+                    grid_2.cells(rId, 5).setValue("active");
+                }
+            }else{
+                return;
+            }
+        });
         //监听点列表右键事件
         var dPid;
         grid_3.attachEvent("onRightClick", function(id,ind,obj){
